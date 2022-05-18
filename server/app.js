@@ -20,7 +20,7 @@ app.use('/api/v1/auth', auth)
 app.use('/api/v1/subscription', tokenChecker.tokenChecker);
 app.use('/api/v1/subscription', subscription);
 
-app.use('/api/v1/documents', tokenChecker.tokenChecker);
+//app.use('/api/v1/documents', tokenChecker.tokenChecker);
 app.use('/api/v1/documents', documents);
 
 module.exports = app;
