@@ -42,19 +42,25 @@ const Upload = (props) => {
     const handleSubmit = (e) => {
         //alert("handling submit")
         e.preventDefault();
-        const formData = {
-            "titolo": titolo,
-            "descrizione": descrizione,
-            "macroarea":macroarea,
-            "tag": tag,
-            "file": documento,
+        // const formData = {
+        //     "titolo": titolo,
+        //     // "descrizione": descrizione,
+        //     // "macroarea":macroarea,
+        //     // "tag": tag,
+        //     "file": documento,
+        // };
+
+        var formdata = new FormData();
+        formdata.appent("title", titolo);
+        formdata.append("url", documento); 
+
+        var requestOptions = {
+            method: 'POST',
+            body: formdata,
+            redirect: 'follow'
         };
 
-        fetch("http://localhost:3001/api/v1/documents",{
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: formData
-        })
+        fetch("http://localhost:3001/api/v1/documents", requestOptions)
         .then( res => console.log(res))
     };
     
