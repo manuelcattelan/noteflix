@@ -40,18 +40,11 @@ const Upload = (props) => {
     const [documento, setDocumento] = useState();
 
     const handleSubmit = (e) => {
-        //alert("handling submit")
+
         e.preventDefault();
-        // const formData = {
-        //     "titolo": titolo,
-        //     // "descrizione": descrizione,
-        //     // "macroarea":macroarea,
-        //     // "tag": tag,
-        //     "file": documento,
-        // };
 
         var formdata = new FormData();
-        formdata.appent("title", titolo);
+        formdata.append("title", titolo);
         formdata.append("url", documento); 
 
         var requestOptions = {
