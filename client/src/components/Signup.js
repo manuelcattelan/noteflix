@@ -10,9 +10,44 @@ const Signup = () => {
     const [avatarConfig,setAvatarConfig] = useState(genConfig(AvatarConfig));
     const handleAvatarChange = () => setAvatarConfig(genConfig(AvatarConfig));
 
+
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+
+
+    const handleSubmit = (e) => {
+        
+        e.preventDefault()
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+
+        var raw = JSON.stringify({
+            "email": email,
+            "password": password,
+            "avatar": avatarConfig
+        });
+
+        console.log(raw)
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch("http://localhost:3001/api/v1/auth/signup", requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
+
+    }
+
+
     return (
         <>
-            <Form className="mt-5">
+            <Form className="mt-5" on Submit={handleSubmit}>
                 <div className="d-flex justify-content-center">
                     <span onClick={handleAvatarChange} style={{ cursor:"pointer" }}>
                         <Avatar style={{ width: '7rem', height: '7rem' }} {...avatarConfig}/>
@@ -26,11 +61,11 @@ const Signup = () => {
                 </div>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Indirizzo Email</Form.Label>
-                    <Form.Control type="email" placeholder="Inserisci la tua email" />
+                    <Form.Control type="email" placeholder="Inserisci la tua email" onChange={(e)=>setEmail(e.target.value)} required/>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" />
+                    <Form.Control type="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} required/>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Conferma la Password</Form.Label>
@@ -38,7 +73,7 @@ const Signup = () => {
                 </Form.Group>
                 <Form.Group className="mb-3 d-flex" controlId="formBasicCheckbox">
                     <Form.Check type="checkbox" className="me-3"/>
-                    <Form.Label>
+                    <Form.Label required>
                         Registrandoti dichiari di aver letto ed accettato i <Link to="/policy"><span className='text-primary fw-bold'>termini del servizio</span></Link>.
                     </Form.Label>
                 </Form.Group>
