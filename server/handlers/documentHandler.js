@@ -33,13 +33,15 @@ const upload = multer({
 // route handler for document upload
 router.post('', upload.single('url'), (request, result) => {
 
+    tags = request.body.tag.split(" ");
+
     // create new document entry
     let document = new Document ({
         title: request.body.title,
         author: request.body.author,
         description: request.body.description,
         area: request.body.area,
-        tag: request.body.tag,
+        tag: tags,
         creationDate: new Date,
         url: request.file.location,
     })
@@ -47,28 +49,58 @@ router.post('', upload.single('url'), (request, result) => {
     // store new document entry in database
     document.save().then( document => {
         console.log('-> document successfully uploaded to database')
-        result.json({ message: 'Document created successfully', document});
+        result
+            .status(201)
+            .json({ 
+                message: 'Document created successfully', 
+                document
+            });
+        return;
     })
+
+    result.status(400);
 });
 
 // route handler for listing all documents
 router.get('', async (request, result) => {
     let documents = await Document.find({});
-    
-    documents = documents.map ( (document) => {
-        return {
-            self: document.id,
-            title: document.title,
-            author: document.author,
-            description: document.description,
-            area: document.area,
-            tag: document.tag,
-            creationDate: document.Date,
-            url: document.url,
-        };
-    });
 
-    result.status(200).json(documents);
+    if (!documents || documents.length == 0){
+        result
+            .status(200)
+            .json({
+                message: 'No documents found',
+            })
+
+        return;
+    }
+    result
+        .status(200)
+        .json({
+            message: 'Documents found',
+            documents: documents 
+        })
+});
+
+// route handler for listing a document by ID
+router.get('/:id', async (request, result) => {
+    let document = await Document.findById(request.params.id);
+
+    if (!document){
+        result
+            .status(404)
+            .json({
+                message: 'No document found',
+            })
+
+        return;
+    }
+    result
+        .status(200)
+        .json({
+            message: 'Document found',
+            document
+        })
 })
 
 // route handler for listing a document by ID

@@ -6,7 +6,6 @@ import Navigation from '../components/Navigation';
     
 const Upload = (props) => {
 
-  
     /*
         Funzione che al caricamento del file controlla (lato client) che il formato
         sia supportato (.pdf) e la size del file non superi i 16MB (16 milioni di byte).
@@ -19,14 +18,49 @@ const Upload = (props) => {
         const correctType = "application/pdf";
         var fileWrapper = document.getElementById("file-wrapper");
 
-        size < maxSize && type === correctType
-        ?
-        fileWrapper.setAttribute("class", "form-control is-valid")
-        :
-        fileWrapper.setAttribute("class", "form-control is-invalid")
+        if(size < maxSize && type === correctType)
+        {
+            fileWrapper.setAttribute("class", "form-control is-valid")
+            setDocumento(inputFile.target.files[0])
+        }else{
+            fileWrapper.setAttribute("class", "form-control is-invalid")
+        }
+        
     };
 
 
+    /*
+        Stati per le variabili del form e funzione per gestire il submit 
+        raccogliendo i dati del form e creando una fetch POST    
+    */
+    const [titolo, setTitolo] = useState("");
+    const [descrizione, setDescrizione] = useState("");
+    const [macroarea, setMacroarea] = useState("");
+    const [tag, setTag] = useState("");
+    const [documento, setDocumento] = useState();
+
+    const handleSubmit = (e) => {
+
+        e.preventDefault();
+
+        var formdata = new FormData();
+        formdata.append("title", titolo);
+        formdata.append("description", descrizione);
+        formdata.append("area", macroarea);
+        formdata.append("tag", tag); 
+        formdata.append("url", documento); 
+
+        console.log(macroarea);
+
+        var requestOptions = {
+            method: 'POST',
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        fetch("http://localhost:3001/api/v1/documents", requestOptions)
+        .then( res => console.log(res))
+    };
     
 
 
@@ -39,21 +73,22 @@ const Upload = (props) => {
                         <p className="titolo text-center my-5">Carica una <span className='text-primary'>nuova</span> dispesa.</p>
                         <p className="testo text-center my-5">Compila il form per pubblicare un nuovo contenuto. Assicurati che rispetti le <br/>nostre linee guida per non compromettere la tua reputazione come mentore.</p>
                         
-                        <Form className="mt-5">
+                        <Form className="mt-5" onSubmit={handleSubmit}>
 
                             <Form.Group className="mb-3">
                                 <Form.Label>Titolo</Form.Label>
-                                <Form.Control id="titolo" type="text" placeholder="Inserisci un titolo" required />
+                                <Form.Control id="titolo" type="text" placeholder="Inserisci un titolo" required onChange={(e)=>{setTitolo(e.target.value)}}/>
                             </Form.Group>
 
                             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea">
                                 <Form.Label>Inserisci una breve descrizione del contenuto</Form.Label>
-                                <Form.Control id="descrizione" as="textarea" rows={3} required />
+                                <Form.Control id="descrizione" as="textarea" rows={3} required  onChange={(e)=>{setDescrizione(e.target.value)}}/>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
                                 <Form.Label>Scegli in che macroarea apparirà il tuo file</Form.Label>
-                                <Form.Select id="macroarea" >
+                                <Form.Select id="macroarea"  onChange={(e)=>{setMacroarea(e.target.value)}}>
+                                    <option disabled selected value>-</option>
                                     <option>Ingegneria Informatica - Informatica</option>
                                     <option>Lettere e Filosofia</option>
                                     <option>Economia e Gestione Aziendale</option>
@@ -62,7 +97,7 @@ const Upload = (props) => {
 
                             <Form.Group className="mb-3">
                                 <Form.Label required >Tag</Form.Label>
-                                <Form.Control id="tag" type="text" placeholder="Parole chiave separate da spazio" />
+                                <Form.Control id="tag" type="text" placeholder="Parole chiave separate da spazio"  onChange={(e)=>{setTag(e.target.value)}}/>
                             </Form.Group>
 
                             <Form.Group hasValidation className="mb-3">
