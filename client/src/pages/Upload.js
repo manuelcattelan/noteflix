@@ -45,7 +45,12 @@ const Upload = (props) => {
 
         var formdata = new FormData();
         formdata.append("title", titolo);
+        formdata.append("description", descrizione);
+        formdata.append("area", macroarea);
+        formdata.append("tag", tag); 
         formdata.append("url", documento); 
+
+        console.log(macroarea);
 
         var requestOptions = {
             method: 'POST',
@@ -83,6 +88,7 @@ const Upload = (props) => {
                             <Form.Group className="mb-3">
                                 <Form.Label>Scegli in che macroarea apparirà il tuo file</Form.Label>
                                 <Form.Select id="macroarea"  onChange={(e)=>{setMacroarea(e.target.value)}}>
+                                    <option disabled selected value>-</option>
                                     <option>Ingegneria Informatica - Informatica</option>
                                     <option>Lettere e Filosofia</option>
                                     <option>Economia e Gestione Aziendale</option>
