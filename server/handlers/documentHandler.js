@@ -5,6 +5,7 @@ const multer = require('multer')
 const multerS3 = require('multer-s3');
 const AWS = require('aws-sdk');
 const fs = require('fs');
+const jwt_decode  = require('jwt-decode');  
 
 // import document model
 const Document = require('./../models/documentModel');
@@ -35,10 +36,14 @@ router.post('', upload.single('url'), (request, result) => {
 
     tags = request.body.tag.split(" ");
 
+    //decode token to get userID
+    var token = request.body.token || request.query.token || request.headers[ 'x-access-token'];
+    var tokenData = jwt_decode(token);
+
     // create new document entry
     let document = new Document ({
         title: request.body.title,
-        author: request.body.author,
+        author: tokenData.id,
         description: request.body.description,
         area: request.body.area,
         tag: tags,
