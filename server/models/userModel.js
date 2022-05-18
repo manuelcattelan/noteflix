@@ -6,6 +6,7 @@ const userSchema = new Schema ({
     passwordHash: String,
     passwordSalt: String,
     joinDate: Date,
+    userType: String,
     subscription: { type: Schema.Types.ObjectId, ref:'Subscription'},
     savedDocuments:[{ type: Schema.Types.ObjectId, ref:'Document'}],
     avatar: {

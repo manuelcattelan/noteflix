@@ -9,6 +9,7 @@ function createToken(user, subscription){
     if (subscription){
         console.log(user.subscription)
         payload = { id: user._id, 
+            type: user.userType,
             subscriptionType: subscription.type,
             subscriptionArea: subscription.area};
     } else {

@@ -15,8 +15,8 @@ app.use('/api/v1/documents', documents);
 app.use('/api/v1/auth', auth)
 
 //verified with token
-app.use('/api/v1/subscription', tokenChecker.tokenChecker)
-app.use('/api/v1/subscription', subscription)
+app.use('/api/v1/subscription', tokenChecker.tokenChecker);
+app.use('/api/v1/subscription', subscription);
 
 
 module.exports = app;
