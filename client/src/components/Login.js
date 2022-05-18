@@ -10,29 +10,15 @@ const Login = () => {
     const handleSubmit = (e) => {
         
         e.preventDefault()
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
 
-
-        var raw = JSON.stringify({
-            "email": email,
-            "password": password
-        });
-
-        console.log(raw)
-
-        var requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-
-        fetch("http://localhost:3001/api/v1/auth", requestOptions)
-        .then(response => response.text())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error));
-
+        fetch('http://localhost:3001/api/v1/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify( { email: email, password: password } ),
+        })
+        .then((resp) => resp.json()).then(result => console.log(result))
+        .catch(error => console.log('error', error)); // Transform the data into json
+        
     }
 
 

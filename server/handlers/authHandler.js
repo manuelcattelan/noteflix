@@ -10,7 +10,7 @@ const tokenChecker = require('./tokenHandler.js');
 const User = require('./../models/userModel');
 const Subscription = require('./../models/subscriptionModel');
 
-router.get('', async (request, result) => {
+router.post('/login', async (request, result) => {
     if ( !(request.body.email && request.body.password)){
         result.status(400).json({ success: false, message: 'Malformed request'});
         return;
@@ -38,7 +38,7 @@ router.get('', async (request, result) => {
     result.status(400).json({ success: false, message: 'Invalid password'});
 });
 
-router.post('', async (request, result) => {
+router.post('/signup', async (request, result) => {
     if ( !(request.body.email && request.body.password && request.body.avatar)){
         result.status(400).json({ success: false, message: 'Malformed request'});
         return;
