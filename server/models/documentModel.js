@@ -5,6 +5,10 @@ const Schema = mongoose.Schema;
 const documentSchema = new Schema ({
     // attributes for document object
     title: String,
+    // author: String,
+    description: String,
+    area: String,
+    tag: String,
     creationDate: Date,
     url: String,
 })

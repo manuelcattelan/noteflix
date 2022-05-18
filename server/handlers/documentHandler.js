@@ -30,26 +30,60 @@ const upload = multer({
     })
 });
 
-// function to upload document in s3 storage
-const uploadDocument = (req, res, next) => {
-    const documentTitle = req.body.title;
-    const documentUrl = req.file.location;
+// route handler for document upload
+router.post('', upload.single('url'), (request, result) => {
 
     // create new document entry
     let document = new Document ({
-        title: documentTitle,
+        title: request.body.title,
+        author: request.body.author,
+        description: request.body.description,
+        area: request.body.area,
+        tag: request.body.tag,
         creationDate: new Date,
-        url:documentUrl,
+        url: request.file.location,
     })
 
     // store new document entry in database
     document.save().then( document => {
         console.log('-> document successfully uploaded to database')
-        res.json({ message: 'Document created successfully', document});
+        result.json({ message: 'Document created successfully', document});
     })
-}
+});
 
-// route handler for document upload
-router.post('', upload.single('url'), uploadDocument);
+// route handler for listing all documents
+router.get('', async (request, result) => {
+    let documents = await Document.find({});
+    
+    documents = documents.map ( (document) => {
+        return {
+            self: document.id,
+            title: document.title,
+            author: document.author,
+            description: document.description,
+            area: document.area,
+            tag: document.tag,
+            creationDate: document.Date,
+            url: document.url,
+        };
+    });
 
+    result.status(200).json(documents);
+})
+
+// route handler for listing a document by ID
+router.get('/:id', async (request, result) => {
+    let document = await Document.findById(request.params.id);
+    
+    result.status(200).json({
+        self: document.id,
+        title: document.title,
+        author: document.author,
+        description: document.description,
+        area: document.area,
+        tag: document.tag,
+        creationDate: document.Date, 
+        url: document.url,
+    })
+})
 module.exports = router;
