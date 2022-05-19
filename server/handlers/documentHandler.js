@@ -18,9 +18,6 @@ const s3 = new AWS.S3({
     secretAccessKey: process.env.AWS_SECRET_KEY
 }) 
 
-const multerFilter = (req, file, cb) => {
-};
-
 // initialize multer storage object
 const upload = multer({
     storage: multerS3 ({
@@ -43,26 +40,32 @@ const upload = multer({
     }
 });
 
+// upload file to s3 cloud storage
 const uploadFile = upload.single('url');
 
 // route handler for document upload
 router.post('', function (request, result) {
-
     uploadFile(request, result, function(error) {
+        // error returned by multer upload function
         if(error){
-            return result.status(400).send({ success: false, message: error.message})
+            return result
+                    .status(400)
+                    .send({ success: false, message: error.message})
+        }
+
+        // check if all file parameters are provided in request
+        if( !( request.body.title && request.body.description && request.body.area && request.body.tag ) ){
+            return result
+                    .status(400)
+                    .send({ success: false, message: "Missing request parameters"});
         }
 
         tags = request.body.tag.split(" ");
 
-        //decode token to get userID
-        var token = request.body.token || request.query.token || request.headers[ 'x-access-token'];
-        var tokenData = jwt_decode(token);
-
         // create new document entry
         let document = new Document ({
             title: request.body.title,
-            author: tokenData.id,
+            author: request.loggedUser.id,
             description: request.body.description,
             area: request.body.area,
             tag: tags,
@@ -87,70 +90,66 @@ router.post('', function (request, result) {
 
 // route handler for listing all documents
 router.get('', async (request, result) => {
+    // retrieve all documents from database
     let documents = await Document.find({});
 
+    // if no documents were found
     if (!documents || documents.length == 0){
         result
-            .status(200)
+            .status(404)
             .json({
-                success: true,
+                success: false,
                 message: 'No documents found',
             })
 
         return;
     }
-    else {
-        result
-            .status(200)
-            .json({
-                success: true,
-                message: 'Documents found',
-                documents: documents 
-            })
-        return;
-    }
+
+    // if documents were found, return documen list
     result
-        .status(400)
+        .status(200)
         .json({
-            success: false,
-            message: 'Unknown error'
+            success: true,
+            message: 'Documents found',
+            documents: documents 
         })
 });
 
 // route handler for listing a document by ID
 router.get('/:id', async (request, result) => {
-    let document = await Document.findById(request.params.id);
+    // check id length and id string format (must be hex)
+    if(request.params.id.length > 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
+        result
+            .status(400)
+            .json({
+                success: false,
+                message: 'Invalid ID',
+            })
+        return;
+    }
 
+    // find document by id parameter
+    let document = await Document.findById(request.params.id);
+    
+    // if no document was found
     if (!document){
         result
             .status(404)
             .json({
+                status: false,
                 message: 'No document found',
             })
-
         return;
     }
+
+    // if document was found return document
     result
         .status(200)
         .json({
+            status: true,
             message: 'Document found',
             document
         })
 })
 
-// route handler for listing a document by ID
-router.get('/:id', async (request, result) => {
-    let document = await Document.findById(request.params.id);
-    
-    result.status(200).json({
-        self: document.id,
-        title: document.title,
-        author: document.author,
-        description: document.description,
-        area: document.area,
-        tag: document.tag,
-        creationDate: document.Date, 
-        url: document.url,
-    })
-})
 module.exports = router;
