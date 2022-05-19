@@ -2,8 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const router = express.Router();
-
-const jwt_decode  = require('jwt-decode');  
+  
 
 const User = require('./../models/userModel');
 const Subscription = require('./../models/subscriptionModel');
@@ -17,9 +16,8 @@ router.post('', async (req, result) => {
         result.status(400).json({ success: false, message: 'Malformed request'});
         return;
     }
-    var token = req.body.token || req.query.token || req.headers[ 'x-access-token'];
-    var tokenData = jwt_decode(token);
-    var usr = await User.findById(tokenData.id).exec();
+    
+    var usr = await User.findById(req.loggedUser.id).exec();
     
     //delete any previous subscription
     await Subscription.deleteOne({ _id: usr.subscription });

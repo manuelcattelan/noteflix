@@ -68,14 +68,14 @@ router.post('/signup', async (request, result) => {
         passwordHash: pwdHash,
         passwordSalt: pwdSalt,
         joinDate: new Date(),
-        avatar: request.body.avatarConfig,
+        avatar: request.body.avatar,
         userType: 'user'
     })
     
     if (await user.save()){
         console.log('user saved');
         result.json({ success: true, message: 'Enjoy your token!',
-                token: tokenChecker.createToken(user), email: user.email, id: user._id, self: "api/v1/" + user._id });
+                token: tokenChecker.createToken(user), email: user.email, id: user._id });
         return;
     }
     result.status(400).json({ success: false, message: 'Unknown error'});
