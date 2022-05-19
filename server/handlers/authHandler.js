@@ -68,7 +68,7 @@ router.post('/signup', async (request, result) => {
         passwordHash: pwdHash,
         passwordSalt: pwdSalt,
         joinDate: new Date(),
-        avatar: request.body.avatarConfig,
+        avatar: request.body.avatar,
         userType: 'user'
     })
     

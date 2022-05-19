@@ -5,8 +5,7 @@ const Homepage = (props) => {
 
     return (
         <>
-        zio:
-           {} 
+
         </>
     );
 };
