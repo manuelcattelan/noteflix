@@ -1,7 +1,5 @@
 require('dotenv').config();
 
-const express = require('express');
-const router = express.Router();
 const jwt = require('jsonwebtoken');
 
 function createToken(user, subscription){
