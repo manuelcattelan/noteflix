@@ -13,6 +13,9 @@ import Platform from './pages/Platform';
 import SignLog from './pages/SignLog';
 import Upload from './pages/Upload';
 import Policy from './pages/Policy';
+import DocPage from './pages/DocPage';
+import Document from './pages/Document';
+import Homepage from './pages/Homepage';
 
 
 
@@ -39,6 +42,11 @@ function App() {
   }
 
 
+  //#############################
+  //      Auth Token           
+  //#############################
+  const [token, setToken] =  useLocalStorage('token', "")
+    
 
 
 
@@ -47,13 +55,16 @@ function App() {
     <div className={`App ${theme}`}>
       <Router>
         <Routes>
-          <Route path='/' exact element={<Main theme={theme} setTheme={toggleTheme}/>} />
-          <Route path='/platform' exact element={<Platform theme={theme} setTheme={toggleTheme}/>} />
-          <Route path='/signlog' exact element={<SignLog theme={theme} setTheme={toggleTheme}/>} />
-          <Route path='/library' exact element={<Library theme={theme} setTheme={toggleTheme}/>} />
-          <Route path='/console' exact element={<Console theme={theme} setTheme={toggleTheme}/>} />
-          <Route path='/upload' exact element={<Upload theme={theme} setTheme={toggleTheme}/>} />
-          <Route path='/policy' exact element={<Policy theme={theme} setTheme={toggleTheme}/>} />
+          <Route path='/' exact element={<Main theme={theme} setTheme={toggleTheme} token={token} setToken={setToken}/>} />
+          <Route path='/platform' exact element={<Platform theme={theme} setTheme={toggleTheme} token={token} setToken={setToken}/>} />
+          <Route path='/signlog' exact element={<SignLog theme={theme} setTheme={toggleTheme} token={token} setToken={setToken}/>} />
+          <Route path='/library' exact element={<Library theme={theme} setTheme={toggleTheme} token={token} setToken={setToken}/>} />
+          <Route path='/console' exact element={<Console theme={theme} setTheme={toggleTheme} token={token} setToken={setToken}/>} />
+          <Route path='/upload' exact element={<Upload theme={theme} setTheme={toggleTheme} token={token} setToken={setToken}/>} />
+          <Route path='/policy' exact element={<Policy theme={theme} setTheme={toggleTheme} token={token} setToken={setToken}/>} />
+          <Route path='/docpage' exact element={<DocPage theme={theme} setTheme={toggleTheme} token={token} setToken={setToken}/>} />
+          <Route path='/document' exact element={<Document theme={theme} setTheme={toggleTheme} token={token} setToken={setToken}/>} />
+          <Route path='/homepage' exact element={<Homepage theme={theme} setTheme={toggleTheme} token={token} setToken={setToken}/>} />
           {/* <Route render={() => <PageNotFound />}/> */}
         </Routes>
       </Router>

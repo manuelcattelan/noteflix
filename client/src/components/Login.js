@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import useLocalStorage from "../hooks/useLocalStorage";//hooks
 
-const Login = () => {
+const Login = (props) => {
 
+    
+    //stato per il form
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+
 
 
     const handleSubmit = (e) => {
@@ -16,9 +20,15 @@ const Login = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify( { email: email, password: password } ),
         })
-        .then((resp) => resp.json()).then(result => console.log(result))
-        .catch(error => console.log('error', error)); // Transform the data into json
-        
+        .then(resp => resp.json())
+        .then(data => {
+            if(data.success){
+                props.setToken(data.token)
+            }else{
+                alert(data.message)
+            }
+        })
+        .then(console.log(props.token))
     }
 
 

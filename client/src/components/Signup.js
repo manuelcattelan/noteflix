@@ -3,51 +3,42 @@ import { Form, Button } from 'react-bootstrap';
 import Avatar, { genConfig, AvatarConfig } from 'react-nice-avatar'
 import { Link } from 'react-router-dom';
 
-const Signup = () => {
+const Signup = (props) => {
 
 
-
+    //handling avatar
     const [avatarConfig,setAvatarConfig] = useState(genConfig(AvatarConfig));
     const handleAvatarChange = () => setAvatarConfig(genConfig(AvatarConfig));
 
-
+    //data form
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+
 
 
     const handleSubmit = (e) => {
         
         e.preventDefault()
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
 
-
-        var raw = JSON.stringify({
-            "email": email,
-            "password": password,
-            "avatar": avatarConfig
-        });
-
-        console.log(raw)
-
-        var requestOptions = {
+        fetch('http://localhost:3001/api/v1/auth/signup', {
             method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-
-        fetch("http://localhost:3001/api/v1/auth/signup", requestOptions)
-        .then(response => response.text())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error));
-
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify( { email: email, password: password, avatar: avatarConfig } ),
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            if(data.success){
+                props.setToken(data.token)
+            }else{
+                alert(data.message)
+            }
+        })
+        .then(console.log(props.token))
     }
-
 
     return (
         <>
-            <Form className="mt-5" on Submit={handleSubmit}>
+            <Form className="mt-5" onSubmit={handleSubmit}>
                 <div className="d-flex justify-content-center">
                     <span onClick={handleAvatarChange} style={{ cursor:"pointer" }}>
                         <Avatar style={{ width: '7rem', height: '7rem' }} {...avatarConfig}/>
