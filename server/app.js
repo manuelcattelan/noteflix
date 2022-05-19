@@ -14,7 +14,8 @@ const auth = require('./handlers/authHandler')
 const subscription = require('./handlers/subscriptionHandler.js');
 const tokenChecker = require('./handlers/tokenHandler.js');
 
-// api/v1/token/{token} checks token validity
+// api/v1/token/?token={token} checks token validity
+app.use('/api/v1/token', tokenChecker.tokenChecker);
 app.use('/api/v1/token', tokenApi)
 
 // specify route prefix for object handlers
