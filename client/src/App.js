@@ -62,7 +62,6 @@ function App() {
           <Route path='/console' exact element={<Console theme={theme} setTheme={toggleTheme} token={token} setToken={setToken}/>} />
           <Route path='/upload' exact element={<Upload theme={theme} setTheme={toggleTheme} token={token} setToken={setToken}/>} />
           <Route path='/policy' exact element={<Policy theme={theme} setTheme={toggleTheme} token={token} setToken={setToken}/>} />
-          <Route path='/docpage' exact element={<DocPage theme={theme} setTheme={toggleTheme} token={token} setToken={setToken}/>} />
           <Route path='/document' exact element={<Document theme={theme} setTheme={toggleTheme} token={token} setToken={setToken}/>} />
           <Route path='/homepage' exact element={<Homepage theme={theme} setTheme={toggleTheme} token={token} setToken={setToken}/>} />
           {/* <Route render={() => <PageNotFound />}/> */}

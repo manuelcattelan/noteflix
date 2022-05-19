@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import useLocalStorage from "../hooks/useLocalStorage";//hooks
+import { HashLink as Link } from 'react-router-hash-link';
+import { Routes, Route, useNavigate} from 'react-router-dom';
+
 
 const Login = (props) => {
 
@@ -9,6 +12,8 @@ const Login = (props) => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
+    //navigate nel caso il form venga compilato correttamente
+    const navigate = useNavigate();
 
 
     const handleSubmit = (e) => {
@@ -24,11 +29,11 @@ const Login = (props) => {
         .then(data => {
             if(data.success){
                 props.setToken(data.token)
+                navigate('/homepage')
             }else{
                 alert(data.message)
             }
         })
-        .then(console.log(props.token))
     }
 
 
@@ -47,9 +52,11 @@ const Login = (props) => {
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" placeholder="Password"  onChange={(e)=>setPassword(e.target.value)} required/>
                 </Form.Group>
-                <Button variant="primary" type="submit">
-                    Accedi
-                </Button>
+               
+                    <Button variant="primary" type="submit">
+                        Accedi
+                    </Button>
+         
             </Form>
         </>
     );

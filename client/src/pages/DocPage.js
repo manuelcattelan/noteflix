@@ -22,9 +22,10 @@ const DocPage = (props) => {
 
     return (
         <>    
-            <Navigation theme={props.theme} setTheme={props.setTheme}/>       
             <Container onLoad={handleDoc}>
-                {}
+                <Navigation theme={props.theme} setTheme={props.setTheme}/>      
+            
+                doc
             </Container>
 
         </>
