@@ -60,6 +60,7 @@ router.post('', function (request, result) {
                     .send({ success: false, message: "Missing request parameters"});
         }
 
+        // convert tag attribute from string with spaces to array of elements
         tags = request.body.tag.split(" ");
 
         // create new document entry
@@ -101,7 +102,6 @@ router.get('', async (request, result) => {
                 success: false,
                 message: 'No documents found',
             })
-
         return;
     }
 
@@ -118,7 +118,7 @@ router.get('', async (request, result) => {
 // route handler for listing a document by ID
 router.get('/:id', async (request, result) => {
     // check id length and id string format (must be hex)
-    if(request.params.id.length > 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
+    if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
         result
             .status(400)
             .json({
