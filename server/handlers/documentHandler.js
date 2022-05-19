@@ -5,6 +5,7 @@ const multer = require('multer')
 const multerS3 = require('multer-s3');
 const AWS = require('aws-sdk');
 const fs = require('fs');
+const path = require('path')
 const jwt_decode  = require('jwt-decode');  
 
 // import document model
@@ -17,6 +18,9 @@ const s3 = new AWS.S3({
     secretAccessKey: process.env.AWS_SECRET_KEY
 }) 
 
+const multerFilter = (req, file, cb) => {
+};
+
 // initialize multer storage object
 const upload = multer({
     storage: multerS3 ({
@@ -28,42 +32,57 @@ const upload = multer({
         key: function (req, file, cb) {
             cb(null, Date.now().toString()+'.pdf')
         }
-    })
+    }),
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype === "application/pdf") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            return cb(new Error('Only .pdf files are supported!'));
+        }
+    }
 });
 
+const uploadFile = upload.single('url');
+
 // route handler for document upload
-router.post('', upload.single('url'), (request, result) => {
+router.post('', function (request, result) {
 
-    tags = request.body.tag.split(" ");
+    uploadFile(request, result, function(error) {
+        if(error){
+            return result.status(400).send({ success: false, message: error.message})
+        }
 
-    //decode token to get userID
-    var token = request.body.token || request.query.token || request.headers[ 'x-access-token'];
-    var tokenData = jwt_decode(token);
+        tags = request.body.tag.split(" ");
 
-    // create new document entry
-    let document = new Document ({
-        title: request.body.title,
-        author: tokenData.id,
-        description: request.body.description,
-        area: request.body.area,
-        tag: tags,
-        creationDate: new Date,
-        url: request.file.location,
+        //decode token to get userID
+        var token = request.body.token || request.query.token || request.headers[ 'x-access-token'];
+        var tokenData = jwt_decode(token);
+
+        // create new document entry
+        let document = new Document ({
+            title: request.body.title,
+            author: tokenData.id,
+            description: request.body.description,
+            area: request.body.area,
+            tag: tags,
+            creationDate: new Date,
+            url: request.file.location,
+        })
+
+        // store new document entry in database
+        document.save().then( document => {
+            console.log('-> document successfully uploaded to database')
+            result
+                .status(201)
+                .json({ 
+                    success: true,
+                    message: 'Document created successfully', 
+                    document
+                });
+            return;
+        })
     })
-
-    // store new document entry in database
-    document.save().then( document => {
-        console.log('-> document successfully uploaded to database')
-        result
-            .status(201)
-            .json({ 
-                message: 'Document created successfully', 
-                document
-            });
-        return;
-    })
-
-    result.status(400);
 });
 
 // route handler for listing all documents
@@ -74,16 +93,27 @@ router.get('', async (request, result) => {
         result
             .status(200)
             .json({
+                success: true,
                 message: 'No documents found',
             })
 
         return;
     }
+    else {
+        result
+            .status(200)
+            .json({
+                success: true,
+                message: 'Documents found',
+                documents: documents 
+            })
+        return;
+    }
     result
-        .status(200)
+        .status(400)
         .json({
-            message: 'Documents found',
-            documents: documents 
+            success: false,
+            message: 'Unknown error'
         })
 });
 
