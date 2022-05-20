@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@egjs/flicking-plugins": "^4.3.0",
+    "@egjs/react-flicking": "^4.7.0",
     "@react-pdf-viewer/core": "^3.3.2",
     "@react-pdf-viewer/default-layout": "^3.3.2",
     "@react-pdf-viewer/toolbar": "^3.3.2",
