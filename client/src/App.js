@@ -13,9 +13,7 @@ import Platform from './pages/Platform';
 import SignLog from './pages/SignLog';
 import Upload from './pages/Upload';
 import Policy from './pages/Policy';
-import DocPage from './pages/Platform';
 import Document from './pages/Document';
-import Homepage from './pages/Homepage';
 
 
 
@@ -86,11 +84,10 @@ function App() {
           <Route path='/policy'  exact element={<Policy  theme={theme} setTheme={toggleTheme}/>} />
           
           {/* pagine accessibili solo sotto verifica utente loggato (hanno la props user) */}
-          <Route path='/library'  exact element={<Library  user={user} theme={theme} setTheme={toggleTheme}/>} />
-          <Route path='/console'  exact element={<Console  user={user} theme={theme} setTheme={toggleTheme}/>} />
-          <Route path='/upload'   exact element={<Upload   user={user} theme={theme} setTheme={toggleTheme}/>} />
-          <Route path='/document' exact element={<Document user={user} theme={theme} setTheme={toggleTheme}/>} />
-          <Route path='/homepage' exact element={<Homepage user={user} theme={theme} setTheme={toggleTheme}/>} />
+          <Route path='/library'  exact element={<Library  user={user} token={token} theme={theme} setTheme={toggleTheme}/>} />
+          <Route path='/console'  exact element={<Console  user={user} token={token} theme={theme} setTheme={toggleTheme}/>} />
+          <Route path='/upload'   exact element={<Upload   user={user} token={token} theme={theme} setTheme={toggleTheme}/>} />
+          <Route path='/document' exact element={<Document user={user} token={token} theme={theme} setTheme={toggleTheme}/>} />
 
 
           {/* <Route render={() => <PageNotFound />}/> */}

@@ -16,8 +16,8 @@ const Platform = (props) => {
     const [docArray, setDocArray] = useState()
 
     const handleDoc = () => {
-        
-        fetch('http://localhost:3001/api/v1/documents', {
+        const url='http://localhost:3001/api/v1/documents/?token='+props.token
+        fetch(url, {
             method: 'GET',
         })
         .then((resp) => resp.json())
@@ -31,13 +31,17 @@ const Platform = (props) => {
     const arrowSet2 = [new Arrow({moveCount:2}), new Fade("", 0.5)];
 
 
+    //esegue il fetch al caricamento dell'app e al cambiamento di token
+    useEffect(() => handleDoc,[]);
+
+
+
 
     return (
         <>    
-            <Container onLoad={handleDoc}>
+            <Container>
                 <Navigation theme={props.theme} setTheme={props.setTheme}/>
                 <p className='doc-titolo text-center' style={{marginTop:"10vh"}}>Esplora e scopri nuovi dispense per la tua libreria</p>
-                {props.user}
                 <Form className="d-flex justify-content-center">
                     <Row style={{width:"80%"}}>
                         <Col xs="12" className="my-1">
