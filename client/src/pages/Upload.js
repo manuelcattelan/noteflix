@@ -58,7 +58,8 @@ const Upload = (props) => {
             redirect: 'follow'
         };
 
-        fetch("http://localhost:3001/api/v1/documents", requestOptions)
+        const url='http://localhost:3001/api/v1/documents/?token='+props.token
+        fetch(url, requestOptions)
         .then( res => console.log(res))
     };
     
