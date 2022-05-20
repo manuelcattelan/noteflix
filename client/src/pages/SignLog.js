@@ -35,9 +35,9 @@ const SignLog = (props) => {
                             {
                                 form==="login"
                                 ?
-                                <Login token={props.token} setToken={props.setToken}/>
+                                <Login token={props.token} setToken={props.setToken} theme={props.theme} setTheme={props.toggleTheme} setPage={props.setPage}/>
                                 :
-                                <Signup token={props.token} setToken={props.setToken}/>
+                                <Signup token={props.token} setToken={props.setToken} theme={props.theme} setTheme={props.toggleTheme} setPage={props.setPage}/>
                             }
                         </div>
                     </Container>

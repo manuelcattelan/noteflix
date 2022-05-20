@@ -3,6 +3,7 @@ import { Form, Button } from 'react-bootstrap';
 import useLocalStorage from "../hooks/useLocalStorage";//hooks
 import { HashLink as Link } from 'react-router-hash-link';
 import { Routes, Route, useNavigate} from 'react-router-dom';
+import Platform from '../pages/Platform';
 
 
 const Login = (props) => {
@@ -29,7 +30,8 @@ const Login = (props) => {
         .then(data => {
             if(data.success){
                 props.setToken(data.token)
-                navigate('/homepage')
+                props.setPage(<Platform theme={props.theme} setTheme={props.toggleTheme} token={props.token} user={props.user}/>)
+                navigate('/')
             }else{
                 alert(data.message)
             }

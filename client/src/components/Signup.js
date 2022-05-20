@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import Avatar, { genConfig, AvatarConfig } from 'react-nice-avatar'
 import { Link } from 'react-router-dom';
+import { Routes, Route, useNavigate} from 'react-router-dom';
+import Platform from '../pages/Platform';
 
 const Signup = (props) => {
 
@@ -13,6 +15,10 @@ const Signup = (props) => {
     //data form
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+
+
+    //navigate nel caso il form venga compilato correttamente
+    const navigate = useNavigate();
 
 
 
@@ -29,6 +35,8 @@ const Signup = (props) => {
         .then(data => {
             if(data.success){
                 props.setToken(data.token)
+                props.setPage(<Platform theme={props.theme} setTheme={props.toggleTheme} token={props.token} user={props.user}/>)
+                navigate('/')
             }else{
                 alert(data.message)
             }
