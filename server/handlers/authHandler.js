@@ -30,8 +30,8 @@ router.post('/login', async (request, result) => {
     let pwdHash = crypto.createHash('sha256').update(request.body.password + user.passwordSalt).digest('hex');
     if (pwdHash ===  user.passwordHash){
         subs = await Subscription.findById(user.subscription).exec();
-        result.json({ success: true, message: 'Enjoy your token!',
-        token: tokenChecker.createToken(user, subs), email: user.email, id: user._id, self: "api/v1/" + user._id });
+        result.status(200).json({ success: true, message: 'Enjoy your token!',
+        token: tokenChecker.createToken(user, subs) });
         return;
     } 
 
@@ -74,8 +74,8 @@ router.post('/signup', async (request, result) => {
     
     if (await user.save()){
         console.log('user saved');
-        result.json({ success: true, message: 'Enjoy your token!',
-                token: tokenChecker.createToken(user), email: user.email, id: user._id });
+        result.status(201).json({ success: true, message: 'Enjoy your token!',
+                token: tokenChecker.createToken(user) });
         return;
     }
     result.status(400).json({ success: false, message: 'Unknown error'});

@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 // create schema for document object
 const documentSchema = new Schema ({
-    // attributes for document objectdocume
+    // attributes for document object
     title: String,
     author: { type: Schema.Types.ObjectId, ref: 'User'},
     description: String,
