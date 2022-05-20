@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { Container, Col, Row, Button, Form, ButtonToolbar } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom'
 import Navigation from '../components/Navigation';
-
 
 import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';// Import the main component
@@ -9,7 +9,6 @@ import '@react-pdf-viewer/core/lib/styles/index.css';// Import the styles
 import { toolbarPlugin } from '@react-pdf-viewer/toolbar';
 import { ToolbarSlot, TransformToolbarSlot } from '@react-pdf-viewer/toolbar';
 import '@react-pdf-viewer/toolbar/lib/styles/index.css';// Import styles
-import { Link } from 'react-router-dom';
 import pdf from '../pdf/ns.pdf';
 
 
@@ -18,6 +17,8 @@ import pdf from '../pdf/ns.pdf';
 const Document = (props) => {
 
 
+    const location = useLocation()
+    const { fileUrl, titolo, autore, descrizione } = location.state
 
     /*
         Parametri per gestire la toolbar sopra i pdf mostrati
@@ -61,8 +62,8 @@ const Document = (props) => {
 
     return (
         <>
+            <Navigation theme={props.theme} setTheme={props.setTheme} user={props.user} setUser={props.setUser}/>
             <Container>
-                <Navigation theme={props.theme} setTheme={props.setTheme}/>
                 <Row className='my-5'>
                     <Col md="9">
                         <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.13.216/build/pdf.worker.min.js">
@@ -73,21 +74,19 @@ const Document = (props) => {
                                 }}
                             >
                                 <Toolbar>{renderDefaultToolbar(transform)}</Toolbar>
-                                <Viewer plugins={[toolbarPluginInstance]} fileUrl={pdf} />
+                                <Viewer plugins={[toolbarPluginInstance]} fileUrl={fileUrl} />
                             </div>
                         </Worker>
                     </Col>
                     <Col>
                         <p className='doc-titolo mt-5'>
-                            Titolo del documento, anche lungo
+                            {titolo}
                         </p>
                         <p className='doc-autore'>
-                            Nome dell'autore
+                            {autore}
                         </p>
                         <p className='doc-descrizione'>
-                            Descrizione del contenuto del documento, scritta dall'autore in modo da descrivere sinteticamente di cosa tratta la dispensa.
-                            In essa vengono nominati gli argomenti necessari all'utente per realizzare se necessita o meno del file. Descrizione del contenuto del documento, scritta dall'autore in modo da descrivere sinteticamente di cosa tratta la dispensa.
-                            In essa vengono nominati gli argomenti necessari all'utente per realizzare se necessita o meno del file.
+                            {descrizione}
                         </p>
                         {/* <Chat handleChatShow={handleChatShow} handleChatClose={handleChatClose} chatShow={chatShow}/> */}
                         <Form className="mt-3">

@@ -30,7 +30,8 @@ const Login = (props) => {
         .then(data => {
             if(data.success){
                 props.setToken(data.token)
-                props.setPage(<Platform theme={props.theme} setTheme={props.toggleTheme} token={props.token} user={props.user}/>)
+                props.setNavbar("user")
+                props.setPage(<Platform theme={props.theme} setTheme={props.toggleTheme} token={data.token} user={props.user} navbar="user"/>)
                 navigate('/')
             }else{
                 alert(data.message)

@@ -7,6 +7,7 @@
     "@egjs/react-flicking": "^4.7.0",
     "@react-pdf-viewer/core": "^3.3.2",
     "@react-pdf-viewer/default-layout": "^3.3.2",
+    "@react-pdf-viewer/thumbnail": "^3.3.2",
     "@react-pdf-viewer/toolbar": "^3.3.2",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import Navigation from '../components/Navigation';
 
-
     
 const Upload = (props) => {
 
@@ -67,8 +66,8 @@ const Upload = (props) => {
 
     return (
         <>
+            <Navigation theme={props.theme} setTheme={props.setTheme} user={props.user} setUser={props.setUser}/>
             <Container>
-                <Navigation theme={props.theme} setTheme={props.setTheme}/>
                 <Container className='d-flex justify-content-center mt-5'>
                     <div>
                         <p className="titolo text-center my-5">Carica una <span className='text-primary'>nuova</span> dispesa.</p>
@@ -88,7 +87,7 @@ const Upload = (props) => {
 
                             <Form.Group className="mb-3">
                                 <Form.Label>Scegli in che macroarea apparirà il tuo file</Form.Label>
-                                <Form.Select id="macroarea"  onChange={(e)=>{setMacroarea(e.target.value)}}>
+                                <Form.Select id="macroarea"  onChange={(e)=>{setMacroarea(e.target.value)}} maxlength="160">
                                     <option disabled selected value>-</option>
                                     <option>Ingegneria Informatica - Informatica</option>
                                     <option>Lettere e Filosofia</option>

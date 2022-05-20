@@ -5,8 +5,8 @@ import Navigation from '../components/Navigation';
 const Main = (props) => {
 
     return (
-        <>    
-            <Navigation theme={props.theme} setTheme={props.setTheme}/>       
+        <>   
+            <Navigation theme={props.theme} setTheme={props.setTheme} user={props.user} setUser={props.setUser} navbar={props.navbar}/>
             <Container>
                 Main
             </Container>

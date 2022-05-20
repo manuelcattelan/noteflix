@@ -8,12 +8,12 @@ import "@egjs/react-flicking/dist/flicking-inline.css";// Or, if you have to sup
 import { Arrow, Fade } from "@egjs/flicking-plugins";
 import "@egjs/flicking-plugins/dist/arrow.css";
 
-import DocSpoil from '../components/DocSpoil';
+import Risultati from '../components/Risultati';
 
 const Platform = (props) => {
 
 
-    const [docArray, setDocArray] = useState()
+    const [docArray, setDocArray] = useState({})
 
     const handleDoc = () => {
         const url='http://localhost:3001/api/v1/documents/?token='+props.token
@@ -28,7 +28,6 @@ const Platform = (props) => {
 
     //Arrow for each carousel
     const arrowSet1 = [new Arrow({moveCount:2}), new Fade("", 0.5)];
-    const arrowSet2 = [new Arrow({moveCount:2}), new Fade("", 0.5)];
 
 
     //esegue il fetch al caricamento dell'app e al cambiamento di token
@@ -39,8 +38,8 @@ const Platform = (props) => {
 
     return (
         <>    
+            <Navigation theme={props.theme} setTheme={props.setTheme} user={props.user} setUser={props.setUser} navbar={props.navbar}/>
             <Container>
-                <Navigation theme={props.theme} setTheme={props.setTheme}/>
                 <p className='doc-titolo text-center' style={{marginTop:"10vh"}}>Esplora e scopri nuovi dispense per la tua libreria</p>
                 <Form className="d-flex justify-content-center">
                     <Row style={{width:"80%"}}>
@@ -55,7 +54,7 @@ const Platform = (props) => {
                 <br/><br/><br/>
             </Container> 
 
-            <Container>
+           {/*  <Container>
                 <p className="text-center titoletti">Raccomandati per te</p>
             </Container> 
             <Flicking
@@ -83,38 +82,17 @@ const Platform = (props) => {
                     <span className="flicking-arrow-prev is-circle mx-5" style={{backgroundColor:"#623FF0"}}></span>
                     <span className="flicking-arrow-next is-circle mx-5" style={{backgroundColor:"#623FF0"}}></span>
                 </ViewportSlot>
-            </Flicking>
+            </Flicking> */}
 
 
             <Container>
-                <p className="text-center titoletti">I più popolari della piattaforma</p>
+                <p className="text-center titoletti">Tutti i documenti</p>
             </Container>
-            <Flicking
-                circular={true}
-                circularFallback="linear"
-                moveType="freeScroll"
-                plugins={arrowSet2}
-            >
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                
+            <Container className="d-flex justify-content-center flex-wrap">
 
-                <ViewportSlot>
-                    <span className="flicking-arrow-prev is-circle mx-5" style={{backgroundColor:"#623FF0"}}></span>
-                    <span className="flicking-arrow-next is-circle mx-5" style={{backgroundColor:"#623FF0"}}></span>
-                </ViewportSlot>
-            </Flicking>
-                
+                <Risultati documenti={docArray.documents}/>
+
+            </Container>
                         
                     
                 

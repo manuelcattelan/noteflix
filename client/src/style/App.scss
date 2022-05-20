@@ -33,3 +33,13 @@ a{
         background: var(--page-background) !important;
     }
 
+
+
+
+//for pdf thumbnails
+.rpv-thumbnail__cover-image{
+    width: 100%;
+    object-fit: cover;
+    overflow: hidden;
+    opacity: 0.9;
+}

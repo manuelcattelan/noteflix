@@ -19,8 +19,7 @@ const SignLog = (props) => {
 
     return (
         <>
-            <Navigation theme={props.theme} setTheme={props.setTheme}/>
-            
+                    <Navigation theme={props.theme} setTheme={props.setTheme} user={props.user} setUser={props.setUser}/>
                     <Container className='d-flex justify-content-center mt-2'>
                         <div>
                             <p className="titolo text-center my-5">Tutte le risorse di cui hai <br/>bisogno, a portata di <span className='text-primary'>click.</span></p>
@@ -35,9 +34,9 @@ const SignLog = (props) => {
                             {
                                 form==="login"
                                 ?
-                                <Login token={props.token} setToken={props.setToken} theme={props.theme} setTheme={props.toggleTheme} setPage={props.setPage}/>
+                                <Login token={props.token} setToken={props.setToken} theme={props.theme} setTheme={props.toggleTheme} setPage={props.setPage} setNavbar={props.setNavbar}/>
                                 :
-                                <Signup token={props.token} setToken={props.setToken} theme={props.theme} setTheme={props.toggleTheme} setPage={props.setPage}/>
+                                <Signup token={props.token} setToken={props.setToken} theme={props.theme} setTheme={props.toggleTheme} setPage={props.setPage} setNavbar={props.setNavbar}/>
                             }
                         </div>
                     </Container>

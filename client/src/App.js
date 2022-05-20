@@ -14,6 +14,7 @@ import SignLog from './pages/SignLog';
 import Upload from './pages/Upload';
 import Policy from './pages/Policy';
 import Document from './pages/Document';
+import Navigation from './components/Navigation';
 
 
 
@@ -47,10 +48,9 @@ function App() {
   //controllo di avere un token salvato nel local storage
   const [token, setToken] =  useLocalStorage('token', "")
   //creo uno stato per conservare l'oggetto utente
-  const [user, setUser] = useState()
- 
-  //creo uno stato per la pagina
-  const [page, setPage] = useState(<Main theme={theme} setTheme={toggleTheme} token={token} user={user}/>)
+  const [user, setUser] = useState({})
+  //creo uno stato per la pagina principale
+  const [page, setPage] = useState(<Main theme={theme} setTheme={toggleTheme} token={token} user={user} navbar="visitatore"/>)
 
   //manda il token all'api per verificarne la validità e ottenere un oggetto user con informazioni utili
   const fetchToken = () => {
@@ -60,7 +60,8 @@ function App() {
       .then(data => {
           setUser(data)
           if(data.success === true){
-              setPage(<Platform theme={theme} setTheme={toggleTheme} token={token} user={user}/>)
+              setNavbar("user")
+              setPage(<Platform theme={theme} setTheme={toggleTheme} token={token} user={user} navbar="user"/>)
           }
       })
   }
@@ -70,24 +71,29 @@ function App() {
 
 
 
+    //creo uno stato per conservare l'oggetto utente
+    const [navbar, setNavbar] = useState("visitatore")
 
   return (
     <div className={`App ${theme}`}>
+      
       <Router>
+        
+        
         <Routes>
-
+          
           {/* carica una pagina a "/" a seconda se l'utente è loggato o meno */}
           <Route path='/' exact element={page} />
 
           {/* pagine accessibili da tutti (anche non loggati) */}
-          <Route path='/signlog' exact element={<SignLog theme={theme} setTheme={toggleTheme} token={token} setToken={setToken} setPage={setPage}/>} />
-          <Route path='/policy'  exact element={<Policy  theme={theme} setTheme={toggleTheme}/>} />
+          <Route path='/signlog' exact element={<SignLog theme={theme} setTheme={toggleTheme} token={token} setToken={setToken} setPage={setPage} navbar={navbar} setNavbar={setNavbar}/>} />
+          <Route path='/policy'  exact element={<Policy  theme={theme} setTheme={toggleTheme} navbar={navbar}/>} />
           
           {/* pagine accessibili solo sotto verifica utente loggato (hanno la props user) */}
-          <Route path='/library'  exact element={<Library  user={user} token={token} theme={theme} setTheme={toggleTheme}/>} />
-          <Route path='/console'  exact element={<Console  user={user} token={token} theme={theme} setTheme={toggleTheme}/>} />
-          <Route path='/upload'   exact element={<Upload   user={user} token={token} theme={theme} setTheme={toggleTheme}/>} />
-          <Route path='/document' exact element={<Document user={user} token={token} theme={theme} setTheme={toggleTheme}/>} />
+          <Route path='/library'  exact element={<Library  user={user} token={token} theme={theme} setTheme={toggleTheme} navbar={navbar}/>} />
+          <Route path='/console'  exact element={<Console  user={user} token={token} theme={theme} setTheme={toggleTheme} navbar={navbar}/>} />
+          <Route path='/upload'   exact element={<Upload   user={user} token={token} theme={theme} setTheme={toggleTheme} navbar={navbar}/>} />
+          <Route path='/document' exact element={<Document user={user} token={token} theme={theme} setTheme={toggleTheme} navbar={navbar}/>} />
 
 
           {/* <Route render={() => <PageNotFound />}/> */}
