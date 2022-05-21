@@ -47,9 +47,6 @@ const Login = (props) => {
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Indirizzo Email</Form.Label>
                     <Form.Control type="email" placeholder="Inserisci la tua email" onChange={(e)=>setEmail(e.target.value)} required/>
-                    <Form.Text className="text-muted">
-                        Non condivideremo la tua email con terze parti.
-                    </Form.Text>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
