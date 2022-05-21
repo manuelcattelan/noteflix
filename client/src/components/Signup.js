@@ -15,6 +15,7 @@ const Signup = (props) => {
     //data form
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [username, setUsername] = useState("")
 
 
     //navigate nel caso il form venga compilato correttamente
@@ -29,7 +30,7 @@ const Signup = (props) => {
         fetch('http://localhost:3001/api/v1/auth/signup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify( { email: email, password: password, avatar: avatarConfig } ),
+            body: JSON.stringify( { email: email, password: password, avatar: avatarConfig, username: username } ),
         })
         .then(resp => resp.json())
         .then(data => {
@@ -45,9 +46,21 @@ const Signup = (props) => {
         .then(console.log(props.token))
     }
 
+
+    const validatePassword = () => {
+        var password = document.getElementById("password-label").value;
+        var confirmPassword = document.getElementById("confirm-password-label").value;
+        if (password != confirmPassword) {
+            alert("Passwords do not match.");
+            return false;
+        }
+        return true;
+    }
+
+
     return (
         <>
-            <Form className="mt-5" onSubmit={handleSubmit}>
+            <Form className="my-5" onSubmit={handleSubmit}>
                 <div className="d-flex justify-content-center">
                     <span onClick={handleAvatarChange} style={{ cursor:"pointer" }}>
                         <Avatar style={{ width: '7rem', height: '7rem' }} {...avatarConfig}/>
@@ -62,22 +75,29 @@ const Signup = (props) => {
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Indirizzo Email</Form.Label>
                     <Form.Control type="email" placeholder="Inserisci la tua email" onChange={(e)=>setEmail(e.target.value)} required/>
+                    <Form.Text className="text-muted">
+                        Non condivideremo la tua email con terze parti.
+                    </Form.Text>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Label>Scegli uno username</Form.Label>
+                    <Form.Control type="text" placeholder="Inserisci uno username" onChange={(e)=>setUsername(e.target.value)} required/>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} required/>
+                    <Form.Control id="password-label" type="password" placeholder="Password" onChange={(e)=>setPassword(e.target.value)} required/>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Conferma la Password</Form.Label>
-                    <Form.Control type="password" placeholder="Ripeti la password" />
+                    <Form.Control id="confirm-password-label" type="password" placeholder="Ripeti la password" />
                 </Form.Group>
                 <Form.Group className="mb-3 d-flex" controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" className="me-3"/>
-                    <Form.Label required>
+                    <Form.Check type="checkbox" className="me-3" required/>
+                    <Form.Label>
                         Registrandoti dichiari di aver letto ed accettato i <Link to="/policy"><span className='text-primary fw-bold'>termini del servizio</span></Link>.
                     </Form.Label>
                 </Form.Group>
-                <Button variant="primary" type="submit">
+                <Button variant="primary" type="submit" onClick={validatePassword}>
                     Registrati
                 </Button>
             </Form>
