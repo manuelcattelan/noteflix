@@ -36,8 +36,8 @@ router.post('', async (req, result) => {
     usr.subscription = subs._id;
     await usr.save();   
     
-    result.json({ success: true, message: 'Enjoy your token!',
-                token: tokenChecker.createToken(usr, subs), email: usr.email, id: usr._id, self: "api/v1/" + usr._id });
+    result.status(201).json({ success: true, message: 'Enjoy your token!',
+                token: tokenChecker.createToken(usr, subs) });
     return;
 
 });
