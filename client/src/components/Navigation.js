@@ -4,7 +4,6 @@ import { HashLink as Link } from 'react-router-hash-link';
 import logolight from "../media/logolight.svg"
 import logodark from "../media/logodark.svg"
 
-
 const Navigation = (props) => {
 
     //change theme (light and dark mode)
@@ -17,6 +16,10 @@ const Navigation = (props) => {
     }
 
 
+    const handleLogout = () => {
+        localStorage.removeItem("token")
+        window.location.reload(false);
+    }
 
 
 
@@ -57,7 +60,7 @@ const Navigation = (props) => {
                             </NavDropdown>
 
                             <Link to="" className='ms-3'>
-                                <Button>Logout</Button>
+                                <Button onClick={handleLogout}>Logout</Button>
                             </Link>
                             
                         </Nav>
