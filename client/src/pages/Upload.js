@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import Navigation from '../components/Navigation';
-
+import { useNavigate} from 'react-router-dom';
     
 const Upload = (props) => {
 
@@ -38,6 +38,12 @@ const Upload = (props) => {
     const [tag, setTag] = useState("");
     const [documento, setDocumento] = useState();
 
+
+
+
+    //navigate nel caso il form venga compilato correttamente
+    const navigate = useNavigate();
+
     const handleSubmit = (e) => {
 
         e.preventDefault();
@@ -60,13 +66,14 @@ const Upload = (props) => {
         const url='http://localhost:3001/api/v1/documents/?token='+props.token
         fetch(url, requestOptions)
         .then( res => console.log(res))
+        .then(navigate('/'))
     };
     
 
 
     return (
         <>
-            <Navigation theme={props.theme} setTheme={props.setTheme} user={props.user} setUser={props.setUser}/>
+            <Navigation theme={props.theme} setTheme={props.setTheme} user={props.user} setUser={props.setUser} navbar={props.navbar}/>
             <Container>
                 <Container className='d-flex justify-content-center mt-5'>
                     <div>

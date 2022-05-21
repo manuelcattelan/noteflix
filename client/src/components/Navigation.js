@@ -3,6 +3,7 @@ import { Navbar, Nav, Container, NavDropdown, Button } from 'react-bootstrap';
 import { HashLink as Link } from 'react-router-hash-link';
 import logolight from "../media/logolight.svg"
 import logodark from "../media/logodark.svg"
+import { useNavigate } from 'react-router-dom';
 
 const Navigation = (props) => {
 
@@ -16,9 +17,13 @@ const Navigation = (props) => {
     }
 
 
+
+    
+    const navigate = useNavigate(); //navigate nel caso di logout
     const handleLogout = () => {
         localStorage.removeItem("token")
-        window.location.reload(false);
+        navigate("/")
+        window.location.reload(false)
     }
 
 
@@ -46,7 +51,10 @@ const Navigation = (props) => {
                             <Link to="/policy">
                                 <Nav.Link href="#def" className="Navtheme">Piattaforma</Nav.Link>
                             </Link>
-                            <Nav.Link href="#def" className="Navtheme">Libreira personale</Nav.Link>
+                            <Link to="/upload">
+                                <Nav.Link href="#def" className="Navtheme">Upload</Nav.Link>
+                            </Link>
+                            <Nav.Link href="#def" className="Navtheme">Libreria personale</Nav.Link>
                             <NavDropdown title="Impostazioni">
                                 <NavDropdown.Item href="#def" onClick={toggleTheme}>
                                     Cambia tema

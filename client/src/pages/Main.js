@@ -11,7 +11,7 @@ const Main = (props) => {
         <>   
             <Navigation theme={props.theme} setTheme={props.setTheme} user={props.user} setUser={props.setUser} navbar={props.navbar}/>
             <Container>
-                <Row style={{height:"100vh"}}>                   
+                <Row style={{height:"100vh"}}>        
                     <Col className="d-flex justify-content-center align-items-center">
                         <img
                             alt=""
