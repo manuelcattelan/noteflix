@@ -14,8 +14,6 @@ import SignLog from './pages/SignLog';
 import Upload from './pages/Upload';
 import Policy from './pages/Policy';
 import Document from './pages/Document';
-import Navigation from './components/Navigation';
-
 
 
 
@@ -23,15 +21,11 @@ function App() {
 
   //#############################
   //      Theme of the app           
-  //#############################
-
-  //setting as a default the one user have in system preferences
-  const isDarkTheme = useThemeDetector();
+  //############################  
+  const isDarkTheme = useThemeDetector();                             //setting as a default the one user have in system preferences
   var defaultTheme;
   isDarkTheme ? defaultTheme="dark": defaultTheme="light"
-
-  //setting theme as saved in local storage or default
-  const [theme, setTheme] = useLocalStorage('theme', defaultTheme)
+  const [theme, setTheme] = useLocalStorage('theme', defaultTheme)    //setting theme as saved in local storage or default
   const toggleTheme = () => {
     if (theme === 'light') {
       setTheme('dark');
@@ -39,21 +33,18 @@ function App() {
       setTheme('light');
     }
   }
+  const [navbar, setNavbar] = useState("visitatore")                  //creo uno stato per conservare l'oggetto utente
 
 
   //#############################
   //      Auth Token           
   //#############################
+  const [token, setToken] =  useLocalStorage('token', "")                                                                       //controllo di avere un token salvato nel local storage
+  const [user, setUser] = useState({})                                                                                          //creo uno stato per conservare l'oggetto utente
+  const [page, setPage] = useState(<Main theme={theme} setTheme={toggleTheme} token={token} user={user} navbar="visitatore"/>)  //creo uno stato per la pagina principale
 
-  //controllo di avere un token salvato nel local storage
-  const [token, setToken] =  useLocalStorage('token', "")
-  //creo uno stato per conservare l'oggetto utente
-  const [user, setUser] = useState({})
-  //creo uno stato per la pagina principale
-  const [page, setPage] = useState(<Main theme={theme} setTheme={toggleTheme} token={token} user={user} navbar="visitatore"/>)
-
-  //manda il token all'api per verificarne la validità e ottenere un oggetto user con informazioni utili
-  const fetchToken = () => {
+  useEffect(() => fetchToken, [token]);                                                                                         //esegue il fetch al caricamento dell'app e al cambiamento di token
+  const fetchToken = () => {                                                                                                    //manda il token all'api per verificarne la validità e ottenere un oggetto user con informazioni utili
       const url = "http://localhost:3001/api/v1/token/?token="+token
       fetch(url)
       .then(resp => resp.json())
@@ -66,20 +57,11 @@ function App() {
       })
   }
 
-  //esegue il fetch al caricamento dell'app e al cambiamento di token
-  useEffect(() => fetchToken, [token]);
-
-
-
-    //creo uno stato per conservare l'oggetto utente
-    const [navbar, setNavbar] = useState("visitatore")
+  
 
   return (
     <div className={`App ${theme}`}>
-      
       <Router>
-        
-        
         <Routes>
           
           {/* carica una pagina a "/" a seconda se l'utente è loggato o meno */}
@@ -94,7 +76,6 @@ function App() {
           <Route path='/console'  exact element={<Console  user={user} token={token} theme={theme} setTheme={toggleTheme} navbar={navbar}/>} />
           <Route path='/upload'   exact element={<Upload   user={user} token={token} theme={theme} setTheme={toggleTheme} navbar={navbar}/>} />
           <Route path='/document' exact element={<Document user={user} token={token} theme={theme} setTheme={toggleTheme} navbar={navbar}/>} />
-
 
           {/* <Route render={() => <PageNotFound />}/> */}
         </Routes>

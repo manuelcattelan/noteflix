@@ -13,6 +13,7 @@ const Risultati = (props) => {
                         url={item.url}
                         macroarea={item.area}
                         autore={item.author}
+                        id={item._id}
                     /> 
                 ) 
                 : 

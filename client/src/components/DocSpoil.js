@@ -24,6 +24,10 @@ const DocSpoil = (props) => {
         PageThumbnail: <Cover getPageIndex={() => 0} />,
     });
 
+
+
+    const link = "/document/?id="+props.id
+
     
 
     return (
@@ -55,11 +59,12 @@ const DocSpoil = (props) => {
                     </Card.Text>
                 </Card.Body>
                 <Card.Body>
-                    <Link to="/document" state={{ 
+                    <Link to={link} state={{ 
                         fileUrl: props.url,
                         titolo: props.titolo,
                         descrizione: props.descrizione,
-                        autore: props.autore
+                        autore: props.autore,
+                        id: props.id
                     }}>
                         <Button variant="outline-primary" className='me-3 mb-2'>Visualizza</Button>
                     </Link>

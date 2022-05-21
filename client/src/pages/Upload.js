@@ -77,12 +77,15 @@ const Upload = (props) => {
 
                             <Form.Group className="mb-3">
                                 <Form.Label>Titolo</Form.Label>
-                                <Form.Control id="titolo" type="text" placeholder="Inserisci un titolo" required onChange={(e)=>{setTitolo(e.target.value)}}/>
+                                <Form.Control maxlength="35" id="titolo" type="text" placeholder="Inserisci un titolo" required onChange={(e)=>{setTitolo(e.target.value)}}/>
+                                <Form.Text className="text-muted">
+                                    Tip: evita di scrivere nel titolo "Dispensa di ..." o "Appunti di ..."
+                                </Form.Text>
                             </Form.Group>
 
                             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea">
                                 <Form.Label>Inserisci una breve descrizione del contenuto</Form.Label>
-                                <Form.Control id="descrizione" as="textarea" rows={3} required  onChange={(e)=>{setDescrizione(e.target.value)}}/>
+                                <Form.Control id="descrizione" as="textarea"  maxlength="166" rows={3} required  onChange={(e)=>{setDescrizione(e.target.value)}}/>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
@@ -97,7 +100,7 @@ const Upload = (props) => {
 
                             <Form.Group className="mb-3">
                                 <Form.Label required >Tag</Form.Label>
-                                <Form.Control id="tag" type="text" placeholder="Parole chiave separate da spazio"  onChange={(e)=>{setTag(e.target.value)}}/>
+                                <Form.Control id="tag" type="text" placeholder="Parole chiave separate da spazio"  onChange={(e)=>{setTag(e.target.value)}} required/>
                             </Form.Group>
 
                             <Form.Group hasValidation className="mb-3">

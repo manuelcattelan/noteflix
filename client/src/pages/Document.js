@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Container, Col, Row, Button, Form, ButtonToolbar } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom'
 import Navigation from '../components/Navigation';
@@ -11,14 +11,24 @@ import { ToolbarSlot, TransformToolbarSlot } from '@react-pdf-viewer/toolbar';
 import '@react-pdf-viewer/toolbar/lib/styles/index.css';// Import styles
 import pdf from '../pdf/ns.pdf';
 
+import Avatar, { genConfig, AvatarConfig } from 'react-nice-avatar'
+
 
 
 
 const Document = (props) => {
 
 
+    const[doc, setDoc] = useState({
+        "author": {
+            "username": "pino"
+        }
+    })
+    
+
     const location = useLocation()
-    const { fileUrl, titolo, autore, descrizione } = location.state
+    const { fileUrl, titolo, autore, descrizione, id } = location.state
+
 
     /*
         Parametri per gestire la toolbar sopra i pdf mostrati
@@ -60,6 +70,18 @@ const Document = (props) => {
     const handleChatShow = () => setChatShow(true);
 
 
+               
+    useEffect(()=>fetchDoc, [""])
+
+    const fetchDoc = () => {                                      
+        const url = "http://localhost:3001/api/v1/documents/"+id+"/?token="+props.token
+        fetch(url)
+        .then(resp => resp.json())
+        .then(data => setDoc(data))
+    }
+
+    
+
     return (
         <>
             <Navigation theme={props.theme} setTheme={props.setTheme} user={props.user} setUser={props.setUser}/>
@@ -78,14 +100,19 @@ const Document = (props) => {
                             </div>
                         </Worker>
                     </Col>
-                    <Col>
-                        <p className='doc-titolo mt-5'>
+                    <Col md="3">
+                        <p className='doc-autore d-flex align-items-center'>
+                            <Avatar className="my-3 me-2" style={{ width: '5rem', height: '5rem' }} {...doc.author.avatar}/>
+                            <div className='mt-2'>
+                                Mentore
+                                <p className='text-primary fs-2 mt-2'>{doc.author.username}</p>
+                            </div>
+                            
+                        </p>
+                        <p className='doc-titolo'>
                             {titolo}
                         </p>
-                        <p className='doc-autore'>
-                            {autore}
-                        </p>
-                        <p className='doc-descrizione'>
+                        <p className='doc-descrizione' style={{overflowWrap: "break-word"}}>
                             {descrizione}
                         </p>
                         {/* <Chat handleChatShow={handleChatShow} handleChatClose={handleChatClose} chatShow={chatShow}/> */}
