@@ -10,6 +10,7 @@ const jwt_decode  = require('jwt-decode');
 
 // import document model
 const Document = require('./../models/documentModel');
+const User = require('./../models/userModel');
 
 // initialize cloud storage
 const s3 = new AWS.S3({
@@ -142,13 +143,21 @@ router.get('/:id', async (request, result) => {
         return;
     }
 
+    let author = await User.findById(document.author);
+
+    if (!author)
+        author = {username: '[deleted]'};
+    else 
+        author = {username: author.username, avatar: author.avatar};
+
     // if document was found return document
     result
         .status(200)
         .json({
             status: true,
             message: 'Document found',
-            document
+            document,
+            author
         })
 })
 
