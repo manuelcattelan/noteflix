@@ -39,7 +39,7 @@ router.post('/login', async (request, result) => {
 });
 
 router.post('/signup', async (request, result) => {
-    if ( !(request.body.email && request.body.password && request.body.avatar)){
+    if ( !(request.body.email && request.body.password && request.body.avatar && request.body.username)){
         result.status(400).json({ success: false, message: 'Malformed request'});
         return;
     }
@@ -67,6 +67,7 @@ router.post('/signup', async (request, result) => {
         email: request.body.email,
         passwordHash: pwdHash,
         passwordSalt: pwdSalt,
+        username: request.body.username,
         joinDate: new Date(),
         avatar: request.body.avatar,
         userType: 'user'

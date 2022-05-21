@@ -7,6 +7,7 @@ const userSchema = new Schema ({
     passwordSalt: String,
     joinDate: Date,
     userType: String,
+    username: String,
     subscription: { type: Schema.Types.ObjectId, ref:'Subscription'},
     savedDocuments:[{ type: Schema.Types.ObjectId, ref:'Document'}],
     avatar: {
