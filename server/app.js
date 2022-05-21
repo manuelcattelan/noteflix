@@ -28,4 +28,10 @@ app.use('/api/v1/subscription', subscription);
 app.use('/api/v1/documents', tokenChecker.tokenChecker);
 app.use('/api/v1/documents', documents);
 
+//return 404 message in JSON when API is not found
+app.use((req, res) => {
+    res.status(404);
+    res.json({ success: false, message: 'Error: not found' });
+});
+
 module.exports = app;
