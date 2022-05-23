@@ -1,0 +1,471 @@
+openapi: 3.0.0
+info:
+  version: '1.0'
+  title: "Noteflix OpenAPI 3.0"
+  description: API for managing Noteflix project.
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:3001/api/v1
+    description: Localhost
+paths:
+  /login:
+    post:
+      description: 'By providing the email and password in the login form, the request is sent to authenticate the user and, if it succeeds, a JWT is returned.'
+      summary: 'Logs in a registered user.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  description: 'Email address of the user used at signup'
+                password:
+                  type: string
+                  description: 'User password chosen at signup'
+      responses:
+        '200':
+          description: 'The login process succeeded and the user token is sent in the "token" field.'
+          content:
+            application/json:
+              schema:
+                type: object  
+                properties:
+                  success:
+                    type: boolean
+                  token: 
+                    type: string
+                  message:
+                    type: string
+        '400':
+          description: 'The login process failed and the reason is stated in the "message" field.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  
+
+  /signup:
+    post:
+      description: 'By providing a non-registered email and a password, the request is sent together with the data regarding the avatar selected and, if it succeeds, a JWT is returned.'
+      summary: 'Registers a new user.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+                - avatar
+              properties:
+                email:
+                  type: string
+                  description: 'Email address of the user used for signup'
+                password:
+                  type: string
+                  description: 'User password chosen at signup'
+                avatar:
+                  type: object
+                  description: 'Avatar configuration'
+      responses:
+        '201':
+          description: 'The registration process succeeded, the user credentials are stored in the database and the user token is sent in the "token" field.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  token: 
+                    type: string
+                  message:
+                    type: string
+        '400':
+          description: 'The registration process failed and the reason is stated in the "message" field.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  
+  /documents:
+    get:
+      description: 'By providing a valid token as a request parameter, the request returns a JSON containing all documents in the database and the corresponding informations.'
+      summary: 'Lists all documents in the database.'
+      parameters: 
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'There were documents found in the database and their information is returned in the "documents" field.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  documents:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Document'
+        '404':
+          description: 'No documents were found in the database and the message is displayed in the "message" field.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    
+    post:
+      description: 'By providing a valid token and the required information in "form-data" format, a new document is created with the given parameters, uploaded to cloud storage and its informations are stored in the database'
+      summary: 'Uploads a new document in the database.'
+      parameters: 
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '201':
+          description: 'The document was successfully uploaded to the database and its informations are returned in the "document" field.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  documents:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Document'
+        '400':
+          description: 'The document upload failed and the reason is stated in the "message" field.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+      
+  
+  /documents/{id}:
+    get:
+      description: 'By providing the document ID and a valid token as a request parameter, the request returns a JSON containing the information regarding the document, if it was found.'
+      summary: 'Finds and returns a document with the given id.'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: 'Hexadecimal ID of the document to find.'
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'The document was found and its information is returned in the field "document".'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  document:
+                    $ref: '#/components/schemas/Document'
+                  author:
+                    type: object
+                    properties:
+                      username: 
+                        type: string
+                      avatar:
+                        $ref: '#/components/schemas/Avatar'
+                    
+        '400':
+          description: 'No documents with the given ID were found and the message is returned in the "message" field.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    
+        '404':
+          description: 'The ID parameter was given with a wrong format and the message is returned in the "message" field.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  
+  /subscription:
+    post:
+      description: 'By providing a valid token and a subscription plan and area (if needed) in the request body, a new subscription is created and stored in the database.'
+      summary: 'Creates a new user subscription.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - subscriptionType
+              properties:
+                subscriptionType:
+                  type: string
+                  description: 'Type of subscription chosen by the user'
+                subscriptionArea:
+                  type: string
+                  description: 'The user can only access documents within this area'
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '201':
+          description: 'The subscription is created and the token containing the information regarding the new subscription.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  token:
+                    type: string
+
+        '400':
+          description: 'The subscription creation failed and the reason is stated in the "message" field.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  
+  /token:
+    post:
+      description: 'By providing a valid token, this request validates it and returns the decoded data.'
+      summary: 'Decode a valid given token.'
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token that needs to be decoded.'
+      responses:
+        '200':
+          description: 'The token was successfully validated and decoded and its informations are returned as JSON in the "tokenData" field.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  tokenData:
+                    type: object
+
+        '401':
+          description: 'The token verification failed because no token was given.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: object
+        
+        '403':
+          description: 'The token verification failed because the token was invalid.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+
+          
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - email
+        - passwordHash
+        - passwordSalt
+        - avatar
+        - userType
+      properties:
+        email:
+          type: string
+          description: 'Email address of the user'
+        passwordHash:
+          type: string
+          description: 'Digest of password'
+        passwordSalt:
+          type: string
+          description: 'randomly generated string'
+        username:
+          type: string
+          description: 'Username of user inside of the platform'
+        joinDate:
+          type: string
+          description: 'Date the user joined'
+        userType:
+          type: string
+          description: 'Type of user'
+        subscription:
+          $ref: '#/components/schemas/Subscription'
+        savedDocuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+        avatar:
+          type: object
+          description: 'Avatar configuration in JSON format'
+    Document:
+      type: object
+      required:
+        - title
+        - author
+        - description
+        - area
+        - tag
+        - creationDate
+        - url
+      properties:
+        title:
+          type: string
+          description: 'Title of the document'
+        author:
+          type: string
+          description: 'ID of the author who pulishes the document'
+        description:
+          type: string
+          description: 'Short description of the document'
+        area:
+          type: string
+          description: 'Area of interest of document'
+        tag:
+          type: array
+          items:
+            type: string
+            description: 'List of tags that identify the kind of document'
+        creationDate:
+          type: string
+          description: 'Date of upload of the document'
+        url:
+          type: string
+          description: 'Link to resource on s3 cloud'
+    Subscription:
+      type: object
+      required:
+        - type
+        - creationDate
+      properties:
+        type:
+          type: string
+          description: 'Type of subscription'
+        area:
+          type: string
+          description: 'The user can only access documents within this area'
+        creationDate:
+          type: string
+          description: 'Date of creation of the subscription'
+        lastPayment:
+          type: string
+          description: 'Date of last payment'
+    Avatar:
+      type: object
+      properties:
+        sex:
+          type: string
+        faceColor:
+          type: string
+        earSize:
+          type: string
+        eyeStyle:
+          type: string
+        noseStyle:
+          type: string
+        mouthStyle:
+          type: string
+        shirtStyle:
+          type: string
+        glassesStyle:
+          type: string
+        hairColor:
+          type: string
+        hairStyle:
+          type: string
+        hatStyle:
+          type: string
+        hatColor:
+          type: string
+        eyeBrowStyle:
+          type: string
+        shirtColor:
+          type: string
+        bgColor:
+          type: string
