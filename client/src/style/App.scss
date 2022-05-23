@@ -1,0 +1,45 @@
+.App{
+    background: var(--page-background);
+    color: var(--text);
+}
+
+.Navtheme{
+    color: var(--text) !important;
+}
+
+.navbar{
+    background: var(--page-background);
+}
+
+a{
+    text-decoration: none !important;
+}
+
+
+//dropdown delle impostazioni
+.dropdown-menu.show{
+    padding: 0;
+    background: var(--page-background);
+    border-color: var(--text) !important;
+}
+.dropdown-toggle.nav-link{
+    color: var(--text) !important;
+}
+.dropdown-item{
+    color: var(--text) !important;
+    
+}
+.dropdown-item:hover{
+        background: var(--page-background) !important;
+    }
+
+
+
+
+//for pdf thumbnails
+.rpv-thumbnail__cover-image{
+    width: 100%;
+    object-fit: cover;
+    overflow: hidden;
+    opacity: 0.9;
+}
