@@ -27,6 +27,10 @@ const Signup = (props) => {
         
         e.preventDefault()
 
+        if (!validatePassword()){
+            return;
+        }
+
         fetch('http://localhost:3001/api/v1/auth/signup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -97,7 +101,7 @@ const Signup = (props) => {
                         Registrandoti dichiari di aver letto ed accettato i <Link to="/policy"><span className='text-primary fw-bold'>termini del servizio</span></Link>.
                     </Form.Label>
                 </Form.Group>
-                <Button variant="primary" type="submit" onClick={validatePassword}>
+                <Button variant="primary" type="submit" >
                     Registrati
                 </Button>
             </Form>
