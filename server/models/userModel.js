@@ -8,7 +8,12 @@ const userSchema = new Schema ({
     joinDate: Date,
     userType: String,
     username: String,
-    subscription: { type: Schema.Types.ObjectId, ref:'Subscription'},
+    subscription: {
+        subType: String,
+        area: String,
+        creationDate: Date,
+        lastPayment: Date
+    },
     savedDocuments:[{ type: Schema.Types.ObjectId, ref:'Document'}],
     avatar: {
         sex: String,
