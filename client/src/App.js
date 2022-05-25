@@ -6,7 +6,7 @@ import "./style/Text.scss" //style for texts
 import './style/theme.scss';  //light and dark theme for the app
 import useLocalStorage from "./hooks/useLocalStorage";//hooks
 import useThemeDetector from "./hooks/useThemeDetector";//hooks
-import Console from './pages/Console';
+import MentorConsole from './pages/MentorConsole';
 import Library from './pages/Library';
 import Main from './pages/Main';
 import Platform from './pages/Platform';
@@ -73,7 +73,7 @@ function App() {
           
           {/* pagine accessibili solo sotto verifica utente loggato (hanno la props user) */}
           <Route path='/library'  exact element={<Library  user={user} token={token} theme={theme} setTheme={toggleTheme} navbar={navbar}/>} />
-          <Route path='/console'  exact element={<Console  user={user} token={token} theme={theme} setTheme={toggleTheme} navbar={navbar}/>} />
+          <Route path='/mentorconsole'  exact element={<MentorConsole  user={user} token={token} theme={theme} setTheme={toggleTheme} navbar={navbar}/>} />
           <Route path='/upload'   exact element={<Upload   user={user} token={token} theme={theme} setTheme={toggleTheme} navbar={navbar}/>} />
           <Route path='/document' exact element={<Document user={user} token={token} theme={theme} setTheme={toggleTheme} navbar={navbar}/>} />
 
