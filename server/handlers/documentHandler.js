@@ -5,9 +5,7 @@ const multer = require('multer')
 const multerMiddleware = multer();
 const multerS3 = require('multer-s3');
 const AWS = require('aws-sdk');
-const fs = require('fs');
 const path = require('path')
-const jwt_decode  = require('jwt-decode');  
 
 // import document model
 const Document = require('./../models/documentModel');
@@ -97,15 +95,31 @@ router.post('', function (request, result) {
 
 // route handler for listing all documents
 router.get('', async (request, result) => {
+    let documents
+    let documentStatus = request.query.status;
+
     // retrieve all documents from database
-    let documents = await Document.find({});
+    if (!documentStatus){ documents = await Document.find({}); }
+    else if (!(documentStatus == "pending" || documentStatus == "public")){
+        result
+            .status(400)
+            .json({
+                success: false,
+                message: 'Unknown document status provided'
+            })
+        return
+    }
+    else {
+        documents = await Document.find({ status: documentStatus })
+    }
+
 
     // if no documents were found
     if (!documents || documents.length == 0){
         result
             .status(404)
             .json({
-                success: false,
+                success: true,
                 message: 'No documents found',
             })
         return;
@@ -142,7 +156,7 @@ router.get('/:id', async (request, result) => {
         result
             .status(404)
             .json({
-                status: false,
+                status: true,
                 message: 'No document found',
             })
         return;
@@ -175,7 +189,7 @@ router.delete('/:id', async(request, result) => {
         result
             .status(404)
             .json({
-                status: false,
+                status: true,
                 message: 'No document found',
             })
         return;
