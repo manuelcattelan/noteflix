@@ -19,7 +19,8 @@ app.use('/api/v1/token', tokenChecker.tokenChecker);
 app.use('/api/v1/token', tokenApi)
 
 // specify route prefix for object handlers
-app.use('/api/v1/auth', auth)
+app.use('/api/v1/auth/changePwd', tokenChecker.tokenChecker);
+app.use('/api/v1/auth/', auth)
 
 //verified with token
 app.use('/api/v1/subscription', tokenChecker.tokenChecker);
