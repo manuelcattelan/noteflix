@@ -86,6 +86,25 @@ const Signup = ({setPage, setNavbar, user, setToken}) => {
         return true;
     }
 
+    const handleAbbonamento = (valore) => {
+        switch(valore){
+            case "Matricole":
+                document.getElementById("info-abbonamento").innerHTML="Non sono previsti costi per il piano selezionato"
+                document.getElementById("macroarea").className="d-none"
+                break;
+            case "Studenti":
+                document.getElementById("info-abbonamento").innerHTML="Il piano solezionato prevede un costo mensile di $4.99"
+                document.getElementById("macroarea").className="d-block mb-3"
+                break;
+            case "Nerd":
+                document.getElementById("info-abbonamento").innerHTML="Il piano seleizonato prevede un costo mensile di $8.99"
+                document.getElementById("macroarea").className="d-none"
+                break;
+            default:
+                document.getElementById("info-abbonamento").innerHTML="Seleziona un piano"
+                document.getElementById("macroarea").className="d-none"
+        }
+    }
 
     return (
         <>
@@ -119,6 +138,27 @@ const Signup = ({setPage, setNavbar, user, setToken}) => {
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Conferma la Password</Form.Label>
                     <Form.Control id="confirm-password-label" type="password" placeholder="Ripeti la password" />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                    <Form.Label>Scegli un piano di abbonamento</Form.Label>
+                    <Form.Select onChange={(e)=>handleAbbonamento(e.target.value)}>
+                        <option>Matricole</option>
+                        <option>Studenti</option>
+                        <option>Nerd</option>
+                    </Form.Select>
+                    <Form.Text id="info-abbonamento" className="text-muted">
+                        Non condivideremo la tua email con terze parti.
+                    </Form.Text>
+                </Form.Group>
+                <Form.Group id="macroarea" className="d-none">
+                    <Form.Label>Scegli una macroarea</Form.Label>
+                    <Form.Select>
+                        <option>opzione</option>
+                        <option>opzione</option>
+                        <option>opzione</option>
+                        <option>opzione</option>
+                        <option>opzione</option>
+                    </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3 d-flex" controlId="formBasicCheckbox">
                     <Form.Check type="checkbox" className="me-3" required/>

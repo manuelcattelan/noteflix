@@ -24,7 +24,7 @@ const MentorNav = (props) => {
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="ms-auto">
-                            <Link to="/upload">
+                            <Link to="/mentorconsole">
                                 <Nav.Link href="#def" className="Navtheme">Console mentore</Nav.Link>
                             </Link>
                             <Link to="/upload">
