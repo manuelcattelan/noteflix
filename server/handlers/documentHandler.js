@@ -100,7 +100,7 @@ router.get('', async (request, result) => {
 
     // retrieve all documents from database
     if (!documentStatus){ documents = await Document.find({}); }
-    else if (!(documentStatus == "pending" || documentStatus == "public")){
+    else if (!(documentStatus == "pending" || documentStatus == "public" || documentStatus == "reported")){
         result
             .status(400)
             .json({
@@ -110,9 +110,9 @@ router.get('', async (request, result) => {
         return
     }
     else {
-        documents = await Document.find({ status: documentStatus })
+        if (documentStatus == "reported") { documents = await Document.find({ status: "public", reported: true }) }
+        else {documents = await Document.find({ status: documentStatus })}
     }
-
 
     // if no documents were found
     if (!documents || documents.length == 0){
