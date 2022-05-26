@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const multer = require('multer')
+const multerMiddleware = multer();
 const multerS3 = require('multer-s3');
 const AWS = require('aws-sdk');
 const fs = require('fs');
@@ -53,21 +54,19 @@ router.post('', function (request, result) {
                     .status(400)
                     .send({ success: false, message: error.message})
         }
-
         // check if all file parameters are provided in request
         if( !( request.body.title && request.body.description && request.body.area && request.body.tag ) ){
             return result
-                    .status(400)
-                    .send({ success: false, message: "Missing request parameters"});
+                .status(400)
+                .send({ success: false, message: "Missing request parameters"});
         }
-
         // convert tag attribute from string with spaces to array of elements
         tags = request.body.tag.split(" ");
 
         // create new document entry
         let document = new Document ({
             title: request.body.title,
-            author: request.loggedUser.id,
+            // author: request.loggedUser.id,
             description: request.body.description,
             area: request.body.area,
             tag: tags,
@@ -160,5 +159,51 @@ router.get('/:id', async (request, result) => {
             author
         })
 })
+
+router.delete('/:id', async(request, result) => {
+    // look for document with provided id
+    let document = await Document.findById(request.params.id).exec();
+
+    // if no document was found
+    if (!document){
+        result
+            .status(404)
+            .json({
+                status: false,
+                message: 'No document found',
+            })
+        return;
+    }
+
+    // retrieve document name from url attribute
+    let documentName = path.basename(document.url);
+
+    // create params object for document deletion
+    let params = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: documentName
+    }
+
+    // delete document from database
+    await document.deleteOne();
+
+    // delete document from cloud storage
+    s3.deleteObject(params, function (error, data) {
+        if (error){
+            return result
+                    .status(400)
+                    .send({ 
+                        success: false, 
+                        message: error.message
+                    })
+        }
+        return result
+                .status(200)
+                .send({
+                    success: true,
+                    message: 'Document deleted.'
+                })
+    })
+} )
 
 module.exports = router;
