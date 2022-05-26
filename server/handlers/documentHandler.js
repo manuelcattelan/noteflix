@@ -4,9 +4,7 @@ const router = express.Router();
 const multer = require('multer')
 const multerS3 = require('multer-s3');
 const AWS = require('aws-sdk');
-const fs = require('fs');
 const path = require('path')
-const jwt_decode  = require('jwt-decode');  
 
 // import document model
 const Document = require('./../models/documentModel');
@@ -97,24 +95,82 @@ router.get('', async (request, result) => {
 
     // if no documents were found
     if (!documents || documents.length == 0){
-        result
-            .status(404)
-            .json({
-                success: false,
-                message: 'No documents found',
-            })
-        return;
+        return result.status(204)
+        .json({
+            success: false,
+            message: 'No documents found',
+        })
     }
 
-    // if documents were found, return documen list
+    // if documents were found, return document list
+
+    documents = documents.map( (doc)=>{
+        return {
+            _id: doc._id,
+            title: doc.title,
+            author: doc.author,
+            description: doc.description,
+            area: doc.area,
+            tag: doc.tag,
+            creationDate: doc.creationDate,
+            url: doc.url,
+            like:   doc.like.length,
+            dislike: doc.dislike.length
+        }
+    })
+
     result
         .status(200)
         .json({
             success: true,
             message: 'Documents found',
-            documents: documents 
+            documents: documents
         })
 });
+
+router.get('/saved', async (request, result) =>{
+    //get user from DB
+    let usr = await User.findById(request.loggedUser.id).exec();
+
+    //get documents saved by user
+    let docs = await Document.find({
+        "_id" : {
+             "$in" : usr.savedDocuments
+        }
+    })
+
+    //if no documents are found
+    if (!docs.length){
+        return result.status(204)
+        .json({
+            success: false,
+            message: 'No documents found',
+        })
+    }
+
+    docs = docs.map( (doc)=>{
+        return {
+            _id: doc._id,
+            title: doc.title,
+            author: doc.author,
+            description: doc.description,
+            area: doc.area,
+            tag: doc.tag,
+            creationDate: doc.creationDate,
+            url: doc.url,
+            like:   doc.like.length,
+            dislike: doc.dislike.length
+        }
+    })
+
+    return result.status(200)
+    .json({
+        success: true,
+        message: 'Documents found',
+        documents: docs
+    })
+})
+
 
 // route handler for listing a document by ID
 router.get('/:id', async (request, result) => {
