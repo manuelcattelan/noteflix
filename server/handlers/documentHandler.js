@@ -72,7 +72,7 @@ router.post('', function (request, result) {
         // create new document entry
         let document = new Document ({
             title: request.body.title,
-            // author: request.loggedUser.id,
+            author: request.loggedUser.id,
             description: request.body.description,
             area: request.body.area,
             tag: tags,
