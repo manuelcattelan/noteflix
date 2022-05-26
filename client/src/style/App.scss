@@ -1,14 +1,16 @@
+
+
 .App{
     background: var(--page-background);
-    color: var(--text);
+    color: #101010
 }
 
 .Navtheme{
-    color: var(--text) !important;
+    color: #000 !important;
 }
 
 .navbar{
-    background: var(--page-background);
+    background:#fff;
 }
 
 a{
@@ -38,7 +40,7 @@ a{
 
 //for pdf thumbnails
 .rpv-thumbnail__cover-image{
-    width: 100%;
+    //width: 100%;
     object-fit: cover;
     overflow: hidden;
     opacity: 0.9;

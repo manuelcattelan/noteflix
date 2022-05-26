@@ -11,11 +11,12 @@ const SignLog = (props) => {
         stato per la variabile form, che conterrà una stringa di testo
         "login" o "signup" a seconda della selezione dell'utente.
         handleSelect cambia il valore di form alla selezione.
-    */
-    const [form,setForm] = useState("login");
-    const handleSelect = (eventKey) => setForm(eventKey);
-
-
+        */
+       const [form,setForm] = useState("login");
+       const handleSelect = (eventKey) => setForm(eventKey);
+       
+     
+    
 
     return (
         <>
