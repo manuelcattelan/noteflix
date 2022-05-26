@@ -206,6 +206,32 @@ router.get('/:id', async (request, result) => {
     else 
         author = {username: author.username, avatar: author.avatar};
 
+    let interactions = {
+        liked: //check if user is in likes
+        !!await Document.findOne({
+            _id: document.id,
+            like: request.loggedUser.id,
+          }).exec(),
+        saved: //check if document is in saved documents
+        !!await User.findOne({
+            _id: request.loggedUser.id,
+            savedDocuments: document.id ,
+          }).exec()
+    }
+
+    document = {
+            _id: document._id,
+            title: document.title,
+            author: document.author,
+            description: document.description,
+            area: document.area,
+            tag: document.tag,
+            creationDate: document.creationDate,
+            url: document.url,
+            like:   document.like.length,
+            dislike: document.dislike.length
+        }
+
     // if document was found return document
     result
         .status(200)
@@ -213,7 +239,8 @@ router.get('/:id', async (request, result) => {
             status: true,
             message: 'Document found',
             document,
-            author
+            author,
+            interactions
         })
 })
 
