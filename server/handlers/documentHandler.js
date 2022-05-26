@@ -114,7 +114,7 @@ router.get('', async (request, result) => {
     // if no documents were found
     if (!documents || documents.length == 0){
         result
-            .status(404)
+            .status(204)
             .json({
                 success: true,
                 message: 'No documents found',
@@ -122,7 +122,7 @@ router.get('', async (request, result) => {
         return;
     }
 
-    // if documents were found, return documen list
+    // if documents were found, return document list
     result
         .status(200)
         .json({
@@ -154,7 +154,7 @@ router.get('/:id', async (request, result) => {
             .status(404)
             .json({
                 success: true,
-                message: 'No document found',
+                message: 'No document found with the given id',
             })
         return;
     }
@@ -188,7 +188,7 @@ router.delete('/:id', async(request, result) => {
             .status(404)
             .json({
                 success: true,
-                message: 'No document found',
+                message: 'No document found with the given id',
             })
         return;
     }
@@ -219,7 +219,7 @@ router.delete('/:id', async(request, result) => {
                 .status(200)
                 .send({
                     success: true,
-                    message: 'Document deleted.'
+                    message: 'Document deleted'
                 })
     })
 } )
@@ -235,7 +235,7 @@ router.patch('/:id/report', async (request, result) => {
             .status(404)
             .json({
                 success: true,
-                message: 'No document found',
+                message: 'No document found with the given id',
             })
         return;
     }
