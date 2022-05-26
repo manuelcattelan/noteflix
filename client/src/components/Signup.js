@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Routes, Route, useNavigate} from 'react-router-dom';
 import Platform from '../pages/Platform';
 
-const Signup = (props) => {
+const Signup = ({setPage, setNavbar, user, setToken}) => {
 
 
     //handling avatar
@@ -39,15 +39,40 @@ const Signup = (props) => {
         .then(resp => resp.json())
         .then(data => {
             if(data.success){
-                props.setToken(data.token)
-                props.setNavbar("user")
-                props.setPage(<Platform theme={props.theme} setTheme={props.toggleTheme} token={data.token} user={props.user} navbar="user"/>)
-                navigate('/')
+                setToken(data.token)
+                
+                const provToken = data.token
+
+                fetch("http://localhost:3001/api/v1/token/?token="+provToken)
+                .then(resp => resp.json())
+                .then(data => {
+                    switch(data.tokenData.type) {
+                        case "mentor":
+                          setNavbar("mentor")
+                          setPage(<Platform token={provToken} user={user} navbar="mentor"/>)
+                          navigate('/')
+                          break;
+                        case "moderator":
+                          setNavbar("moderator")
+                          setPage(<Platform token={provToken} user={user} navbar="moderator"/>)
+                          navigate('/')
+                          break;
+                        case "user":
+                          setNavbar("user")
+                          setPage(<Platform token={provToken} user={user} navbar="user"/>)
+                          navigate('/')
+                          break;
+                        default:
+                          setNavbar("user")
+                          setPage(<Platform token={data.token} user={user} navbar="user"/>)
+                          navigate('/')
+                    }
+                })
+                
             }else{
                 alert(data.message)
             }
         })
-        .then(console.log(props.token))
     }
 
 
