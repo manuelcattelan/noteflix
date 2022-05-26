@@ -2,16 +2,15 @@ require('dotenv').config();
 
 const jwt = require('jsonwebtoken');
 
-function createToken(user, subscription){
-    var payload
-    if (subscription){
-        console.log(user.subscription)
-        payload = { id: user._id, 
-            type: user.userType,
-            subscriptionType: subscription.type,
-            subscriptionArea: subscription.area};
-    } else {
-        payload = { id: user._id };
+function createToken(user){
+    var payload = { id: user._id,
+                    type: user.userType};
+    if (user.subscription){
+        if (new Date() - user.subscription.lastPayment < 30 * (1000*3600*24) )  //must have payed within 30 days
+            payload.subscription = {
+                type: user.subscription.subType,
+                area: user.subscription.area,
+            }
     }
     var options = { expiresIn: 86400 } // expires in 24 hours
     var token = jwt.sign(payload, process.env.TOKEN_SECRET, options);
@@ -38,16 +37,7 @@ const tokenChecker = function ( req, res, next ) {
     });
 };
 
-function checkPermissions (req, macroarea) {
-    var token = req.body.token || req.query.token || req.headers[ 'x-access-token'];
-    var tokenData = jwt_decode(token);
-    return (tokenData.subscription == "Nerd" ||
-            tokenData.area == macroarea )
-} 
-
-
 module.exports = {
     tokenChecker: tokenChecker,
     createToken: createToken,
-    checkPermissions: checkPermissions
 }
