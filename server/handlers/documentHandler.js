@@ -50,20 +50,18 @@ const upload = multer({
 const uploadFile = upload.single('url');
 
 // route handler for document upload
-router.post('', function (request, result) {
+router.post('', async (request, result) => {
     uploadFile(request, result, function(error) {
         // error returned by multer upload function
         if(error){
             return result
                     .status(400)
-                    .send({ success: false, message: error.message})
+                    .send({ 
+                        success: false, 
+                        message: error.message
+                    })
         }
-        // check if all file parameters are provided in request
-        if( !( request.body.title && request.body.description && request.body.area && request.body.tag ) ){
-            return result
-                .status(400)
-                .send({ success: false, message: "Missing request parameters"});
-        }
+
         // convert tag attribute from string with spaces to array of elements
         tags = request.body.tag.split(" ");
 
