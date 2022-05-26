@@ -156,7 +156,7 @@ router.get('/:id', async (request, result) => {
         result
             .status(404)
             .json({
-                status: true,
+                success: true,
                 message: 'No document found',
             })
         return;
@@ -173,7 +173,7 @@ router.get('/:id', async (request, result) => {
     result
         .status(200)
         .json({
-            status: true,
+            success: true,
             message: 'Document found',
             document,
             author
@@ -190,7 +190,7 @@ router.delete('/:id', async(request, result) => {
         result
             .status(404)
             .json({
-                status: true,
+                success: true,
                 message: 'No document found',
             })
         return;
@@ -237,7 +237,7 @@ router.patch('/:id/report', async (request, result) => {
         result
             .status(404)
             .json({
-                status: true,
+                success: true,
                 message: 'No document found',
             })
         return;
