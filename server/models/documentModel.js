@@ -11,6 +11,13 @@ const documentSchema = new Schema ({
     tag: [ String ],
     creationDate: Date,
     url: String,
+    like:    [{ type: Schema.Types.ObjectId, ref: 'User'}],
+    dislike: [{ type: Schema.Types.ObjectId, ref: 'User'}],
+    comments: [{
+        author: { type: Schema.Types.ObjectId, ref: 'User'},
+        Date: Date,
+        Body: String
+    }]
 })
 
 // create model for document object
