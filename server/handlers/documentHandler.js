@@ -128,7 +128,6 @@ router.get('', async (request, result) => {
                  "$in" : usr.savedDocuments
             }
         });
-
     }
     else {
         // if status == reported, return all public documents that are currently reported
@@ -143,7 +142,6 @@ router.get('', async (request, result) => {
             .send()
     }
     // if documents were found, return document list
-
     documents = documents.map( (doc)=>{
         return {
             _id: doc._id,
@@ -158,7 +156,6 @@ router.get('', async (request, result) => {
             dislike: doc.dislike.length
         }
     })
-
     return result
         .status(200)
         .json({
@@ -196,7 +193,7 @@ router.get('/:id', async (request, result) => {
         author = {username: '[deleted]'};
     else 
         author = {username: author.username, avatar: author.avatar};
-
+    // handle user interactions with retrieved documents
     let interactions = {
         liked: //check if user is in likes
         !!await Document.findOne({
@@ -209,7 +206,6 @@ router.get('/:id', async (request, result) => {
             savedDocuments: document.id ,
           }).exec()
     }
-
     document = {
             _id: document._id,
             title: document.title,
@@ -222,7 +218,6 @@ router.get('/:id', async (request, result) => {
             like:   document.like.length,
             dislike: document.dislike.length
         }
-
     // if document was found return document
     return result
         .status(200)
@@ -354,4 +349,52 @@ router.patch('/:id/report', async (request, result) => {
         })
 })
 
+// route handler for updating the "pending" attribute to "public" on document report
+router.patch('/:id/validate', async (request, result) => {
+    // check id length and id string format (must be hex)
+    if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
+        return result
+            .status(400)
+            .json({
+                success: false,
+                message: 'Invalid ID',
+            })
+    }
+    // look for document with provided id
+    let document = await Document.findById(request.params.id).exec();
+    // if no document was found
+    if (!document){
+        result
+            .status(404)
+            .json({
+                success: true,
+                message: 'No document found with the given id',
+            })
+        return;
+    }
+    // if document was pending, publish it
+    if (document.status == "pending"){ document.status = "public"; }
+    // if document was public and got reported, validate it
+    else if (document.status == "public" && document.reported == true) { document.reported = false; }
+    // push changes to database
+    document.save()
+        .then( () => {
+            // document publish was successfull
+            return result
+                .status(200)
+                .json({ 
+                    success: true,
+                    message: 'Document validated successfully'
+                });
+        })
+        .catch( error => {
+            // document publish failed
+            return result
+                .status(400)
+                .json({
+                    success: false,
+                    message: error.message
+                })
+        })
+})
 module.exports = router;
