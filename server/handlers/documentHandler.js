@@ -33,11 +33,17 @@ const upload = multer({
         }
     }),
     fileFilter: (req, file, cb) => {
+        // check for file extension before uploading
         if (file.mimetype === "application/pdf") {
             cb(null, true);
         } else {
             cb(null, false);
             return cb(new Error('Only .pdf files are supported!'));
+        }
+        // check if all file parameters are provided in request
+        if( !( req.body.title && req.body.description && req.body.area && req.body.tag ) ){
+            cb(null, false);
+            return cb(new Error('Missing parameters in request form.'))
         }
     }
 });
