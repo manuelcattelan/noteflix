@@ -17,7 +17,7 @@ const Navigation = (props) => {
     switch(props.navbar){
         case "user":       return (<UserNav       handleLogout={handleLogout}/>)        
         case "moderator":  return (<ModeratorNav  handleLogout={handleLogout}/>)   
-        case "moderator":  return (<MentorNav     handleLogout={handleLogout}/>)    
+        case "mentor":     return (<MentorNav     handleLogout={handleLogout}/>)    
         default:           return (<VisitorNav    handleLogout={handleLogout}/>) 
     }
   
