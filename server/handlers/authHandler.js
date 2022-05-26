@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const tokenChecker = require('./tokenHandler.js');
 
 const User = require('./../models/userModel');
+const Subscription = require('./../models/subscriptionModel');
 
 router.post('/login', async (request, result) => {
     if ( !(request.body.email && request.body.password)){
@@ -28,8 +29,9 @@ router.post('/login', async (request, result) => {
     
     let pwdHash = crypto.createHash('sha256').update(request.body.password + user.passwordSalt).digest('hex');
     if (pwdHash ===  user.passwordHash){
+        subs = await Subscription.findById(user.subscription).exec();
         result.status(200).json({ success: true, message: 'Enjoy your token!',
-        token: tokenChecker.createToken(user) });
+        token: tokenChecker.createToken(user, subs) });
         return;
     } 
 
@@ -81,21 +83,5 @@ router.post('/signup', async (request, result) => {
     
 })
 
-router.patch('/changePwd', async (request, result) => {
-    if ( !(request.body.oldPassword && request.body.newPassword)){
-        result.status(400).json({ success: false, message: 'Malformed request'});
-        return;
-    }
-    let usr = await User.findById(request.loggedUser.id);
-    let hash = crypto.createHash('sha256').update(request.body.oldPassword + usr.passwordSalt).digest('hex');
-    if (hash != usr.passwordHash){
-        result.status(400).json({ success: false, message: 'Old password doesn\'t match'});
-        return;
-    }
 
-    hash = crypto.createHash('sha256').update(request.body.newPassword + usr.passwordSalt).digest('hex');
-    usr.passwordHash = hash;
-    await usr.save();
-    result.status(200).json({ success: true, message: 'Password successfully updated'});
-})
 module.exports = router;

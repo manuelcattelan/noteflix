@@ -5,6 +5,7 @@ const router = express.Router();
   
 
 const User = require('./../models/userModel');
+const Subscription = require('./../models/subscriptionModel');
 const tokenChecker = require('./tokenHandler.js');
 
 
@@ -17,21 +18,26 @@ router.post('', async (req, result) => {
     }
     
     var usr = await User.findById(req.loggedUser.id).exec();
+    
+    //delete any previous subscription
+    await Subscription.deleteOne({ _id: usr.subscription });
 
-    sub = {
-        subType: req.body.subscriptionType,
-        area: req.body.subscriptionArea,
+    var subs = new Subscription ({
+        type: req.body.subscriptionType,
         creationDate: new Date,
         lastPayment: new Date
-    };
+    })
 
+    if (req.body.subscriptionType != "Nerd"){
+        subs.area= req.body.subscriptionArea;
+    }
 
-    usr.subscription = sub;
-    console.log (usr);
+    await subs.save();
+    usr.subscription = subs._id;
     await usr.save();   
     
     result.status(201).json({ success: true, message: 'Enjoy your token!',
-                token: tokenChecker.createToken(usr) });
+                token: tokenChecker.createToken(usr, subs) });
     return;
 
 });
