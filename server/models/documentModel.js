@@ -11,6 +11,7 @@ const documentSchema = new Schema ({
     tag: [ String ],
     creationDate: Date,
     status: { type: String, enum: ["pending", "public"], default: "pending"}, 
+    reported: { type: Boolean, default: false },
     url: String,
 })
 
