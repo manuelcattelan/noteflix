@@ -28,10 +28,14 @@ app.use('/api/v1/subscription', subscription);
 app.use('/api/v1/documents', tokenChecker.tokenChecker);
 app.use('/api/v1/documents', documents);
 
+const interaction = require('./handlers/interactionHandler.js');
+app.use('/api/v1/documents', interaction);
+
 //return 404 message in JSON when API is not found
 app.use((req, res) => {
     res.status(404);
     res.json({ success: false, message: 'Error: not found' });
 });
+
 
 module.exports = app;

@@ -113,13 +113,22 @@ router.get('', async (request, result) => {
     // retrieve all documents from database if no status parameter was given
     if (!documentStatus){ documents = await Document.find({}); }
     // check for validity of status parameter given 
-    else if (!(documentStatus == "pending" || documentStatus == "public" || documentStatus == "reported")){
+    else if (!(documentStatus == "pending" || documentStatus == "public" || documentStatus == "reported" || documentStatus == "saved")){
         return result
             .status(400)
             .json({
                 success: false,
                 message: 'Unknown document status provided'
             })
+    } else if (documentStatus == "saved"){
+        //get documents saved by current user
+        let usr = await User.findById(request.loggedUser.id).exec();
+        documents = await Document.find({
+            "_id" : {
+                 "$in" : usr.savedDocuments
+            }
+        });
+
     }
     else {
         // if status == reported, return all public documents that are currently reported
@@ -134,16 +143,32 @@ router.get('', async (request, result) => {
             .send()
     }
     // if documents were found, return document list
-    result
+
+    documents = documents.map( (doc)=>{
+        return {
+            _id: doc._id,
+            title: doc.title,
+            author: doc.author,
+            description: doc.description,
+            area: doc.area,
+            tag: doc.tag,
+            creationDate: doc.creationDate,
+            url: doc.url,
+            like:   doc.like.length,
+            dislike: doc.dislike.length
+        }
+    })
+
+    return result
         .status(200)
         .json({
             success: true,
             message: 'Documents found',
-            documents: documents 
+            documents: documents
         })
 });
 
-// route handler for retrieving a document by ID
+// route handler for listing a document by ID
 router.get('/:id', async (request, result) => {
     // check id length and id string format (must be hex)
     if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
@@ -171,6 +196,33 @@ router.get('/:id', async (request, result) => {
         author = {username: '[deleted]'};
     else 
         author = {username: author.username, avatar: author.avatar};
+
+    let interactions = {
+        liked: //check if user is in likes
+        !!await Document.findOne({
+            _id: document.id,
+            like: request.loggedUser.id,
+          }).exec(),
+        saved: //check if document is in saved documents
+        !!await User.findOne({
+            _id: request.loggedUser.id,
+            savedDocuments: document.id ,
+          }).exec()
+    }
+
+    document = {
+            _id: document._id,
+            title: document.title,
+            author: document.author,
+            description: document.description,
+            area: document.area,
+            tag: document.tag,
+            creationDate: document.creationDate,
+            url: document.url,
+            like:   document.like.length,
+            dislike: document.dislike.length
+        }
+
     // if document was found return document
     return result
         .status(200)
@@ -178,7 +230,8 @@ router.get('/:id', async (request, result) => {
             success: true,
             message: 'Document found',
             document,
-            author
+            author,
+            interactions
         })
 })
 
