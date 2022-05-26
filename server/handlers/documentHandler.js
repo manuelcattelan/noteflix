@@ -93,7 +93,7 @@ router.post('', function (request, result) {
     })
 });
 
-// route handler for listing all documents
+// route handler for listing all documents (depending on the status provided)
 router.get('', async (request, result) => {
     let documents
     let documentStatus = request.query.status;
@@ -180,6 +180,7 @@ router.get('/:id', async (request, result) => {
         })
 })
 
+// route handler for deleting a document by ID
 router.delete('/:id', async(request, result) => {
     // look for document with provided id
     let document = await Document.findById(request.params.id).exec();
@@ -225,5 +226,43 @@ router.delete('/:id', async(request, result) => {
                 })
     })
 } )
+
+// route handler for updating the "reported" attribute on document report
+router.patch('/:id/report', async (request, result) => {
+    // look for document with provided id
+    let document = await Document.findById(request.params.id).exec();
+
+    // if no document was found
+    if (!document){
+        result
+            .status(404)
+            .json({
+                status: true,
+                message: 'No document found',
+            })
+        return;
+    }
+
+    if(document.reported){
+        return result
+            .status(200)
+            .json({ 
+                success: true,
+                message: 'Document was already reported and is being evaluated'
+            });
+    }
+
+    // update reported attribute
+    document.reported = true;
+    // push changes to database
+    await document.save();
+
+    return result
+        .status(200)
+        .json({ 
+            success: true,
+            message: 'Document reported successfully'
+        });
+})
 
 module.exports = router;
