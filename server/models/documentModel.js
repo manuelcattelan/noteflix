@@ -10,6 +10,7 @@ const documentSchema = new Schema ({
     area: String,
     tag: [ String ],
     creationDate: Date,
+    status: { type: String, enum: ["pending", "public"], default: "pending"}, 
     url: String,
 })
 
