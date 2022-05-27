@@ -37,11 +37,12 @@ router.post('/login', async (request, result) => {
 });
 
 router.post('/signup', async (request, result) => {
-    if ( !(request.body.email && request.body.password && request.body.avatar && request.body.username)){
+    if ( !(request.body.email && request.body.password && request.body.avatar && request.body.username) ||
+         !(req.body.subscriptionType == 'studenti' || req.body.subscriptionType == 'nerd' || req.body.subscriptionType == 'matricole') ||
+          (req.body.subscriptionType == "studenti" && (!req.body.subscriptionArea))){
         result.status(400).json({ success: false, message: 'Malformed request'});
         return;
     }
-
 
     //check for valid email address (i have no idea if the regex is correct)
     if (!request.body.email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)){
@@ -68,6 +69,12 @@ router.post('/signup', async (request, result) => {
         username: request.body.username,
         joinDate: new Date(),
         avatar: request.body.avatar,
+        subscription: {
+            subType: req.body.subscriptionType,
+            area: req.body.subscriptionArea,
+            creationDate: new Date,
+            lastPayment: new Date
+        },
         userType: 'user'
     })
     
