@@ -10,13 +10,15 @@ const documentSchema = new Schema ({
     area: String,
     tag: [ String ],
     creationDate: Date,
+    status: { type: String, enum: ["pending", "public"], default: "pending"}, 
+    reported: { type: Boolean, default: false },
     url: String,
     like:    [{ type: Schema.Types.ObjectId, ref: 'User'}],
     dislike: [{ type: Schema.Types.ObjectId, ref: 'User'}],
     comments: [{
         author: { type: Schema.Types.ObjectId, ref: 'User'},
-        Date: Date,
-        Body: String
+        date: Date,
+        body: String
     }]
 })
 

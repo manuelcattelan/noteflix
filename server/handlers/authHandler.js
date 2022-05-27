@@ -37,10 +37,14 @@ router.post('/login', async (request, result) => {
 });
 
 router.post('/signup', async (request, result) => {
-    if ( !(request.body.email && request.body.password && request.body.avatar && request.body.username) ||
-         !(req.body.subscriptionType == 'studenti' || req.body.subscriptionType == 'nerd' || req.body.subscriptionType == 'matricole') ||
-          (req.body.subscriptionType == "studenti" && (!req.body.subscriptionArea))){
-        result.status(400).json({ success: false, message: 'Malformed request'});
+    if ( !(request.body.email && request.body.password && request.body.avatar && request.body.username && request.body.subscriptionType)){
+        result.status(400).json({ success: false, message: 'Missing parameters in rerquest body'});
+        return;
+    }
+
+    if (!(request.body.subscriptionType == 'studenti' || request.body.subscriptionType == 'nerd' || request.body.subscriptionType == 'matricole') ||
+         (request.body.subscriptionType == "studenti" && (!request.body.subscriptionArea))){
+        result.status(400).json({ success: false, message: 'Invalid subscription plan'});
         return;
     }
 
@@ -70,8 +74,8 @@ router.post('/signup', async (request, result) => {
         joinDate: new Date(),
         avatar: request.body.avatar,
         subscription: {
-            subType: req.body.subscriptionType,
-            area: req.body.subscriptionArea,
+            subType: request.body.subscriptionType,
+            area: request.body.subscriptionArea,
             creationDate: new Date,
             lastPayment: new Date
         },

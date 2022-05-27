@@ -27,7 +27,6 @@ router.post('', async (req, result) => {
 
 
     usr.subscription = sub;
-    console.log (usr);
     await usr.save();   
     
     result.status(201).json({ success: true, message: 'Enjoy your token!',
