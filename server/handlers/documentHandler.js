@@ -348,6 +348,20 @@ router.get('/:id', async (request, result) => {
             savedDocuments: document.id ,
           }).exec()
     }
+
+    //gather user data for each comment author
+    let comments = await Promise.all(document.comments.map( async (comment) => {
+        let author = await User.findById(comment.author);
+        if (!author)
+            author = {username: '[deleted]'};
+        else 
+            author = {username: author.username, avatar: author.avatar};
+        return {
+            id: comment._id,
+            author,
+            body: comment.body
+        }
+    }));
     document = {
             _id: document._id,
             title: document.title,
@@ -368,6 +382,7 @@ router.get('/:id', async (request, result) => {
             message: 'Document found',
             document,
             author,
+            comments,
             interactions
         })
 })
