@@ -503,7 +503,7 @@ router.patch('/:id/validate', async (request, result) => {
             })
     }
     // check if current user is a moderator
-    if (!request.loggedUser.type == "moderator"){
+    if (request.loggedUser.type != "moderator"){
         return result
             .status(401)
             .json({
