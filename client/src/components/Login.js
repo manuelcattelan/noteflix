@@ -6,7 +6,7 @@ import { Routes, Route, useNavigate} from 'react-router-dom';
 import Platform from '../pages/Platform';
 
 
-const Login = ({setToken, token, user, setPage, setNavbar}) => {
+const Login = ({setToken, token, setUser, user, setPage, setNavbar}) => {
 
     
     //stato per il form
@@ -36,6 +36,7 @@ const Login = ({setToken, token, user, setPage, setNavbar}) => {
                 fetch("http://localhost:3001/api/v1/token/?token="+provToken)
                 .then(resp => resp.json())
                 .then(data => {
+                    setUser(data.tokenData.id)
                     switch(data.tokenData.type) {
                         case "mentor":
                           setNavbar("mentor")

@@ -26,6 +26,7 @@ const Platform = (props) => {
     }
 
 
+
     //Arrow for each carousel
     const arrowSet1 = [new Arrow({moveCount:2}), new Fade("", 0.5)];
 
@@ -88,17 +89,11 @@ const Platform = (props) => {
             <Container>
                 <p className="text-center titoletti">Tutti i documenti</p>
             </Container>
+
             <Container className="d-flex justify-content-center flex-wrap">
-
                 <Risultati documenti={docArray.documents}/>
-
             </Container>
-                        
-                    
-                
-                
-                
-            
+
 
         </>
     );

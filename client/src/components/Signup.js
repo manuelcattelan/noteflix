@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Routes, Route, useNavigate} from 'react-router-dom';
 import Platform from '../pages/Platform';
 
-const Signup = ({setPage, setNavbar, user, setToken}) => {
+const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
 
 
     //handling avatar
@@ -46,6 +46,7 @@ const Signup = ({setPage, setNavbar, user, setToken}) => {
                 fetch("http://localhost:3001/api/v1/token/?token="+provToken)
                 .then(resp => resp.json())
                 .then(data => {
+                    setUser(data.tokenData.id)
                     switch(data.tokenData.type) {
                         case "mentor":
                           setNavbar("mentor")

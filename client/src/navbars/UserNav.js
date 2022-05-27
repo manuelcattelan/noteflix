@@ -4,6 +4,7 @@ import { HashLink as Link } from 'react-router-hash-link';
 import logolight from "../media/logolight.svg"
 
 const UserNav = (props) => {
+
     return (
         <>
             <Navbar collapseOnSelect expand="lg" style={{position:"sticky", top: "0", zIndex:"100"}}>
@@ -33,14 +34,8 @@ const UserNav = (props) => {
                             <Link to="/library">
                                 <Nav.Link href="#def" className="Navtheme">Libreria personale</Nav.Link>
                             </Link>
-                            
-                           
-
                             <Button className='ms-3' onClick={props.handleLogout} variant="outline-primary">Logout</Button>
-                            
-                            
-                        </Nav>
-                        
+                        </Nav> 
                     </Navbar.Collapse>
                 </Container>
             </Navbar>

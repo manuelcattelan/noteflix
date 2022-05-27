@@ -21,7 +21,7 @@ function App() {
 
   const [navbar, setNavbar] = useState("visitor")                                           // la navbar potrà essere visitatore, user, moderator, mentor
   const [token, setToken] =  useLocalStorage('token', "")                                   //controllo di avere un token salvato nel local storage
-  const [user, setUser] = useState({})                                                      //creo uno stato per conservare l'oggetto utente
+  const [user, setUser] = useLocalStorage('user', "")                                       //creo uno stato per conservare l'oggetto utente
   const [page, setPage] = useState(<Main token={token} user={user} navbar="visitatore"/>)   //creo uno stato per la pagina principale
 
 
@@ -29,9 +29,9 @@ function App() {
     fetch("http://localhost:3001/api/v1/token/?token="+token)
     .then(resp => resp.json())
     .then(data => {
-      setUser(data)
+      setUser(data.tokenData.id)
       if(data.success === true){
-
+        
         switch(data.tokenData.type) {
           case "mentor":
             setNavbar("mentor")
@@ -69,7 +69,7 @@ function App() {
 
 
           {/* pagine accessibili da tutti (anche non loggati) */}
-          <Route path='/signlog'        exact element={<SignLog token={token} setToken={setToken} setPage={setPage} navbar={navbar} setNavbar={setNavbar}/>} />
+          <Route path='/signlog'        exact element={<SignLog token={token} setToken={setToken} setPage={setPage}  setUser={setUser} navbar={navbar} setNavbar={setNavbar}/>} />
           <Route path='/policy'         exact element={<Policy  navbar={navbar}/>} />
           <Route path='/mentorwannabe'  exact element={<MentorWannaBe token={token} navbar={navbar}/>} />
           
