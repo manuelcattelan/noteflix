@@ -106,64 +106,140 @@ router.post('', async (request, result) => {
     })
 });
 
-// route handler for listing all documents (depending on the status provided)
+// route handler for listing all public documents 
 router.get('', async (request, result) => {
-    let documents
-    let documentStatus = request.query.status;
-    // retrieve all documents from database if no status parameter was given
-    if (!documentStatus){ documents = await Document.find({}); }
-    // check for validity of status parameter given 
-    else if (!(documentStatus == "pending" || documentStatus == "public" || documentStatus == "reported" || documentStatus == "saved")){
-        return result
-            .status(400)
-            .json({
-                success: false,
-                message: 'Unknown document status provided'
-            })
-    } else if (documentStatus == "saved"){
-        //get documents saved by current user
-        let usr = await User.findById(request.loggedUser.id).exec();
-        documents = await Document.find({
-            "_id" : {
-                 "$in" : usr.savedDocuments
-            }
-        });
-    }
-    else {
-        // if status == reported, return all public documents that are currently reported
-        if (documentStatus == "reported") { documents = await Document.find({ status: "public", reported: true }) }
-        // if status == pending or status == public, return all public documents that are pending or public
-        else {documents = await Document.find({ status: documentStatus })}
-    }
+    // find all documents that are public
+    let documents = await Document.find({ status: "public" }).exec();
     // if no documents were found in the database
     if (!documents || documents.length == 0){
         return result
             .status(204)
             .send()
     }
-    // if documents were found, return document list
+    // if documents were found, extract needed information to return
     documents = documents.map( (doc)=>{
         return {
             _id: doc._id,
             title: doc.title,
-            author: doc.author,
             description: doc.description,
-            area: doc.area,
-            tag: doc.tag,
-            creationDate: doc.creationDate,
+            approval: 100 * doc.like.length/(doc.like.length + doc.dislike.length), 
             url: doc.url,
-            like:   doc.like.length,
-            dislike: doc.dislike.length
         }
     })
+    // return needed information to show document preview
     return result
         .status(200)
         .json({
             success: true,
-            message: 'Documents found',
+            message: 'Public documents found',
             documents: documents
         })
 });
+
+// route handler for listing pending documents waiting for validation
+router.get('/pending', async (request, result) => {
+    // find all documents that are waiting for validation
+    let documents = await Document.find({ status: "pending" }).exec();
+    // if no documents were found in the database
+    if (!documents || documents.length == 0){
+        return result
+            .status(204)
+            .send()
+    }
+    // if documents were found, extract needed information to return
+    documents = documents.map( (doc)=>{
+        return {
+            _id: doc._id,
+            title: doc.title,
+        }
+    })
+    // return needed information to show list of pending documents 
+    return result
+        .status(200)
+        .json({
+            success: true,
+            message: 'Pending documents found',
+            documents: documents
+        })
+});
+
+// route handler for listing reported documents waiting for validation
+router.get('/reported', async (request, result) => {
+    // find all documents that have been reported
+    let documents = await Document.find({ reported: true }).exec();
+    // if no documents were found in the database
+    if (!documents || documents.length == 0){
+        return result
+            .status(204)
+            .send()
+    }
+    // if documents were found, extract needed information to return
+    documents = documents.map( (doc)=>{
+        return {
+            _id: doc._id,
+            title: doc.title,
+        }
+    })
+    // return needed information to show list of reported documents
+    return result
+        .status(200)
+        .json({
+            success: true,
+            message: 'Reported documents found',
+            documents: documents
+        })
+});
+
+// route handler for listing all documents uploaded by logged mentor
+router.get('/uploaded', async (request, result) => {
+    // check if logged user is mentor
+    if (request.loggedUser.type != "mentor"){
+        console.log(request.loggedUser.type);
+        return result
+            .status(401)
+            .json({
+                success: false,
+                message: 'User is not a mentor'
+            })
+    }
+    // check for user existence in database
+    let user = await User.findById(request.loggedUser.id).exec();
+    if (!user){
+        return result
+            .status(404)
+            .json({
+                success: false,
+                message: 'User not found'
+            })
+    }
+    // find all documents that have been uploaded from current mentor
+    let documents = await Document.find({ author: user._id }).exec();
+    // if no documents were found in the database
+    if (!documents || documents.length == 0){
+        return result
+            .status(204)
+            .send()
+    }
+    // if documents were found, extract needed information to return
+    documents = documents.map( (doc)=>{
+        return {
+            _id: doc._id,
+            title: doc.title,
+            status: doc.status,
+            totalVotes: (doc.like.lenght + doc.dislike.length),
+            approval: 100 * doc.like.length/(doc.like.length + doc.dislike.length), 
+            totalComments: doc.comments.length
+        }
+    })
+    // return needed information to show list of uploaded documents
+    return result
+        .status(200)
+        .json({
+            success: true,
+            message: 'Uploaded documents found',
+            documents: documents
+        })
+})
 
 // route handler for listing a document by ID
 router.get('/:id', async (request, result) => {
