@@ -241,6 +241,46 @@ router.get('/uploaded', async (request, result) => {
         })
 })
 
+// route handler for listing all documents uploaded by logged mentor
+router.get('/saved', async (request, result) => {
+    // check for user existence in database
+    let user = await User.findById(request.loggedUser.id).exec();
+    if (!user){
+        return result
+            .status(404)
+            .json({
+                success: false,
+                message: 'User not found'
+            })
+    }
+    // find all documents that have been uploaded from current mentor
+    let documents = await Document.find({ status: "public", _id: {$in: user.savedDocuments }}).exec();
+    // if no documents were found in the database
+    if (!documents || documents.length == 0){
+        return result
+            .status(204)
+            .send()
+    }
+    // if documents were found, extract needed information to return
+    documents = documents.map( (doc)=>{
+        return {
+            _id: doc._id,
+            title: doc.title,
+            description: doc.description,
+            approval: 100 * doc.like.length/(doc.like.length + doc.dislike.length), 
+            url: doc.url,
+        }
+    })
+    // return needed information to show list of uploaded documents
+    return result
+        .status(200)
+        .json({
+            success: true,
+            message: 'Uploaded documents found',
+            documents: documents
+        })
+})
+
 // route handler for listing a document by ID
 router.get('/:id', async (request, result) => {
     // check id length and id string format (must be hex)
@@ -270,14 +310,21 @@ router.get('/:id', async (request, result) => {
     // check if logged user has a subscription plan
     let hasSubscription = (request.loggedUser.subscription);
     // check if user subscription is valid for document access
-    let hasValidSubscription = ((request.loggedUser.type == 'nerd') || 
-                                (request.loggedUser.type == 'studenti')) 
+    let hasValidSubscription = ((request.loggedUser.subscription.type == "nerd") || 
+                                (request.loggedUser.subscription.type == "studenti" && request.loggedUser.subscription.area == document.area)) 
     if (!(isModerator || isAuthor)){
-        if (!hasSubscription || !hasValidSubscription){
+        if (!hasSubscription)
             return result
                 .status(401)
                 .json({
-                    status: false,
+                    success: false,
+                    message: 'Your subscription plan does not allow you to view this document.',
+                })
+        if (!hasValidSubscription) {
+            return result
+                .status(401)
+                .json({
+                    success: false,
                     message: 'Your subscription plan does not allow you to view this document.',
                 })
         }
@@ -452,7 +499,16 @@ router.patch('/:id/validate', async (request, result) => {
             .status(400)
             .json({
                 success: false,
-                message: 'Invalid ID',
+                message: 'invalid id',
+            })
+    }
+    // check if current user is a moderator
+    if (!request.loggedUser.type == "moderator"){
+        return result
+            .status(401)
+            .json({
+                success: false,
+                message: 'You cannot validate resources unless you are a moderator'
             })
     }
     // look for document with provided id
