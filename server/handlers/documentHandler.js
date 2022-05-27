@@ -461,8 +461,21 @@ router.delete('/:id', async(request, result) => {
                 message: 'Invalid ID',
             })
     }
+    
     // look for document with provided id
     let document = await Document.findById(request.params.id).exec();
+
+    //only author and a moderator can delete a resource
+    if (request.loggedUser.type != "moderator" && 
+        request.loggedUser.id   != document.author){
+        return result
+            .status(401)
+            .json({
+                success: false,
+                message: 'You cannot delete resources unless you are a moderator or the document author'
+            })
+    }
+
     // if no document was found in the database
     if (!document){
         return result
