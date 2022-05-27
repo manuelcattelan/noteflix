@@ -143,6 +143,17 @@ router.get('/:id', async (request, result) => {
         return;
     }
 
+    //check if subscription plan is sufficient
+    if (!(request.loggedUser.subscription.type == 'nerd' || 
+         (request.loggedUser.subscription.type == 'studente' && request.loggedUser.subscription.area == document.area))){
+        return result
+            .status(401)
+            .json({
+                status: false,
+                message: 'Your subscription plan does not allow you to view this document.',
+            })
+    }
+
     let author = await User.findById(document.author);
 
     if (!author)
