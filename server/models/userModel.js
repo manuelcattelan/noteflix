@@ -6,9 +6,14 @@ const userSchema = new Schema ({
     passwordHash: String,
     passwordSalt: String,
     joinDate: Date,
-    userType: String,
+    userType: { type: String, enum: ["user","mentor", "moderator",], default: "user"},
     username: String,
-    subscription: { type: Schema.Types.ObjectId, ref:'Subscription'},
+    subscription: {
+        subType: { type: String, enum: ["matricole","studenti", "nerd",], default: "matricole"},
+        area: String,
+        creationDate: Date,
+        lastPayment: Date
+    },
     savedDocuments:[{ type: Schema.Types.ObjectId, ref:'Document'}],
     avatar: {
         sex: String,

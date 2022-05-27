@@ -11,8 +11,8 @@ const tokenChecker = require('./tokenHandler.js');
 
 //only authenticated
 router.post('', async (req, result) => {
-    if ( (!req.body.subscriptionType) ||
-     (req.body.subscriptionType != "Nerd" && (!req.body.subscriptionArea)) ){
+    if ( !(req.body.subscriptionType == 'studenti' || req.body.subscriptionType == 'nerd' || req.body.subscriptionType == 'matricole') ||
+     (req.body.subscriptionType == "studenti" && (!req.body.subscriptionArea)) ){
         result.status(400).json({ success: false, message: 'Malformed request'});
         return;
     }
