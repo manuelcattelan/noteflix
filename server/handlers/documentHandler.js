@@ -138,6 +138,26 @@ router.get('', async (request, result) => {
 
 // route handler for listing pending documents waiting for validation
 router.get('/pending', async (request, result) => {
+    // check if logged user is mentor
+    if (request.loggedUser.type != "moderator"){
+        console.log(request.loggedUser.type);
+        return result
+            .status(401)
+            .json({
+                success: false,
+                message: 'User is not a moderator'
+            })
+    }
+    // check for user existence in database
+    let user = await User.findById(request.loggedUser.id).exec();
+    if (!user){
+        return result
+            .status(404)
+            .json({
+                success: false,
+                message: 'User not found'
+            })
+    }
     // find all documents that are waiting for validation
     let documents = await Document.find({ status: "pending" }).exec();
     // if no documents were found in the database
@@ -147,12 +167,18 @@ router.get('/pending', async (request, result) => {
             .send()
     }
     // if documents were found, extract needed information to return
-    documents = documents.map( (doc)=>{
+    documents = await Promise.all(documents.map( async (doc) => {
+        let author = await User.findById(doc.author);
+        if (!author)
+            authorEmail = {email: '[deleted]'};
+        else 
+            authorEmail = {email: author.email};
         return {
             _id: doc._id,
             title: doc.title,
+            authorEmail: user.email
         }
-    })
+    }));
     // return needed information to show list of pending documents 
     return result
         .status(200)
@@ -165,6 +191,26 @@ router.get('/pending', async (request, result) => {
 
 // route handler for listing reported documents waiting for validation
 router.get('/reported', async (request, result) => {
+    // check if logged user is mentor
+    if (request.loggedUser.type != "moderator"){
+        console.log(request.loggedUser.type);
+        return result
+            .status(401)
+            .json({
+                success: false,
+                message: 'User is not a moderator'
+            })
+    }
+    // check for user existence in database
+    let user = await User.findById(request.loggedUser.id).exec();
+    if (!user){
+        return result
+            .status(404)
+            .json({
+                success: false,
+                message: 'User not found'
+            })
+    }
     // find all documents that have been reported
     let documents = await Document.find({ reported: true }).exec();
     // if no documents were found in the database
