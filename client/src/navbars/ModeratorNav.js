@@ -24,7 +24,7 @@ const ModeratorNav = (props) => {
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="ms-auto">
-                            <Link to="/policy">
+                            <Link to="/moderatorconsole">
                                 <Nav.Link href="#def" className="Navtheme">Console moderatore</Nav.Link>
                             </Link>
                             <Link to="/">

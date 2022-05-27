@@ -3,6 +3,7 @@ import { Container, ButtonToolbar, ButtonGroup, Button, ListGroup, Row, Col, For
 import Navigation from '../components/Navigation';
 import Avatar, { AvatarConfig } from 'react-nice-avatar'
 import { useNavigate } from 'react-router-dom';
+import MentorFileList from '../components/liste/MentorFileList';
 
 
 
@@ -56,76 +57,7 @@ const MentorConsole = (props) => {
                 </Row>
             </Container>
             <Container>
-                <ListGroup as="ol" numbered>
-                    <ListGroup.Item
-                        as="li"
-                        className="d-flex justify-content-between align-items-center"
-                    >
-                        <div className="fw-bold ms-2 me-auto">Verifica di Agata</div>
-                        <span className="fw-bold text-primary me-3">Online</span>
-                        <ListGroup className="me-3" horizontal>
-                            <ListGroup.Item>13 commenti</ListGroup.Item>
-                            <ListGroup.Item>129 valutazioni</ListGroup.Item>
-                            <ListGroup.Item>Piace al 90%</ListGroup.Item>
-                        </ListGroup>
-                        <ButtonToolbar aria-label="Toolbar with button groups">
-                            <ButtonGroup className="me-2" aria-label="First group">
-                                <Button>Modifica</Button> <Button>Elimina</Button>
-                            </ButtonGroup>
-                        </ButtonToolbar>
-                    </ListGroup.Item>
-                    <ListGroup.Item
-                        as="li"
-                        className="d-flex justify-content-between align-items-center"
-                    >
-                        <div className="fw-bold ms-2 me-auto">Verifica di Agata</div>
-                        <span className="fw-bold text-primary me-3">Online</span>
-                        <ListGroup className="me-3" horizontal>
-                            <ListGroup.Item>13 commenti</ListGroup.Item>
-                            <ListGroup.Item>129 valutazioni</ListGroup.Item>
-                            <ListGroup.Item>Piace al 90%</ListGroup.Item>
-                        </ListGroup>
-                        <ButtonToolbar aria-label="Toolbar with button groups">
-                            <ButtonGroup className="me-2" aria-label="First group">
-                                <Button>Modifica</Button> <Button>Elimina</Button>
-                            </ButtonGroup>
-                        </ButtonToolbar>
-                    </ListGroup.Item>
-                    <ListGroup.Item
-                        as="li"
-                        className="d-flex justify-content-between align-items-center"
-                    >
-                        <div className="fw-bold ms-2 me-auto">Verifica di Agata</div>
-                        <span className="fw-bold text-primary me-3">Online</span>
-                        <ListGroup className="me-3" horizontal>
-                            <ListGroup.Item>13 commenti</ListGroup.Item>
-                            <ListGroup.Item>129 valutazioni</ListGroup.Item>
-                            <ListGroup.Item>Piace al 90%</ListGroup.Item>
-                        </ListGroup>
-                        <ButtonToolbar aria-label="Toolbar with button groups">
-                            <ButtonGroup className="me-2" aria-label="First group">
-                                <Button>Modifica</Button> <Button>Elimina</Button>
-                            </ButtonGroup>
-                        </ButtonToolbar>
-                    </ListGroup.Item>
-                    <ListGroup.Item
-                        as="li"
-                        className="d-flex justify-content-between align-items-center"
-                    >
-                        <div className="fw-bold ms-2 me-auto">Verifica di Agata</div>
-                        <span className="fw-bold text-primary me-3">Online</span>
-                        <ListGroup className="me-3" horizontal>
-                            <ListGroup.Item>13 commenti</ListGroup.Item>
-                            <ListGroup.Item>129 valutazioni</ListGroup.Item>
-                            <ListGroup.Item>Piace al 90%</ListGroup.Item>
-                        </ListGroup>
-                        <ButtonToolbar aria-label="Toolbar with button groups">
-                            <ButtonGroup className="me-2" aria-label="First group">
-                                <Button>Modifica</Button> <Button>Elimina</Button>
-                            </ButtonGroup>
-                        </ButtonToolbar>
-                    </ListGroup.Item>
-                </ListGroup>
+                <MentorFileList/>
             </Container>
             
         </>

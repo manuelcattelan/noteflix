@@ -14,6 +14,7 @@ import Policy from './pages/Policy';
 import Document from './pages/Document';
 import MentorWannaBe from './pages/MentorWannaBe';
 import Test from './pages/Test';
+import ModeratorConsole from './pages/ModeratorConsole';
 
 
 
@@ -74,10 +75,11 @@ function App() {
           <Route path='/mentorwannabe'  exact element={<MentorWannaBe token={token} navbar={navbar}/>} />
           
           {/* pagine accessibili solo sotto verifica utente loggato (hanno la props user) */}
-          <Route path='/library'        exact element={<Library  user={user} token={token} navbar={navbar}/>} />
-          <Route path='/mentorconsole'  exact element={<MentorConsole  user={user} token={token} navbar={navbar}/>} />
-          <Route path='/upload'         exact element={<Upload   user={user} token={token} navbar={navbar}/>} />
-          <Route path='/document'       exact element={<Document user={user} token={token} navbar={navbar}/>} />
+          <Route path='/library'           exact element={<Library  user={user} token={token} navbar={navbar}/>} />
+          <Route path='/mentorconsole'     exact element={<MentorConsole  user={user} token={token} navbar={navbar}/>} />
+          <Route path='/moderatorconsole'  exact element={<ModeratorConsole user={user} token={token} navbar={navbar}/>} />
+          <Route path='/upload'            exact element={<Upload   user={user} token={token} navbar={navbar}/>} />
+          <Route path='/document'          exact element={<Document user={user} token={token} navbar={navbar}/>} />
 
           {/* <Route render={() => <PageNotFound />}/> */}
         </Routes>
