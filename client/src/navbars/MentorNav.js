@@ -36,10 +36,9 @@ const MentorNav = (props) => {
                             <Link to="/library">
                                 <Nav.Link href="#def" className="Navtheme">Libreria personale</Nav.Link>
                             </Link>
-
-                            <Button className='ms-3' onClick={props.handleLogout} variant="outline-primary">Logout</Button>
-
-                            
+                            <div>
+                                <Button size="sm" className='ms-3 mt-1' onClick={props.handleLogout} variant="outline-primary">Logout</Button>
+                            </div>
                         </Nav>
                         
                     </Navbar.Collapse>
