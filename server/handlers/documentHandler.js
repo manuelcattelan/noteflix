@@ -90,7 +90,7 @@ router.post('', async (request, result) => {
                     .json({ 
                         success: true,
                         message: 'Document created successfully', 
-                        document
+                        documentId: document._id
                     });
             })
             .catch( error => {
