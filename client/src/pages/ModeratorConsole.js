@@ -31,10 +31,10 @@ const ModeratorConsole = (props) => {
             <Container className='my-5'>
                 <Tabs defaultActiveKey="pending" id="uncontrolled-tab-example" className="mb-3">
                     <Tab eventKey="pending" title="File in attesa di approvazione">
-                        <ModeratorPendingList/>
+                        <ModeratorPendingList token={props.token}/>
                     </Tab>
                     <Tab eventKey="reported" title="File segnalati dagli utenti">
-                        <ModeratorReportedList/>
+                        <ModeratorReportedList token={props.token}/>
                     </Tab>
                 </Tabs>
             </Container>

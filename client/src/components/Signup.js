@@ -16,6 +16,8 @@ const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [username, setUsername] = useState("")
+    const [subplan, setSubplan] = useState("matricole")
+    const [macroarea, setMacroarea] = useState("")
 
 
     //navigate nel caso il form venga compilato correttamente
@@ -34,7 +36,7 @@ const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
         fetch('http://localhost:3001/api/v1/auth/signup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify( { email: email, password: password, avatar: avatarConfig, username: username } ),
+            body: JSON.stringify( { email: email, password: password, avatar: avatarConfig, username: username, subscriptionType: subplan, subscriptionArea: macroarea } ),
         })
         .then(resp => resp.json())
         .then(data => {
@@ -88,16 +90,19 @@ const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
     }
 
     const handleAbbonamento = (valore) => {
+        
+        setSubplan(valore)
+
         switch(valore){
-            case "Matricole":
+            case "matricole":
                 document.getElementById("info-abbonamento").innerHTML="Non sono previsti costi per il piano selezionato"
                 document.getElementById("macroarea").className="d-none"
                 break;
-            case "Studenti":
+            case "studenti":
                 document.getElementById("info-abbonamento").innerHTML="Il piano solezionato prevede un costo mensile di $4.99"
                 document.getElementById("macroarea").className="d-block mb-3"
                 break;
-            case "Nerd":
+            case "nerd":
                 document.getElementById("info-abbonamento").innerHTML="Il piano seleizonato prevede un costo mensile di $8.99"
                 document.getElementById("macroarea").className="d-none"
                 break;
@@ -142,10 +147,10 @@ const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Scegli un piano di abbonamento</Form.Label>
-                    <Form.Select onChange={(e)=>handleAbbonamento(e.target.value)}>
-                        <option>Matricole</option>
-                        <option>Studenti</option>
-                        <option>Nerd</option>
+                    <Form.Select onChange={(e)=>handleAbbonamento(e.target.value)} required>
+                        <option value="matricole">Matricole</option>
+                        <option value="studenti">Studenti</option>
+                        <option value="nerd">Nerd</option>
                     </Form.Select>
                     <Form.Text id="info-abbonamento" className="text-muted">
                         Non condivideremo la tua email con terze parti.
@@ -153,12 +158,13 @@ const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
                 </Form.Group>
                 <Form.Group id="macroarea" className="d-none">
                     <Form.Label>Scegli una macroarea</Form.Label>
-                    <Form.Select>
-                        <option>opzione</option>
-                        <option>opzione</option>
-                        <option>opzione</option>
-                        <option>opzione</option>
-                        <option>opzione</option>
+                    <Form.Select onChange={(e)=>setMacroarea(e.target.value)} >
+                        <option disabled selected value>-</option>
+                        <option value="opzione">opzione</option>
+                        <option value="opzione">opzione</option>
+                        <option value="opzione">opzione</option>
+                        <option value="opzione">opzione</option>
+                        <option value="opzione">opzione</option>
                     </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3 d-flex" controlId="formBasicCheckbox">

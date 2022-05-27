@@ -59,13 +59,7 @@ const DocSpoil = (props) => {
                     </Card.Text>
                 </Card.Body>
                 <Card.Body>
-                    <Link to={link} state={{ 
-                        fileUrl: props.url,
-                        titolo: props.titolo,
-                        descrizione: props.descrizione,
-                        autore: props.autore,
-                        id: props.id
-                    }}>
+                    <Link to={link}>
                         <Button variant="outline-primary" className='me-3 mb-2'>Visualizza</Button>
                     </Link>
                     <Card.Link href="#">Salva nella libreria</Card.Link>

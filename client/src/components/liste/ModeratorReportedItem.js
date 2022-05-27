@@ -15,8 +15,14 @@ const ModeratorFileItemReported = () => {
                     <ListGroup.Item>129 valutazioni</ListGroup.Item>
                     <ListGroup.Item>Piace al 90%</ListGroup.Item>
                 </ListGroup>
-                <Button variant="outline-primary" className="mx-3">Visualizza</Button>
-                <Button>Rimuovi segnalazione</Button>
+                <Button variant="primary">Visualizza</Button>
+                <ButtonToolbar aria-label="Toolbar with button groups">
+                    <ButtonGroup className="ms-2" aria-label="First group">
+                        <Button variant="outline-primary">Rimuovi segnalazione</Button>
+                        <Button variant="outline-primary">Elimina documento</Button>
+                    </ButtonGroup>
+                </ButtonToolbar>
+                
             </ListGroup.Item>
 
     );

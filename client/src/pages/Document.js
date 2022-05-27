@@ -21,13 +21,15 @@ const Document = (props) => {
 
     const[doc, setDoc] = useState({
         "author": {
-            "username": "pino"
+            "username": ""
+        },
+        "document":{
+            "url":"https://noteflix.s3.eu-central-1.amazonaws.com/1653654581000.pdf",
+            "title":"",
+            "description":""
         }
     })
     
-
-    const location = useLocation()
-    const { fileUrl, titolo, autore, descrizione, id } = location.state
 
 
     /*
@@ -73,9 +75,11 @@ const Document = (props) => {
                
     useEffect(()=>fetchDoc, [""])
 
-    const fetchDoc = () => {                                      
-        const url = "http://localhost:3001/api/v1/documents/"+id+"/?token="+props.token
-        fetch(url)
+    const fetchDoc = () => {                          
+
+        const id = window.location.href.split("?id=")[1]
+
+        fetch("http://localhost:3001/api/v1/documents/"+id+"?token="+props.token)
         .then(resp => resp.json())
         .then(data => setDoc(data))
     }
@@ -96,7 +100,7 @@ const Document = (props) => {
                                 }}
                             >
                                 <Toolbar>{renderDefaultToolbar(transform)}</Toolbar>
-                                <Viewer plugins={[toolbarPluginInstance]} fileUrl={fileUrl} />
+                                <Viewer plugins={[toolbarPluginInstance]} fileUrl={doc.document.url} />
                             </div>
                         </Worker>
                     </Col>
@@ -110,10 +114,10 @@ const Document = (props) => {
                             
                         </p>
                         <p className='doc-titolo'>
-                            {titolo}
+                            {doc.document.title}
                         </p>
                         <p className='doc-descrizione' style={{overflowWrap: "break-word"}}>
-                            {descrizione}
+                            {doc.document.description}
                         </p>
                         {/* <Chat handleChatShow={handleChatShow} handleChatClose={handleChatClose} chatShow={chatShow}/> */}
                         <Form className="mt-3">
