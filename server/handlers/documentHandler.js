@@ -263,16 +263,24 @@ router.get('/:id', async (request, result) => {
                 message: 'No document found with the given id',
             })
     }
-    //check if subscription plan is sufficient
-    if (! request.loggedUser.subscription ||
-        !(request.loggedUser.subscription.type == 'nerd' || 
-         (request.loggedUser.subscription.type == 'studente' && request.loggedUser.subscription.area == document.area))){
-        return result
-            .status(401)
-            .json({
-                status: false,
-                message: 'Your subscription plan does not allow you to view this document.',
-            })
+    // grant access to document to every moderator
+    let isModerator = (request.loggedUser.type == "moderator");
+    // grant access to document for document author
+    let isAuthor = (request.loggedUser.id == document.author);
+    // check if logged user has a subscription plan
+    let hasSubscription = (request.loggedUser.subscription);
+    // check if user subscription is valid for document access
+    let hasValidSubscription = ((request.loggedUser.type == 'nerd') || 
+                                (request.loggedUser.type == 'studenti')) 
+    if (!(isModerator || isAuthor)){
+        if (!hasSubscription || !hasValidSubscription){
+            return result
+                .status(401)
+                .json({
+                    status: false,
+                    message: 'Your subscription plan does not allow you to view this document.',
+                })
+        }
     }
     // retrieve user name of document author
     let author = await User.findById(document.author);
