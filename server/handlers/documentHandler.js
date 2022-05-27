@@ -263,9 +263,8 @@ router.get('/:id', async (request, result) => {
                 message: 'No document found with the given id',
             })
     }
-
-     //check if subscription plan is sufficient
-     if (! request.loggedUser.subscription ||
+    //check if subscription plan is sufficient
+    if (! request.loggedUser.subscription ||
         !(request.loggedUser.subscription.type == 'nerd' || 
          (request.loggedUser.subscription.type == 'studente' && request.loggedUser.subscription.area == document.area))){
         return result
@@ -275,7 +274,6 @@ router.get('/:id', async (request, result) => {
                 message: 'Your subscription plan does not allow you to view this document.',
             })
     }
-
     // retrieve user name of document author
     let author = await User.findById(document.author);
     if (!author)
