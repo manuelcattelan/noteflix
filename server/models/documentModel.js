@@ -17,8 +17,8 @@ const documentSchema = new Schema ({
     dislike: [{ type: Schema.Types.ObjectId, ref: 'User'}],
     comments: [{
         author: { type: Schema.Types.ObjectId, ref: 'User'},
-        Date: Date,
-        Body: String
+        date: Date,
+        body: String
     }]
 })
 

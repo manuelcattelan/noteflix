@@ -104,4 +104,43 @@ router.post('/:id/like', async (request, result) =>{
     return;
 })
 
+router.post('/:id/comment', async (request, result) =>{
+     // check id length and id string format (must be hex)
+     if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
+        result.status(400)
+            .json({
+                success: false,
+                liked: false,
+                message: 'Invalid ID',
+            })
+        return;
+    }
+
+    if (!request.body.commentText) {
+        result.status(400)
+        .json({
+            success: false,
+            message: 'Missing commentText in request body'
+        })
+    }
+
+    //push new comment to document
+    await Document.updateOne({ _id: request.params.id },
+        { $push:{
+            comments: {
+                author: request.loggedUser.id,
+                date: new Date(),
+                body: request.body.commentText
+            }
+        }
+    }).exec();
+
+    result.status(200)
+        .json({
+            success: true,
+            message: 'Comment added successfully'
+        })
+
+    });
+
 module.exports = router
