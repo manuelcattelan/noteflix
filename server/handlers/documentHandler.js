@@ -200,7 +200,8 @@ router.get('/:id', async (request, result) => {
     }
 
     //check if subscription plan is sufficient
-    if (!(request.loggedUser.subscription.type == 'nerd' || 
+    if (! request.loggedUser.subscription ||
+        !(request.loggedUser.subscription.type == 'nerd' || 
          (request.loggedUser.subscription.type == 'studente' && request.loggedUser.subscription.area == document.area))){
         return result
             .status(401)
