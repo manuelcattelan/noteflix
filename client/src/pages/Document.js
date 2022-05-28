@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Container, Col, Row, Button, Form, ButtonToolbar } from 'react-bootstrap';
+import { Container, Col, Row, Button, Form, ButtonToolbar, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom'
 import Navigation from '../components/Navigation';
 
@@ -12,21 +12,29 @@ import '@react-pdf-viewer/toolbar/lib/styles/index.css';// Import styles
 import pdf from '../pdf/ns.pdf';
 
 import Avatar, { genConfig, AvatarConfig } from 'react-nice-avatar'
+import Rating from '../components/Rating';
 
 
 
 
 const Document = (props) => {
 
-
+    const id = window.location.href.split("?id=")[1] //ottengo l'id del doc
+    
     const[doc, setDoc] = useState({
         "author": {
             "username": ""
         },
+        "interactions":{
+            "liked": false,
+            "saved": false
+        },
         "document":{
             "url":"https://noteflix.s3.eu-central-1.amazonaws.com/1653654581000.pdf",
             "title":"",
-            "description":""
+            "description":"",
+            "like":0,
+            "dislike":0
         }
     })
     
@@ -73,17 +81,19 @@ const Document = (props) => {
 
 
                
-    useEffect(()=>fetchDoc, [""])
-
-    const fetchDoc = () => {                          
-
-        const id = window.location.href.split("?id=")[1]
-
+    useEffect(()=>{                          
         fetch("http://localhost:3001/api/v1/documents/"+id+"?token="+props.token)
         .then(resp => resp.json())
         .then(data => setDoc(data))
-    }
+    }, [""])
 
+    const handleReport = (e) => {
+        e.preventDefault()
+
+        fetch("http://localhost:3001/api/v1/documents/"+id+"/report?token="+props.token, {method: 'PATCH'})
+        .then(res => res.json())
+        .then(data => alert(data.message))
+    }
     
 
     return (
@@ -116,11 +126,29 @@ const Document = (props) => {
                         <p className='doc-titolo'>
                             {doc.document.title}
                         </p>
+                        <Rating like={doc.document.like} dislike={doc.document.dislike} liked={doc.interactions.liked} id={id} token={props.token}/>
                         <p className='doc-descrizione' style={{overflowWrap: "break-word"}}>
                             {doc.document.description}
                         </p>
+                        <Form className="" onSubmit={handleReport}>
+                            <Form.Text>
+                                <OverlayTrigger
+                                    placement='right'
+                                    overlay={
+                                        <Tooltip>
+                                            <p className="mt-1"> Cliccando "invia una segnalazione" sottoponi il documento ad un controllo da parte dei nostri moderatori.</p>
+                                        </Tooltip>
+                                    }
+                                    >
+                                    <span className="mt-1 text-secondary">Qualcosa non va?</span>
+                                </OverlayTrigger>
+                                <input type="submit" size="sm" className="fw-bold text-secondary" value="Invia una segnalazione" style={{border:"none", background:"none", textDecoration:"underline"}}/> 
+                            </Form.Text>
+                        </Form>
                         {/* <Chat handleChatShow={handleChatShow} handleChatClose={handleChatClose} chatShow={chatShow}/> */}
-                        <Form className="mt-3">
+
+                        
+                        <Form className="mt-5">
                             <Form.Group controlId="formBasic">
                                 <Form.Control as="textarea" rows={4} placeholder="Commento..."/>
                             </Form.Group>
@@ -134,9 +162,9 @@ const Document = (props) => {
                             </ButtonToolbar>
                             
                         </Form>
-                        <p className="my-5 text-secondary">
-                            Qualcosa non va? <span className='fw-bold' style={{cursor:"pointer"}}>Segnala</span> il documento.
-                        </p>
+                        
+                        
+                        
                     </Col>
                 </Row>
             </Container>

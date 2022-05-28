@@ -16,6 +16,7 @@ const MentorFileList = ({docArray, token}) => {
                             title={item.title}
                             status={item.status}
                             like={item.approval}
+                            votes={item.totalVotes}
                             comments={item.totalComments}
                             token={token}
                         />
