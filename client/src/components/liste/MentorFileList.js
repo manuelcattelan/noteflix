@@ -1,8 +1,9 @@
 import React from 'react';
-import { ListGroup } from 'react-bootstrap';
+import { Container, ListGroup, Spinner } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import MentorFileItem from './MentorFileItem';
 
-const MentorFileList = ({docArray}) => {
+const MentorFileList = ({docArray, token}) => {
     return (
 
             <ListGroup as="ol" numbered>
@@ -16,10 +17,20 @@ const MentorFileList = ({docArray}) => {
                             status={item.status}
                             like={item.approval}
                             comments={item.totalComments}
+                            token={token}
                         />
                     )
                     :
-                    "no doc"
+                    <Container className="mt-5">
+                        <p className='text-center h1 fw-bold'>
+                            Nessun documento caricato, <br/> 
+                            <Link to="/upload">
+                                <span className='text-primary'> caricane uno.</span>
+                            </Link>
+                        </p>
+
+                    </Container>
+                    
                 }
             </ListGroup>
 

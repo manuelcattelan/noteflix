@@ -62,7 +62,7 @@ const MentorConsole = (props) => {
                 </Row>
             </Container>
             <Container>
-                <MentorFileList docArray={docArray}/>
+                <MentorFileList docArray={docArray} token={props.token}/>
             </Container>
             
         </>
