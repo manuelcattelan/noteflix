@@ -8,16 +8,21 @@ const ModeratorFileItemReported = ({token, id, title, reportedTimes}) => {
     const [decision, setDecision] = useState()
 
     const handleSubmit = (e) => {
+
+        e.preventDefault();
+
         switch(decision){
             case "rimuovi":
                 fetch("api/v1/documents/"+id+"/validate?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
                 .then(data => alert(data.message))
+                .then(document.getElementById("item").className="d-none")
                 break;
             case "elimina":
                 fetch("api/v1/documents/"+id+"?token="+token, {method: 'DELETE'})
                 .then(res => res.json())
                 .then(data => alert(data.message))
+                .then(document.getElementById("item").className="d-none")
                 break;
         }
     }
@@ -25,6 +30,7 @@ const ModeratorFileItemReported = ({token, id, title, reportedTimes}) => {
     return (
 
             <ListGroup.Item
+                id="item"
                 as="li"
                 className="d-flex justify-content-between align-items-center"
             >
@@ -39,7 +45,7 @@ const ModeratorFileItemReported = ({token, id, title, reportedTimes}) => {
                 <Link to={"/document/?id="+id}>
                     <Button variant="outline-primary">Visualizza</Button>
                 </Link>
-                <Form className="d-flex" onSubmit={handleSubmit}>
+                <Form id="form" className="d-flex" onSubmit={handleSubmit}>
                     <Form.Select className='mx-3' id="macroarea" maxlength="160" onChange={(e) => setDecision(e.target.value)}>
                         <option disabled selected value>- seleziona un'azione</option>
                         <option value="rimuovi">Rimuovi segnalazione</option>

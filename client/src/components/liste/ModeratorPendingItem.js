@@ -9,16 +9,21 @@ const ModeratorPendingItem = ({title, id, email, token}) => {
     const [decision, setDecision] = useState()
 
     const handleSubmit = (e) => {
+
+        e.preventDefault();
+
         switch(decision){
             case "approva":
                 fetch("api/v1/documents/"+id+"/validate?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
                 .then(data => alert(data.message))
+                .then(document.getElementById("item").className="d-none")
                 break;
             case "elimina":
                 fetch("api/v1/documents/"+id+"?token="+token, {method: 'DELETE'})
                 .then(res => res.json())
                 .then(data => alert(data.message))
+                .then(document.getElementById("item").className="d-none")
                 break;
         }
     }
@@ -26,6 +31,7 @@ const ModeratorPendingItem = ({title, id, email, token}) => {
 
     return (
         <ListGroup.Item
+            id="item"
             as="li"
             className="d-flex justify-content-between align-items-center"
         >
