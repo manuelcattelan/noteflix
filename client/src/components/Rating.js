@@ -21,17 +21,23 @@ const Rating = ({like, dislike, id, liked, token}) => {
         <>
             <Row>
                 <Col xs="auto">
-                    <Button size="sm" className='me-1' variant="outline-primary">Salva</Button>
                     {
                         liked
                         ?
-                        <Button size="sm" variant="outline-primary" onClick={handleLike}>Unlike</Button>
+                        <i class="bi bi-hand-thumbs-down-fill" style={{fontSize: "2rem", color: "#623FF0"}} onClick={handleLike}></i>
                         :
-                        <Button size="sm" variant="outline-primary" onClick={handleLike}>Like</Button>
+                        <i class="bi bi-hand-thumbs-down" style={{fontSize: "2rem", color: "#623FF0"}} onClick={handleLike}></i>
+                    }
+                    {
+                        liked
+                        ?
+                        <i class="bi bi-hand-thumbs-up-fill" style={{fontSize: "2rem", color: "#623FF0"}} onClick={handleLike}></i>
+                        :
+                        <i class="bi bi-hand-thumbs-up" style={{fontSize: "2rem", color: "#623FF0"}}  onClick={handleLike}></i>
                     }
                     
                 </Col>
-                <Col className="p-0">
+                <Col className="mt-2 p-0">
                     <p className='my-0 text-primary doc-descrizione' style={{lineHeight:"15px"}}>Piace a {like} utenti</p>
                     <p className='my-0 text-primary doc-descrizione' style={{lineHeight:"15px"}}>Non piace a {dislike} utenti</p>
                 </Col>

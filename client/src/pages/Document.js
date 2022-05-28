@@ -124,12 +124,13 @@ const Document = (props) => {
                             
                         </p>
                         <p className='doc-titolo'>
-                            {doc.document.title}
+                        <i class="bi bi-bookmark pe-2" style={{fontSize: "2rem"}}></i>{doc.document.title}
                         </p>
-                        <Rating like={doc.document.like} dislike={doc.document.dislike} liked={doc.interactions.liked} id={id} token={props.token}/>
                         <p className='doc-descrizione' style={{overflowWrap: "break-word"}}>
                             {doc.document.description}
                         </p>
+                        <Rating like={doc.document.like} dislike={doc.document.dislike} liked={doc.interactions.liked} id={id} token={props.token}/>
+
                         <Form className="" onSubmit={handleReport}>
                             <Form.Text>
                                 <OverlayTrigger
