@@ -411,7 +411,6 @@ router.get('/:id', async (request, result) => {
             savedDocuments: document.id ,
           }).exec()
     }
-
     //gather user data for each comment author
     let comments = await Promise.all(document.comments.map( async (comment) => {
         let author = await User.findById(comment.author);
@@ -464,7 +463,6 @@ router.delete('/:id', async(request, result) => {
     
     // look for document with provided id
     let document = await Document.findById(request.params.id).exec();
-
     //only author and a moderator can delete a resource
     if (request.loggedUser.type != "moderator" && 
         request.loggedUser.id   != document.author){
@@ -475,7 +473,6 @@ router.delete('/:id', async(request, result) => {
                 message: 'You cannot delete resources unless you are a moderator or the document author'
             })
     }
-
     // if no document was found in the database
     if (!document){
         return result
@@ -661,4 +658,5 @@ router.patch('/:id/validate', async (request, result) => {
                 })
         })
 })
+
 module.exports = router;
