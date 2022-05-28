@@ -54,6 +54,26 @@ const uploadFile = upload.single('url');
 
 // route handler for document upload
 router.post('', async (request, result) => {
+    // check if logged user is mentor
+    if (request.loggedUser.type != "mentor"){
+        console.log(request.loggedUser.type);
+        return result
+            .status(401)
+            .json({
+                success: false,
+                message: 'User is not a mentor'
+            })
+    }
+    // check for user existence in database
+    let user = await User.findById(request.loggedUser.id).exec();
+    if (!user){
+        return result
+            .status(404)
+            .json({
+                success: false,
+                message: 'User not found'
+            })
+    }
     // upload document sent in form to s3 storage
     uploadFile(request, result, function(error) {
         // error returned by multer upload function
