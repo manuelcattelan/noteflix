@@ -56,7 +56,6 @@ const uploadFile = upload.single('url');
 router.post('', async (request, result) => {
     // check if logged user is mentor
     if (request.loggedUser.type != "mentor"){
-        console.log(request.loggedUser.type);
         return result
             .status(401)
             .json({
@@ -160,7 +159,6 @@ router.get('', async (request, result) => {
 router.get('/pending', async (request, result) => {
     // check if logged user is mentor
     if (request.loggedUser.type != "moderator"){
-        console.log(request.loggedUser.type);
         return result
             .status(401)
             .json({
@@ -213,7 +211,6 @@ router.get('/pending', async (request, result) => {
 router.get('/reported', async (request, result) => {
     // check if logged user is mentor
     if (request.loggedUser.type != "moderator"){
-        console.log(request.loggedUser.type);
         return result
             .status(401)
             .json({
@@ -232,7 +229,7 @@ router.get('/reported', async (request, result) => {
             })
     }
     // find all documents that have been reported
-    let documents = await Document.find({ reported: true }).exec();
+    let documents = await Document.find({ 'reported.0':  { $exists: true }}).exec();
     // if no documents were found in the database
     if (!documents || documents.length == 0){
         return result
@@ -244,6 +241,7 @@ router.get('/reported', async (request, result) => {
         return {
             _id: doc._id,
             title: doc.title,
+            reportedTimes: doc.reported.length
         }
     })
     // return needed information to show list of reported documents
@@ -260,7 +258,6 @@ router.get('/reported', async (request, result) => {
 router.get('/uploaded', async (request, result) => {
     // check if logged user is mentor
     if (request.loggedUser.type != "mentor"){
-        console.log(request.loggedUser.type);
         return result
             .status(401)
             .json({
@@ -292,7 +289,7 @@ router.get('/uploaded', async (request, result) => {
             _id: doc._id,
             title: doc.title,
             status: doc.status,
-            totalVotes: (doc.like.lenght + doc.dislike.length),
+            totalVotes: (doc.like.length + doc.dislike.length),
             approval: 100 * doc.like.length/(doc.like.length + doc.dislike.length), 
             totalComments: doc.comments.length
         }
@@ -517,6 +514,25 @@ router.delete('/:id', async(request, result) => {
 
 // route handler for updating the "reported" attribute on document report
 router.patch('/:id/report', async (request, result) => {
+    // check if logged user is mentor
+    if (request.loggedUser.type == "mentor"){
+        return result
+            .status(401)
+            .json({
+                success: false,
+                message: 'Mentors are not allowed to report documents'
+            })
+    }
+    // check for user existence in database
+    let user = await User.findById(request.loggedUser.id).exec();
+    if (!user){
+        return result
+            .status(404)
+            .json({
+                success: false,
+                message: 'User not found'
+            })
+    }
     // check id length and id string format (must be hex)
     if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
         return result
@@ -538,18 +554,17 @@ router.patch('/:id/report', async (request, result) => {
             })
         return;
     }
-    // if document was already reported, do nothing and return
-    if(document.reported){
-        return result
-            .status(200)
-            .json({ 
+    // update reported attribute if it wasn't already reported by the logged user
+    if (document.reported.indexOf(user._id) !== -1){
+        result
+            .status(400)
+            .json({
                 success: true,
-                message: 'Document was already reported and is being evaluated'
-            });
+                message: 'You have reported this document already',
+            })
+        return;
     }
-    // if here, document was not already reported
-    // update reported attribute
-    document.reported = true;
+    document.reported.push(user._id);
     // push changes to database
     document.save()
         .then( () => {
@@ -607,7 +622,7 @@ router.patch('/:id/validate', async (request, result) => {
     // if document was pending, publish it
     if (document.status == "pending"){ document.status = "public"; }
     // if document was public and got reported, validate it
-    else if (document.status == "public" && document.reported == true) { document.reported = false; }
+    else if (document.status == "public" && document.reported.length > 0) { document.reported = []; }
     // push changes to database
     document.save()
         .then( () => {
