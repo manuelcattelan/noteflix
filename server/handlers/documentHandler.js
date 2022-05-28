@@ -194,7 +194,7 @@ router.get('/pending', async (request, result) => {
         return {
             _id: doc._id,
             title: doc.title,
-            authorEmail: user.email
+            authorEmail: author.authorEmail
         }
     }));
     // return needed information to show list of pending documents 
@@ -633,9 +633,13 @@ router.patch('/:id/validate', async (request, result) => {
         return;
     }
     // if document was pending, publish it
-    if (document.status == "pending"){ document.status = "public"; }
+    if (document.status == "pending"){ 
+        document.status = "public"; 
+    }
     // if document was public and got reported, validate it
-    else if (document.status == "public" && document.reported.length > 0) { document.reported = []; }
+    else if (document.status == "public" && document.reported.length > 0) { 
+        document.reported = [];
+    }
     // push changes to database
     document.save()
         .then( () => {
