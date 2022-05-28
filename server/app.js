@@ -34,7 +34,7 @@ app.use('/api/v1/documents', interaction);
 //return 404 message in JSON when API is not found
 app.use((req, res) => {
     res.status(404);
-    res.json({ success: false, message: 'Error: not found' });
+    res.json({ success: false, message: 'Error: API not found' });
 });
 
 
