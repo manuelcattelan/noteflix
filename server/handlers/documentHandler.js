@@ -187,14 +187,13 @@ router.get('/pending', async (request, result) => {
     // if documents were found, extract needed information to return
     documents = await Promise.all(documents.map( async (doc) => {
         let author = await User.findById(doc.author);
-        if (!author)
-            authorEmail = {email: '[deleted]'};
-        else 
-            authorEmail = {email: author.email};
+        let authorEmail
+        if (!author){ authorEmail = '[deleted]'; }
+        else { authorEmail = author.email; }
         return {
             _id: doc._id,
             title: doc.title,
-            authorEmail: author.authorEmail
+            authorEmail: authorEmail
         }
     }));
     // return needed information to show list of pending documents 
