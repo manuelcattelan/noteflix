@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Container, ButtonToolbar, ButtonGroup, Button, ListGroup, Row, Col, Form } from 'react-bootstrap';
 import Navigation from '../components/Navigation';
 import Avatar, { AvatarConfig } from 'react-nice-avatar'
@@ -11,12 +11,17 @@ const MentorConsole = (props) => {
 
     const navigate = useNavigate();
 
+    const [docArray, setDocArray] = useState()
+
     useEffect(() => {
-        fetch("http://localhost:3001/api/v1/token/?token="+props.token)
+        fetch("http://localhost:3001/api/v1/documents/uploaded?token="+props.token)
         .then(resp => resp.json())
         .then(data => {
             if(!data.success){
                 navigate('/')
+            }
+            else{
+                setDocArray(data.documents)
             }
         })
     }, [""]);
@@ -57,7 +62,7 @@ const MentorConsole = (props) => {
                 </Row>
             </Container>
             <Container>
-                <MentorFileList/>
+                <MentorFileList docArray={docArray}/>
             </Container>
             
         </>
