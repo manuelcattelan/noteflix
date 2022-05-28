@@ -5,18 +5,18 @@ const Schema = mongoose.Schema;
 const documentSchema = new Schema ({
     // attributes for document object
     title: String,
-    author: { type: Schema.Types.ObjectId, ref: 'User'},
+    author: { type: Schema.Types.ObjectId, ref: 'User' },
     description: String,
     area: String,
     tag: [ String ],
     creationDate: Date,
-    status: { type: String, enum: ["pending", "public"], default: "pending"}, 
-    reported: { type: Boolean, default: false },
+    status: { type: String, enum: ["pending", "public"], default: "pending" }, 
+    reported: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     url: String,
-    like:    [{ type: Schema.Types.ObjectId, ref: 'User'}],
-    dislike: [{ type: Schema.Types.ObjectId, ref: 'User'}],
+    like:    [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    dislike: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     comments: [{
-        author: { type: Schema.Types.ObjectId, ref: 'User'},
+        author: { type: Schema.Types.ObjectId, ref: 'User' },
         date: Date,
         body: String
     }]
