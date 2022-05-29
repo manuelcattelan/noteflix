@@ -254,6 +254,8 @@ router.patch('/:id/:vote', async (request, result) =>{
         .json({
             success: true,
             rating,
+            like: doc.like.length,
+            dislike: doc.dislike.length,
             //message: "Document "+ (!num?"un":'')+request.params.vote+"d successfully" 
         })
     }).catch( error => {
