@@ -55,7 +55,7 @@ const DocSpoil = (props) => {
                         {props.titolo}
                     </Card.Title>
                     <Card.Text className='doc-descrizione' style={{overflowY:"hidden", height:"6rem"}}>
-                        {props.descrizione}
+                        {props.descrizione}<br/>
                         {
                             props.approval?<Badge className="mt-2" bg="primary">Piace al {props.approval}%</Badge>:""
                         }

@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
 import { Button, Col, Row, ProgressBar } from 'react-bootstrap';
 
-const Rating = ({like, dislike, id, rating, token, saved}) => {
+const Rating = ({like, dislike, id, rating, token, saved, approval}) => {
 
     const percent = (nlike, ndislike) =>{
         if(nlike + ndislike == 0) return 0;
         else return (nlike*100)/(nlike+ndislike)
     }
 
-    const [progress, setProgress] = useState(percent(like, dislike))
+    const [progress, setProgress] = useState()
 
     const handleLike = (e) => {
         fetch("http://localhost:3001/api/v1/documents/"+id+"/like?token="+token, {method: 'PATCH'})
@@ -83,7 +83,7 @@ const Rating = ({like, dislike, id, rating, token, saved}) => {
                 </Col>
                 
             </Row>
-            <ProgressBar className="mx-2" animated now={progress} style={{height:"5px"}}/>
+            <ProgressBar className="mx-2" animated now={progress?progress:approval} style={{height:"5px"}}/>
         </>
     );
 };
