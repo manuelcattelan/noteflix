@@ -225,19 +225,19 @@ router.patch('/:id/:vote', async (request, result) =>{
     doc.like.pull(request.loggedUser.id)
     doc.dislike.pull(request.loggedUser.id)
 
-    let num = 0;
+    let rating = 'none';
     switch (request.params.vote) {
         case 'like':
             //if the document wasn't liked already add like
             if (!liked){
                 doc.like.push(request.loggedUser.id);
-                num = 1;
+                rating = "liked"
             }
             break;
         case 'dislike':
             if (!disliked){
                 doc.dislike.push(request.loggedUser.id);
-                num = -1;
+                rating = "disliked"
             }
             break;
         default:
@@ -253,9 +253,8 @@ router.patch('/:id/:vote', async (request, result) =>{
         return result.status(200)
         .json({
             success: true,
-            status: num,
-            message: "Document "+ (!num?"un":'')+request.params.vote+"d successfully" 
-            //generate return message (it's a bit overcomplicated but ok)
+            rating,
+            //message: "Document "+ (!num?"un":'')+request.params.vote+"d successfully" 
         })
     }).catch( error => {
         // document save failure

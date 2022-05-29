@@ -398,10 +398,15 @@ router.get('/:id', async (request, result) => {
     else 
         author = {username: author.username, avatar: author.avatar};
 
-    // handle user interactions with retrieved documents
+    // Check the rating status (liked, disliked or none)
+    let rating = 'none';
+    if (document.like.indexOf( request.loggedUser.id) != -1)
+        rating = 'liked'
+    else if (document.dislike.indexOf( request.loggedUser.id) != -1)
+        rating = 'disliked'
+
     let interactions = {
-        liked:    document.like.indexOf( request.loggedUser.id) != -1,
-        disliked: document.dislike.indexOf( request.loggedUser.id) != -1,
+        rating,
         saved: //check if document is in user's saved documents
         !!await User.findOne({
             _id: request.loggedUser.id,
