@@ -27,6 +27,9 @@ const MentorNav = (props) => {
                             <Link to="/mentorconsole">
                                 <Nav.Link href="#def" className="Navtheme">Console mentore</Nav.Link>
                             </Link>
+                            <Link to="/upload">
+                                <Nav.Link href="#def" className="Navtheme">Carica un file</Nav.Link>
+                            </Link>
                             <Link to="/">
                                 <Nav.Link href="#def" className="Navtheme">Piattaforma</Nav.Link>
                             </Link>

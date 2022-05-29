@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import Navigation from '../components/Navigation';
 import { useNavigate} from 'react-router-dom';
+import macroaree from '../data/macroaree.json'
     
 const Upload = (props) => {
 
@@ -34,7 +35,7 @@ const Upload = (props) => {
     */
     const [titolo, setTitolo] = useState("");
     const [descrizione, setDescrizione] = useState("");
-    const [macroarea, setMacroarea] = useState("");
+    const [macroarea, setMacroarea] = useState(macroaree[0].nome);
     const [tag, setTag] = useState("");
     const [documento, setDocumento] = useState();
 
@@ -55,7 +56,6 @@ const Upload = (props) => {
         formdata.append("tag", tag); 
         formdata.append("url", documento); 
 
-        console.log(macroarea);
 
         var requestOptions = {
             method: 'POST',
@@ -77,7 +77,7 @@ const Upload = (props) => {
             <Container>
                 <Container className='d-flex justify-content-center mt-5'>
                     <div>
-                        <p className="titolo text-center my-5">Carica una <span className='text-primary'>nuova</span> dispesa.</p>
+                        <p className="titolo text-center">Carica una <span className='text-primary'>nuova</span> dispesa.</p>
                         <p className="testo text-center my-5">Compila il form per pubblicare un nuovo contenuto. Assicurati che rispetti le <br/>nostre linee guida per non compromettere la tua reputazione come mentore.</p>
                         
                         <Form className="mt-5" onSubmit={handleSubmit}>
@@ -97,11 +97,13 @@ const Upload = (props) => {
 
                             <Form.Group className="mb-3">
                                 <Form.Label>Scegli in che macroarea apparirà il tuo file</Form.Label>
-                                <Form.Select id="macroarea"  onChange={(e)=>{setMacroarea(e.target.value)}} maxlength="160">
+                                <Form.Select id="macroarea"  onChange={(e)=>{setMacroarea(e.target.value)}} maxlength="160" required>
                                     <option disabled selected value>-</option>
-                                    <option>Ingegneria Informatica - Informatica</option>
-                                    <option>Lettere e Filosofia</option>
-                                    <option>Economia e Gestione Aziendale</option>
+                                    {
+                                        macroaree.map((item) => 
+                                            <option value={item.nome}>{item.nome}</option>
+                                        )
+                                    }
                                 </Form.Select>
                             </Form.Group>
 

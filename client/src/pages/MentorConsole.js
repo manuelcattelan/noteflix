@@ -10,8 +10,9 @@ import MentorFileList from '../components/liste/MentorFileList';
 const MentorConsole = (props) => {
 
     const navigate = useNavigate();
-
     const [docArray, setDocArray] = useState()
+    const userId = JSON.parse(window.localStorage.getItem("user"))
+    const [persona, setPersona] = useState({})
 
     useEffect(() => {
         fetch("http://localhost:3001/api/v1/documents/uploaded?token="+props.token)
@@ -24,8 +25,16 @@ const MentorConsole = (props) => {
                 setDocArray(data.documents)
             }
         })
+
+        fetch("http://localhost:3001/api/v1/users/"+userId+"?token="+props.token)
+        .then(resp => resp.json())
+        .then(data => setPersona(data))
+        // .then(alert(JSON.stringify(persona)))
+
+
     }, [""]);
 
+    
 
 
 
@@ -35,13 +44,12 @@ const MentorConsole = (props) => {
             <Container className='my-5'>
                 <Row>
                     <Col md="3" className='d-flex justify-content-center align-content-center'>
-                        <Avatar className="" style={{ width: '10rem', height: '10rem' }} {...AvatarConfig}/>
+                        <Avatar className="" style={{ width: '10rem', height: '10rem' }} {...persona.avatar}/>
                     </Col>
                     <Col className='d-flex align-content-center'>
                         <div>
-                            <p className='h1 fw-bold'>Pagina personale da mentore <br/> di Noteflix, ciao <span className='text-primary'>Raffaele</span></p>
+                            <p className='h1 fw-bold'>Pagina personale da mentore <br/> di Noteflix, ciao <span className='text-primary'>{persona.username}</span></p>
                             <Form>
-                                
                                     <Row>
                                         <Col md="9">
                                             <Form.Control id="descrizione" as="textarea" className="me-2 mb-2" cols={120} rows={4} required
@@ -55,7 +63,6 @@ const MentorConsole = (props) => {
                                             <p style={{fontSize:"11px"}} className="mt-2">La nuova biografia sarà resa pubblica e gli utenti avranno la possibilità di leggerla e segnalarla se lo ritengono opportuno.</p>
                                         </Col>
                                     </Row>
-                                
                             </Form>
                         </div>
                     </Col>

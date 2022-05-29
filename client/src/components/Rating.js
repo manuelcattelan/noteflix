@@ -1,7 +1,14 @@
 import React, {useState} from 'react';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row, ProgressBar } from 'react-bootstrap';
 
 const Rating = ({like, dislike, id, rating, token, saved}) => {
+
+    const percent = (nlike, ndislike) =>{
+        if(nlike + ndislike == 0) return 0;
+        else return (nlike*100)/(nlike+ndislike)
+    }
+
+    const [progress, setProgress] = useState(percent(like, dislike))
 
     const handleLike = (e) => {
         fetch("http://localhost:3001/api/v1/documents/"+id+"/like?token="+token, {method: 'PATCH'})
@@ -11,15 +18,14 @@ const Rating = ({like, dislike, id, rating, token, saved}) => {
                 if(data.rating === "liked"){
                     document.getElementById("t-u").className="bi bi-hand-thumbs-up-fill"
                     document.getElementById("t-d").className="bi bi-hand-thumbs-down"
-                    document.getElementById("like").innerHTML = "Piace a " + data.like +" utenti, pari al " + (data.like*100)/(data.like+data.dislike) + "% dei voti"
-                    document.getElementById("dislike").innerHTML = "Non piace a " + data.dislike +" utenti"
                 }
                 else{
                     document.getElementById("t-u").className="bi bi-hand-thumbs-up"
                     document.getElementById("t-d").className="bi bi-hand-thumbs-down"
-                    document.getElementById("like").innerHTML = "Piace a " + data.like +" utenti, pari al " + (data.like*100)/(data.like+data.dislike) + "% dei voti"
-                    document.getElementById("dislike").innerHTML = "Non piace a " + data.dislike +" utenti"
                 }
+                document.getElementById("like").innerHTML = "Piace a " + data.like +" utenti, pari al " + percent(data.like, data.dislike) + "% dei voti"
+                document.getElementById("dislike").innerHTML = "Non piace a " + data.dislike +" utenti"
+                setProgress(percent(data.like, data.dislike))
             }
         })
     }
@@ -32,15 +38,14 @@ const Rating = ({like, dislike, id, rating, token, saved}) => {
                 if(data.rating === "disliked"){
                     document.getElementById("t-u").className="bi bi-hand-thumbs-up"
                     document.getElementById("t-d").className="bi bi-hand-thumbs-down-fill"
-                    document.getElementById("like").innerHTML = "Piace a " + data.like +" utenti, pari al " + (data.like*100)/(data.like+data.dislike) + "% dei voti"
-                    document.getElementById("dislike").innerHTML = "Non piace a " + data.dislike +" utenti"
                 }
                 else{
                     document.getElementById("t-u").className="bi bi-hand-thumbs-up"
                     document.getElementById("t-d").className="bi bi-hand-thumbs-down"
-                    document.getElementById("like").innerHTML = "Piace a " + data.like +" utenti, pari al " + (data.like*100)/(data.like+data.dislike) + "% dei voti"
-                    document.getElementById("dislike").innerHTML = "Non piace a " + data.dislike +" utenti"
                 }
+                document.getElementById("like").innerHTML = "Piace a " + data.like +" utenti, pari al " + percent(data.like, data.dislike) + "% dei voti"
+                document.getElementById("dislike").innerHTML = "Non piace a " + data.dislike +" utenti"
+                setProgress(percent(data.like, data.dislike))
             }
         })
     }
@@ -73,11 +78,12 @@ const Rating = ({like, dislike, id, rating, token, saved}) => {
                     }
                 </Col>
                 <Col className="mt-2 p-0">
-                    <p id="like" className='my-0 text-primary doc-descrizione' style={{lineHeight:"15px"}}>Piace a {like} utenti, pari al {(like*100)/(like+dislike)}% dei voti</p>
+                    <p id="like" className='my-0 text-primary doc-descrizione' style={{lineHeight:"15px"}}>Piace a {like} utenti, pari al {percent(like, dislike)}% dei voti</p>
                     <p id="dislike" className='my-0 text-primary doc-descrizione' style={{lineHeight:"15px"}}>Non piace a {dislike} utenti</p>
                 </Col>
+                
             </Row>
-            
+            <ProgressBar className="mx-2" animated now={progress} style={{height:"5px"}}/>
         </>
     );
 };
