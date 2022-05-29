@@ -1,13 +1,13 @@
 import React from 'react';
-import { Navbar, Nav, Container, NavDropdown, Button, Badge } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Badge } from 'react-bootstrap';
+import Avatar from 'react-nice-avatar';
 import { HashLink as Link } from 'react-router-hash-link';
 import logolight from "../media/logolight.svg"
 
 const MentorNav = (props) => {
     return (
         <>
-            <Navbar collapseOnSelect expand="lg" style={{position:"sticky", top: "0", zIndex:"100"}}>
-                <Container>
+            <Navbar className="mx-5 mt-1" collapseOnSelect expand="lg" style={{position:"sticky", top: "0", zIndex:"100"}}>
                     <Navbar.Brand href="#home">
                         <Link to="/">
                             <img
@@ -23,12 +23,9 @@ const MentorNav = (props) => {
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
-                        <Nav className="ms-auto">
+                        <Nav className="mx-auto">
                             <Link to="/mentorconsole">
                                 <Nav.Link href="#def" className="Navtheme">Console mentore</Nav.Link>
-                            </Link>
-                            <Link to="/upload">
-                                <Nav.Link href="#def" className="Navtheme">Carica documento</Nav.Link>
                             </Link>
                             <Link to="/">
                                 <Nav.Link href="#def" className="Navtheme">Piattaforma</Nav.Link>
@@ -36,13 +33,17 @@ const MentorNav = (props) => {
                             <Link to="/library">
                                 <Nav.Link href="#def" className="Navtheme">Libreria personale</Nav.Link>
                             </Link>
-                            <div>
-                                <Button size="sm" className='ms-3 mt-1' onClick={props.handleLogout} variant="outline-primary">Logout</Button>
-                            </div>
+                        </Nav>
+                        <Nav>
+                            <NavDropdown title={props.persona.username} className="fw-bold mt-1 me-2 text-decoration-underline">
+                                <NavDropdown.Item href="#" onClick={props.handleLogout}>
+                                    Disconnettiti
+                                </NavDropdown.Item>
+                            </NavDropdown>
+                            <Avatar style={{ width: '3rem', height: '3rem' }} {...props.persona.avatar}/>
                         </Nav>
                         
                     </Navbar.Collapse>
-                </Container>
             </Navbar>
         </>
     );

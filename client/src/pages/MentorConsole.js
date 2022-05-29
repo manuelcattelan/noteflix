@@ -31,7 +31,7 @@ const MentorConsole = (props) => {
 
     return (
         <>
-            <Navigation theme={props.theme} setTheme={props.setTheme} user={props.user} setUser={props.setUser} navbar={props.navbar}/>
+            <Navigation navbar={props.navbar} token={props.token}/>
             <Container className='my-5'>
                 <Row>
                     <Col md="3" className='d-flex justify-content-center align-content-center'>

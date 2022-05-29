@@ -39,7 +39,7 @@ const Platform = (props) => {
 
     return (
         <>    
-            <Navigation theme={props.theme} setTheme={props.setTheme} user={props.user} setUser={props.setUser} navbar={props.navbar}/>
+            <Navigation navbar={props.navbar} token={props.token}/>
             <Container>
                 <p className='doc-titolo text-center' style={{marginTop:"10vh"}}>Esplora e scopri nuovi dispense per la tua libreria</p>
                 <Form className="d-flex justify-content-center">

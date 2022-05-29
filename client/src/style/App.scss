@@ -1,9 +1,27 @@
-
-
 .App{
-    background: var(--page-background);
-    color: #101010
+    background: #fff;
+    color: #101010;
+
+    //impedire la selezione del testo
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
+
+
+/* nascondere la scrollbar */
+html::-webkit-scrollbar {
+    display: none;
+}
+html{
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll; 
+}
+
 
 .Navtheme{
     color: #000 !important;
@@ -21,20 +39,23 @@ a{
 //dropdown delle impostazioni
 .dropdown-menu.show{
     padding: 0;
+    margin-top: 20px !important;
     background: var(--page-background);
     border-color: var(--text) !important;
 }
 .dropdown-toggle.nav-link{
-    color: var(--text) !important;
+    color: #623FF0 !important;
 }
 .dropdown-item{
     color: var(--text) !important;
     
 }
 .dropdown-item:hover{
-        background: var(--page-background) !important;
-    }
-
+    background: var(--page-background) !important;
+}
+.dropdown-toggle::after {
+    display: none !important;
+}
 
 
 

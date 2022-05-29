@@ -98,7 +98,7 @@ const Document = (props) => {
 
     return (
         <>
-            <Navigation theme={props.theme} setTheme={props.setTheme} user={props.user} setUser={props.setUser} navbar={props.navbar}/>
+            <Navigation navbar={props.navbar} token={props.token}/>
             <Container>
                 <Row className='my-5'>
                     <Col md="9">

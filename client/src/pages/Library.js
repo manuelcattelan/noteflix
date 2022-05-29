@@ -34,7 +34,7 @@ const Library = (props) => {
 
     return (
         <>
-            <Navigation theme={props.theme} setTheme={props.setTheme} user={props.user} setUser={props.setUser} navbar={props.navbar}/>
+            <Navigation navbar={props.navbar} token={props.token}/>
             <Container>
                 <p className='titolo text-center mt-5'>Ecco la tua <span className='text-primary'>libreria</span> personale.</p>
                 <p className='testo text-center'>Qui troverai i documenti che hai salvato dalla sezione esplora.</p>        

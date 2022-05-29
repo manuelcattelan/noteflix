@@ -23,7 +23,7 @@ const MentorWannaBe = (props) => {
 
     return (
         <>
-            <Navigation theme={props.theme} setTheme={props.setTheme} user={props.user} setUser={props.setUser} navbar={props.navbar}/>
+            <Navigation navbar={props.navbar} token={props.token}/>
             <Container className='d-flex justify-content-center align-items-center' style={{height:"90vh"}}>
                 <div>
                     <p className='titolo text-center'><span className='text-primary'>Guadagnare</span> vendendo <span className='text-primary'>appunti</span> di <br/> qualità sulla nostra piattafroma.</p>

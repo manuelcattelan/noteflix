@@ -40,22 +40,22 @@ const Login = ({setToken, token, setUser, user, setPage, setNavbar}) => {
                     switch(data.tokenData.type) {
                         case "mentor":
                           setNavbar("mentor")
-                          setPage(<Platform token={provToken} user={user} navbar="mentor"/>)
+                          setPage(<Platform token={provToken} navbar="mentor"/>)
                           navigate('/')
                           break;
                         case "moderator":
                           setNavbar("moderator")
-                          setPage(<Platform token={provToken} user={user} navbar="moderator"/>)
+                          setPage(<Platform token={provToken} navbar="moderator"/>)
                           navigate('/')
                           break;
                         case "user":
                           setNavbar("user")
-                          setPage(<Platform token={provToken} user={user} navbar="user"/>)
+                          setPage(<Platform token={provToken} navbar="user"/>)
                           navigate('/')
                           break;
                         default:
                           setNavbar("user")
-                          setPage(<Platform token={data.token} user={user} navbar="user"/>)
+                          setPage(<Platform token={data.token} navbar="user"/>)
                           navigate('/')
                     }
                 })

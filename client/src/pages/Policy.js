@@ -6,7 +6,7 @@ import check from '../media/completed.svg'
 const Policy = (props) => {
     return (
         <>
-            <Navigation theme={props.theme} setTheme={props.setTheme} user={props.user} setUser={props.setUser} navbar={props.navbar}/>
+            <Navigation navbar={props.navbar} token={props.token}/>
             <Container>
                 <Container>
                     <p className='h1 my-5 fw-bold'>Processo di verifica documenti <br/> della piattaforma <span className='font-italic text-primary'>Noteflix</span></p>

@@ -27,7 +27,7 @@ const ModeratorConsole = (props) => {
 
     return (
         <>
-            <Navigation theme={props.theme} setTheme={props.setTheme} user={props.user} setUser={props.setUser} navbar={props.navbar}/>
+            <Navigation navbar={props.navbar} token={props.token}/>
             <Container className='my-5'>
                 <Tabs defaultActiveKey="pending" id="uncontrolled-tab-example" className="mb-3">
                     <Tab eventKey="pending" title="File in attesa di approvazione">

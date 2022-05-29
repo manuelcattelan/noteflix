@@ -20,7 +20,7 @@ const SignLog = (props) => {
 
     return (
         <>
-                    <Navigation theme={props.theme} setTheme={props.setTheme} user={props.user} setUser={props.setUser}/>
+                    <Navigation navbar={props.navbar} token={props.token}/>
                     <Container className='d-flex justify-content-center mt-2'>
                         <div>
                             <p className="titolo text-center my-5">Tutte le risorse di cui hai <br/>bisogno, a portata di <span className='text-primary'>click.</span></p>

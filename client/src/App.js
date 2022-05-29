@@ -23,7 +23,7 @@ function App() {
   const [navbar, setNavbar] = useState("visitor")                                           // la navbar potrà essere visitatore, user, moderator, mentor
   const [token, setToken] =  useLocalStorage('token', "")                                   //controllo di avere un token salvato nel local storage
   const [user, setUser] = useLocalStorage('user', "")                                       //creo uno stato per conservare l'oggetto utente
-  const [page, setPage] = useState(<Main token={token} user={user} navbar="visitatore"/>)   //creo uno stato per la pagina principale
+  const [page, setPage] = useState(<Main token={token}   navbar="visitatore"/>)   //creo uno stato per la pagina principale
 
 
   useEffect(() => {
@@ -32,23 +32,23 @@ function App() {
     .then(data => {
       setUser(data.tokenData.id)
       if(data.success === true){
-        
+
         switch(data.tokenData.type) {
           case "mentor":
             setNavbar("mentor")
-            setPage(<Platform token={token} user={user} navbar="mentor"/>)
+            setPage(<Platform token={token}   navbar="mentor"/>)
             break;
           case "moderator":
             setNavbar("moderator")
-            setPage(<Platform token={token} user={user} navbar="moderator"/>)
+            setPage(<Platform token={token}   navbar="moderator"/>)
             break;
           case "user":
             setNavbar("user")
-            setPage(<Platform token={token} user={user} navbar="user"/>)
+            setPage(<Platform token={token}   navbar="user"/>)
             break;
           default:
             setNavbar("user")
-            setPage(<Platform token={token} user={user} navbar="user"/>)
+            setPage(<Platform token={token}   navbar="user"/>)
         }
         
       }
@@ -56,7 +56,7 @@ function App() {
   }, [""]);
 
   return (
-    <>
+    <div  className="App">
       <Router>
         <Routes>
 
@@ -70,21 +70,21 @@ function App() {
 
 
           {/* pagine accessibili da tutti (anche non loggati) */}
-          <Route path='/signlog'        exact element={<SignLog token={token} setToken={setToken} setPage={setPage}  setUser={setUser} navbar={navbar} setNavbar={setNavbar}/>} />
+          <Route path='/signlog'        exact element={<SignLog token={token} setToken={setToken} setPage={setPage}  setUser={setUser} /*qui il set user è necessario*/ navbar={navbar} setNavbar={setNavbar}/>} />
           <Route path='/policy'         exact element={<Policy  navbar={navbar}/>} />
           <Route path='/mentorwannabe'  exact element={<MentorWannaBe token={token} navbar={navbar}/>} />
           
           {/* pagine accessibili solo sotto verifica utente loggato (hanno la props user) */}
-          <Route path='/library'           exact element={<Library  user={user} token={token} navbar={navbar}/>} />
-          <Route path='/mentorconsole'     exact element={<MentorConsole  user={user} token={token} navbar={navbar}/>} />
-          <Route path='/moderatorconsole'  exact element={<ModeratorConsole user={user} token={token} navbar={navbar}/>} />
-          <Route path='/upload'            exact element={<Upload   user={user} token={token} navbar={navbar}/>} />
-          <Route path='/document'          exact element={<Document user={user} token={token} navbar={navbar}/>} />
+          <Route path='/library'           exact element={<Library  token={token} navbar={navbar}/>} />
+          <Route path='/mentorconsole'     exact element={<MentorConsole    token={token} navbar={navbar}/>} />
+          <Route path='/moderatorconsole'  exact element={<ModeratorConsole   token={token} navbar={navbar}/>} />
+          <Route path='/upload'            exact element={<Upload     token={token} navbar={navbar}/>} />
+          <Route path='/document'          exact element={<Document   token={token} navbar={navbar}/>} />
 
           {/* <Route render={() => <PageNotFound />}/> */}
         </Routes>
       </Router>
-    </>
+    </div>
   );
 }
 
