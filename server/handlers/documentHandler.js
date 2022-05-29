@@ -397,14 +397,12 @@ router.get('/:id', async (request, result) => {
         author = {username: '[deleted]'};
     else 
         author = {username: author.username, avatar: author.avatar};
+
     // handle user interactions with retrieved documents
     let interactions = {
-        liked: //check if user is in likes
-        !!await Document.findOne({
-            _id: document.id,
-            like: request.loggedUser.id,
-          }).exec(),
-        saved: //check if document is in saved documents
+        liked:    document.like.indexOf( request.loggedUser.id) != -1,
+        disliked: document.dislike.indexOf( request.loggedUser.id) != -1,
+        saved: //check if document is in user's saved documents
         !!await User.findOne({
             _id: request.loggedUser.id,
             savedDocuments: document.id ,
@@ -519,81 +517,6 @@ router.delete('/:id', async(request, result) => {
                     message: 'Document deleted'
                 })
     })
-})
-
-// route handler for updating the "reported" attribute on document report
-router.patch('/:id/report', async (request, result) => {
-    // check if logged user is mentor
-    if (request.loggedUser.type == "mentor"){
-        return result
-            .status(401)
-            .json({
-                success: false,
-                message: 'Mentors are not allowed to report documents'
-            })
-    }
-    // check for user existence in database
-    let user = await User.findById(request.loggedUser.id).exec();
-    if (!user){
-        return result
-            .status(404)
-            .json({
-                success: false,
-                message: 'User not found'
-            })
-    }
-    // check id length and id string format (must be hex)
-    if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
-        return result
-            .status(400)
-            .json({
-                success: false,
-                message: 'Invalid ID',
-            })
-    }
-    // look for document with provided id
-    let document = await Document.findById(request.params.id).exec();
-    // if no document was found
-    if (!document){
-        result
-            .status(404)
-            .json({
-                success: true,
-                message: 'No document found with the given id',
-            })
-        return;
-    }
-    // update reported attribute if it wasn't already reported by the logged user
-    if (document.reported.indexOf(user._id) !== -1){
-        result
-            .status(400)
-            .json({
-                success: true,
-                message: 'You have reported this document already',
-            })
-        return;
-    }
-    document.reported.push(user._id);
-    // push changes to database
-    document.save()
-        .then( () => {
-            // document report was successfull
-            return result
-                .status(200)
-                .json({ 
-                    success: true,
-                    message: 'Document reported successfully'
-                });
-        })
-        .catch( error => {
-            // document report failed
-            return result
-                .status(400)
-                .json({
-                    success: false,
-                    message: error.message
-                })
-        })
 })
 
 // route handler for updating the "pending" attribute to "public" on document report

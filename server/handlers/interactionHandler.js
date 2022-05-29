@@ -50,59 +50,6 @@ router.post('/:id/save', async (request, result) =>{
     return;
 })
 
-router.post('/:id/like', async (request, result) =>{
-    // check id length and id string format (must be hex)
-    if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
-        result.status(400)
-            .json({
-                success: false,
-                liked: false,
-                message: 'Invalid ID',
-            })
-        return;
-    }
-
-    let updated = await Document.updateOne({ _id: request.params.id },
-            { $pull:{
-                like: request.loggedUser.id
-            }
-        }).exec();
-
-    //if can't find on DB send error
-    if (!updated.matchedCount){
-        return result.status(400)
-            .json({
-                success: false,
-                liked: false,
-                message: 'Invalid ID',
-            })
-    }
-
-    //if like has been removed
-    if (updated.modifiedCount){
-        return result.status(200)
-            .json({
-                success: true,
-                liked: false,
-                message: 'Document unliked',
-            })
-    }
-
-    await Document.updateOne({ _id: request.params.id },
-        { $push:{
-            like: request.loggedUser.id
-        }
-    }).exec();
-
-    
-    result.status(200)
-        .json({
-            success: true,
-            liked: true,
-            message: 'Document liked',
-        })
-    return;
-})
 
 router.post('/:id/comment', async (request, result) =>{
      // check id length and id string format (must be hex)
@@ -180,4 +127,146 @@ router.delete('/:id/comment/:commentId', async (request, result) =>{
         })
 
 });
+
+// route handler for updating the "reported" attribute on document report
+router.patch('/:id/report', async (request, result) => {
+    // check if logged user is mentor
+    if (request.loggedUser.type == "mentor"){
+        return result
+            .status(401)
+            .json({
+                success: false,
+                message: 'Mentors are not allowed to report documents'
+            })
+    }
+    // check id length and id string format (must be hex)
+    if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
+        return result
+            .status(400)
+            .json({
+                success: false,
+                message: 'Invalid ID',
+            })
+    }
+    // look for document with provided id
+    let document = await Document.findById(request.params.id).exec();
+    // if no document was found
+    if (!document){
+        result
+            .status(404)
+            .json({
+                success: true,
+                message: 'No document found with the given id',
+            })
+        return;
+    }
+    // update reported attribute if it wasn't already reported by the logged user
+    if (document.reported.indexOf(request.loggedUser.id) !== -1){
+        result
+            .status(400)
+            .json({
+                success: true,
+                message: 'You have reported this document already',
+            })
+        return;
+    }
+    document.reported.push(request.loggedUser.id);
+    // push changes to database
+    document.save()
+        .then( () => {
+            // document report was successfull
+            return result
+                .status(200)
+                .json({ 
+                    success: true,
+                    message: 'Document reported successfully'
+                });
+        })
+        .catch( error => {
+            // document report failed
+            return result
+                .status(400)
+                .json({
+                    success: false,
+                    message: error.message
+                })
+        })
+})
+
+
+router.patch('/:id/:vote', async (request, result) =>{
+    // check id length and id string format (must be hex)
+    if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
+        result.status(400)
+            .json({
+                success: false,
+                liked: false,
+                message: 'Invalid ID',
+            })
+        return;
+    }
+
+    let doc = await Document.findById(request.params.id);
+
+    //if can't find on DB send error
+    if (!doc){
+        return result.status(404)
+            .json({
+                success: false,
+                message: 'Document not found',
+            })
+    }
+
+    //check if current user has already liked/disliked
+    let liked = doc.like.indexOf(request.loggedUser.id) != -1
+    let disliked = doc.dislike.indexOf(request.loggedUser.id) != -1
+
+    //remove any previous votes
+    doc.like.pull(request.loggedUser.id)
+    doc.dislike.pull(request.loggedUser.id)
+
+    let num = 0;
+    switch (request.params.vote) {
+        case 'like':
+            //if the document wasn't liked already add like
+            if (!liked){
+                doc.like.push(request.loggedUser.id);
+                num = 1;
+            }
+            break;
+        case 'dislike':
+            if (!disliked){
+                doc.dislike.push(request.loggedUser.id);
+                num = -1;
+            }
+            break;
+        default:
+            //return error for any other :vote option
+            return result.status(400)
+            .json({
+                success: false,
+                message: 'Invalid operation',
+            })
+    }
+    
+    doc.save().then(()=>{
+        return result.status(200)
+        .json({
+            success: true,
+            status: num,
+            message: "Document "+ (!num?"un":'')+request.params.vote+"d successfully" 
+            //generate return message (it's a bit overcomplicated but ok)
+        })
+    }).catch( error => {
+        // document save failure
+        return result
+            .status(400)
+            .json({
+                success: false,
+                message: error.message
+            })
+    })
+})
+
+
 module.exports = router
