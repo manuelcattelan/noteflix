@@ -14,6 +14,7 @@ const Risultati = (props) => {
                         macroarea={item.area}
                         autore={item.author}
                         id={item._id}
+                        approval={item.approval}
                     /> 
                 ) 
                 : 

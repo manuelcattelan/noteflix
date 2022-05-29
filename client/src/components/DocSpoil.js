@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Button } from 'react-bootstrap';
+import { Card, Button, Badge } from 'react-bootstrap';
 
 
 import pdf from '../pdf/ns.pdf';
@@ -35,6 +35,7 @@ const DocSpoil = (props) => {
             <Card className="m-3" style={{ width: '18rem' }}>
                 <Card.Header style={{ width: '18rem', overflowX:"hidden" }}>{props.macroarea}</Card.Header>
                     <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.13.216/build/pdf.worker.min.js">
+                        
                         <div
                             style={{
                                 height: '150px',
@@ -47,15 +48,17 @@ const DocSpoil = (props) => {
                                 :
                                 ""
                             }
-                            
                         </div>
                     </Worker>
                 <Card.Body>
                     <Card.Title style={{overflowY:"hidden", height:"3rem"}}>
                         {props.titolo}
                     </Card.Title>
-                    <Card.Text className='doc-descrizione' style={{overflowY:"hidden", height:"5rem"}}>
+                    <Card.Text className='doc-descrizione' style={{overflowY:"hidden", height:"6rem"}}>
                         {props.descrizione}
+                        {
+                            props.approval?<Badge className="mt-2" bg="primary">Piace al {props.approval}%</Badge>:""
+                        }
                     </Card.Text>
                 </Card.Body>
                 <Card.Body>
