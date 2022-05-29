@@ -33,7 +33,7 @@ const Policy = (props) => {
                                 <br/><b>Esso dovrà necessariamente contenere:</b> 
                                 <ul>
                                     <li>
-                                        <b>Indicie:</b> è richiesto che ogni file della piattaforma, per quanto breve, deve essere corredato di indice dei contenuti, visualizzabile nelle pagine di anteprima del file.
+                                        <b>Indice:</b> è richiesto che ogni file della piattaforma, per quanto breve, deve essere corredato di indice dei contenuti, visualizzabile nelle pagine di anteprima del file.
                                     </li>
                                     <li>
                                         <b>Data di pubblicazione:</b> è necessario che ogni documento sia corredato di data di pubblicazione nel frontespizio, così che gli utenti possano immediatamente escluderlo se fosse troppo datato.
