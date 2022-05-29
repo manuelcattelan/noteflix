@@ -437,8 +437,7 @@ router.get('/:id', async (request, result) => {
             url: document.url,
             like:   document.like.length,
             dislike: document.dislike.length,
-            // approval percentage is completely redundant and unnecessary but since raffaele can't get the page to work, i'm adding it anyways
-            approval: 100 * doc.like.length/(doc.like.length + doc.dislike.length)
+            approval: 100 * document.like.length/(document.like.length + document.dislike.length)
         }
     // if document was found return document
     return result
