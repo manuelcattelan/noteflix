@@ -436,7 +436,8 @@ router.get('/:id', async (request, result) => {
             creationDate: document.creationDate,
             url: document.url,
             like:   document.like.length,
-            dislike: document.dislike.length
+            dislike: document.dislike.length,
+            approval: 100 * document.like.length/(document.like.length + document.dislike.length)
         }
     // if document was found return document
     return result
