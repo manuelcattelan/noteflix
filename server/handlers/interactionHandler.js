@@ -206,7 +206,7 @@ router.patch('/:id/report', async (request, result) => {
     // update reported attribute if it wasn't already reported by the logged user
     if (document.reported.indexOf(request.loggedUser.id) !== -1){
         result
-            .status(400)
+            .status(200)
             .json({
                 success: true,
                 message: 'You have reported this document already',

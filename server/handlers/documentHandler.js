@@ -155,6 +155,187 @@ router.get('', async (request, result) => {
         })
 });
 
+// route handler for listing a document by ID
+router.get('/:id', async (request, result) => {
+    // check id length and id string format (must be hex)
+    if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
+        return result
+            .status(400)
+            .json({
+                success: false,
+                message: 'Invalid ID',
+            })
+    }
+    // find document by id parameter
+    let document = await Document.findById(request.params.id);
+    // if no document was found in the database
+    if (!document){
+        return result
+            .status(404)
+            .json({
+                success: true,
+                message: 'No document found with the given id',
+            })
+    }
+    // grant access to document to every moderator
+    let isModerator = (request.loggedUser.type == "moderator");
+    // grant access to document for document author
+    let isAuthor = (request.loggedUser.id == document.author);
+    // check if logged user has a subscription plan
+    let hasSubscription = (request.loggedUser.subscription);
+    // check if user subscription is valid for document access
+    let hasValidSubscription = ((request.loggedUser.subscription.type == "nerd") || 
+                                (request.loggedUser.subscription.type == "studenti" && request.loggedUser.subscription.area == document.area)) 
+    if (!(isModerator || isAuthor)){
+        if (!hasSubscription)
+            return result
+                .status(401)
+                .json({
+                    success: false,
+                    message: 'Your subscription plan does not allow you to view this document.',
+                })
+        if (!hasValidSubscription) {
+            return result
+                .status(401)
+                .json({
+                    success: false,
+                    message: 'Your subscription plan does not allow you to view this document.',
+                })
+        }
+    }
+    // retrieve user name of document author
+    let author = await User.findById(document.author);
+    if (!author)
+        author = {username: '[deleted]'};
+    else 
+        author = {username: author.username, avatar: author.avatar};
+    // Check the rating status (liked, disliked or none)
+    let rating = 'none';
+    if (document.like.indexOf( request.loggedUser.id) != -1)
+        rating = 'liked'
+    else if (document.dislike.indexOf( request.loggedUser.id) != -1)
+        rating = 'disliked'
+    // create interaction object
+    let interactions = {
+        rating,
+        saved: //check if document is in user's saved documents
+        !!await User.findOne({
+            _id: request.loggedUser.id,
+            savedDocuments: document.id ,
+          }).exec()
+    }
+    //gather user data for each comment author
+    let comments = await Promise.all(document.comments.map( async (comment) => {
+        let author = await User.findById(comment.author);
+        if (!author)
+            author = {username: '[deleted]'};
+        else 
+            author = {username: author.username, avatar: author.avatar};
+        return {
+            id: comment._id,
+            author,
+            body: comment.body
+        }
+    }));
+    document = {
+            _id: document._id,
+            title: document.title,
+            author: document.author,
+            description: document.description,
+            area: document.area,
+            tag: document.tag,
+            creationDate: document.creationDate,
+            url: document.url,
+            like:   document.like.length,
+            dislike: document.dislike.length,
+            approval: 100 * document.like.length/(document.like.length + document.dislike.length)
+        }
+    // if document was found return document
+    return result
+        .status(200)
+        .json({
+            success: true,
+            message: 'Document found',
+            document,
+            author,
+            comments,
+            interactions
+        })
+})
+
+// route handler for deleting a document by ID
+router.delete('/:id', async(request, result) => {
+    // check id length and id string format (must be hex)
+    if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
+        return result
+            .status(400)
+            .json({
+                success: false,
+                message: 'Invalid ID',
+            })
+    }
+    
+    // look for document with provided id
+    let document = await Document.findById(request.params.id).exec();
+    //only author and a moderator can delete a resource
+    if (request.loggedUser.type != "moderator" && 
+        request.loggedUser.id   != document.author){
+        return result
+            .status(401)
+            .json({
+                success: false,
+                message: 'You cannot delete resources unless you are a moderator or the document author'
+            })
+    }
+    // if no document was found in the database
+    if (!document){
+        return result
+            .status(404)
+            .json({
+                success: true,
+                message: 'No document found with the given id',
+            })
+    }
+    // retrieve document name from url attribute
+    let documentName = path.basename(document.url);
+    // create params object for document deletion
+    let params = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: documentName
+    }
+    // delete document from database
+    document.deleteOne()
+        .catch( error => {
+            // document deletion failed
+            console.log('-> document deletion failed')
+            return result
+                .status(400)
+                .json({
+                    success: false,
+                    message: error.message
+                })
+        })
+    // delete document from cloud storage
+    s3.deleteObject(params, function (error, data) {
+        // document deletion from cloud failed
+        if (error){
+            return result
+                    .status(400)
+                    .send({ 
+                        success: false, 
+                        message: error.message
+                    })
+        }
+        // document deletion from cloud succeeded
+        return result
+                .status(200)
+                .send({
+                    success: true,
+                    message: 'Document deleted'
+                })
+    })
+})
+
 // route handler for listing pending documents waiting for validation
 router.get('/pending', async (request, result) => {
     // check if logged user is mentor
@@ -341,188 +522,6 @@ router.get('/saved', async (request, result) => {
             message: 'Uploaded documents found',
             documents: documents
         })
-})
-
-// route handler for listing a document by ID
-router.get('/:id', async (request, result) => {
-    // check id length and id string format (must be hex)
-    if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
-        return result
-            .status(400)
-            .json({
-                success: false,
-                message: 'Invalid ID',
-            })
-    }
-    // find document by id parameter
-    let document = await Document.findById(request.params.id);
-    // if no document was found in the database
-    if (!document){
-        return result
-            .status(404)
-            .json({
-                success: true,
-                message: 'No document found with the given id',
-            })
-    }
-    // grant access to document to every moderator
-    let isModerator = (request.loggedUser.type == "moderator");
-    // grant access to document for document author
-    let isAuthor = (request.loggedUser.id == document.author);
-    // check if logged user has a subscription plan
-    let hasSubscription = (request.loggedUser.subscription);
-    // check if user subscription is valid for document access
-    let hasValidSubscription = ((request.loggedUser.subscription.type == "nerd") || 
-                                (request.loggedUser.subscription.type == "studenti" && request.loggedUser.subscription.area == document.area)) 
-    if (!(isModerator || isAuthor)){
-        if (!hasSubscription)
-            return result
-                .status(401)
-                .json({
-                    success: false,
-                    message: 'Your subscription plan does not allow you to view this document.',
-                })
-        if (!hasValidSubscription) {
-            return result
-                .status(401)
-                .json({
-                    success: false,
-                    message: 'Your subscription plan does not allow you to view this document.',
-                })
-        }
-    }
-    // retrieve user name of document author
-    let author = await User.findById(document.author);
-    if (!author)
-        author = {username: '[deleted]'};
-    else 
-        author = {username: author.username, avatar: author.avatar};
-
-    // Check the rating status (liked, disliked or none)
-    let rating = 'none';
-    if (document.like.indexOf( request.loggedUser.id) != -1)
-        rating = 'liked'
-    else if (document.dislike.indexOf( request.loggedUser.id) != -1)
-        rating = 'disliked'
-
-    let interactions = {
-        rating,
-        saved: //check if document is in user's saved documents
-        !!await User.findOne({
-            _id: request.loggedUser.id,
-            savedDocuments: document.id ,
-          }).exec()
-    }
-    //gather user data for each comment author
-    let comments = await Promise.all(document.comments.map( async (comment) => {
-        let author = await User.findById(comment.author);
-        if (!author)
-            author = {username: '[deleted]'};
-        else 
-            author = {username: author.username, avatar: author.avatar};
-        return {
-            id: comment._id,
-            author,
-            body: comment.body
-        }
-    }));
-    document = {
-            _id: document._id,
-            title: document.title,
-            author: document.author,
-            description: document.description,
-            area: document.area,
-            tag: document.tag,
-            creationDate: document.creationDate,
-            url: document.url,
-            like:   document.like.length,
-            dislike: document.dislike.length,
-            approval: 100 * document.like.length/(document.like.length + document.dislike.length)
-        }
-    // if document was found return document
-    return result
-        .status(200)
-        .json({
-            success: true,
-            message: 'Document found',
-            document,
-            author,
-            comments,
-            interactions
-        })
-})
-
-// route handler for deleting a document by ID
-router.delete('/:id', async(request, result) => {
-    // check id length and id string format (must be hex)
-    if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
-        return result
-            .status(400)
-            .json({
-                success: false,
-                message: 'Invalid ID',
-            })
-    }
-    
-    // look for document with provided id
-    let document = await Document.findById(request.params.id).exec();
-    //only author and a moderator can delete a resource
-    if (request.loggedUser.type != "moderator" && 
-        request.loggedUser.id   != document.author){
-        return result
-            .status(401)
-            .json({
-                success: false,
-                message: 'You cannot delete resources unless you are a moderator or the document author'
-            })
-    }
-    // if no document was found in the database
-    if (!document){
-        return result
-            .status(404)
-            .json({
-                success: true,
-                message: 'No document found with the given id',
-            })
-    }
-    // retrieve document name from url attribute
-    let documentName = path.basename(document.url);
-    // create params object for document deletion
-    let params = {
-        Bucket: process.env.AWS_BUCKET_NAME,
-        Key: documentName
-    }
-    // delete document from database
-    document.deleteOne()
-        .catch( error => {
-            // document deletion failed
-            console.log('-> document deletion failed')
-            return result
-                .status(400)
-                .json({
-                    success: false,
-                    message: error.message
-                })
-        })
-    // delete document from cloud storage
-    s3.deleteObject(params, function (error, data) {
-        // document deletion from cloud failed
-        if (error){
-            return result
-                    .status(400)
-                    .send({ 
-                        success: false, 
-                        message: error.message
-                    })
-        }
-        // document deletion from cloud succeeded
-        return result
-                .status(200)
-                .send({
-                    success: true,
-                    message: 'Document deleted'
-                })
-    })
 })
 
 // route handler for updating the "pending" attribute to "public" on document report

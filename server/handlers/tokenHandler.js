@@ -34,6 +34,7 @@ function createToken(user){
     return token;
 }
 
+// function used to verify token validity
 const tokenChecker = function ( req, res, next ) {
     // header or url parameters or post parameters
     var token = req.body.token || req.query.token || req.headers[ 'x-access-token'];
