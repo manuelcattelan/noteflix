@@ -161,7 +161,7 @@ router.patch('/changePassword', async (request, result) => {
         result.status(400).json({ success: false, message: 'Malformed request'});
         return;
     }
-    // check if currently logged in user exists
+    // retrieve information of currently logged in user 
     let usr = await User.findById(request.loggedUser.id);
     // generate password digest with the old password to check validity
     let hash = crypto.createHash('sha256').update(request.body.oldPassword + usr.passwordSalt).digest('hex');
