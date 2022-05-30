@@ -15,7 +15,7 @@ const Message = ({username, avatar, body, date}) => {
                     <Col xs="auto" className='d-flex justify-content-center pt-1'>
                         <Avatar style={{ width: '3rem', height: '3rem' }} {...avatar} />
                     </Col> 
-                    <Col className='pt-2' style={{border: "1px solid #EAD6FF", borderRadius: "13px", width:"fit-content"}}>
+                    <Col className='pt-2' style={{border: "1px solid #EAD6FF", borderRadius: "13px", width:"fit-content", backgroundColor:"#ffffff"}}>
                         <p className="fw-bold mb-0">
                                 {username}
                         </p>
