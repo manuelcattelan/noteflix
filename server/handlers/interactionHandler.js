@@ -8,14 +8,6 @@ const User = require('./../models/userModel');
 
 // save document to display it in user library (implemented as a toggle option)
 router.post('/:id/save', async (request, result) =>{
-    if (request.loggedUser.type=='moderator'){
-        return result
-            .status(401)
-            .json({
-                success: false,
-                message: 'Moderators cannot do this',
-            })
-    }
     // check id length and id string format (must be hex)
     if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
         result.status(400)
@@ -37,13 +29,12 @@ router.post('/:id/save', async (request, result) =>{
             })
     }
     let user = await User.findById(request.loggedUser.id);
-
     if (!user){
         return result
             .status(404)
             .json({
                 success: false,
-                message: 'No user found with the given id',
+                message: 'No user found with the id of the logged user'
             })
     }
     // find index of saved reference to logged user id, if it exists
@@ -76,14 +67,6 @@ router.post('/:id/save', async (request, result) =>{
 
 // add a new comment to the document
 router.patch('/:id/comment', async (request, result) =>{
-    if (request.loggedUser.type=='moderator'){
-        return result
-            .status(401)
-            .json({
-                success: false,
-                message: 'Moderators cannot do this',
-            })
-    }
      // check id length and id string format (must be hex)
      if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
         result.status(400)
@@ -98,7 +81,7 @@ router.patch('/:id/comment', async (request, result) =>{
         result.status(400)
         .json({
             success: false,
-            message: 'Missing commentText in request body'
+            message: 'Missing comment body'
         })
     }
     // find document by id parameter
@@ -146,7 +129,7 @@ router.delete('/:id/comment/:commentId', async (request, result) =>{
         result.status(400)
             .json({
                 success: false,
-                message: 'Invalid document or comment ID',
+                message: 'Invalid document or comment id',
             })
         return;
     }
@@ -166,24 +149,23 @@ router.delete('/:id/comment/:commentId', async (request, result) =>{
     // if index == -1 it means that no comment with the given id was found
     if (commentIndex == -1){
         result
-            .status(400)
+            .status(404)
             .json({
                 success: false,
-                message: 'No comment exists with the given id',
+                message: 'No comment found with the given id',
             })
         return;
     } 
-
+    // only moderators and comment authors are allowed to delete documents
     if (document.commets[commentIndex].author != request.loggedUser.id || request.loggedUser.type != 'moderator'){
         result
-            .status(401)
+            .status(403)
             .json({
                 success: false,
                 message: 'You do not have the permissionto delete this comment',
             })
         return;
     }
-
     // if a comment with the given id was found, delete it
     document.comments.splice(commentIndex, 1);
     // save document changes to database
@@ -207,14 +189,6 @@ router.delete('/:id/comment/:commentId', async (request, result) =>{
 
 // route handler for updating the "reported" attribute on document report
 router.patch('/:id/report', async (request, result) => {
-    if (request.loggedUser.type=='moderator'){
-        return result
-            .status(401)
-            .json({
-                success: false,
-                message: 'Moderators cannot do this',
-            })
-    }
     // check id length and id string format (must be hex)
     if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
         return result
@@ -236,17 +210,24 @@ router.patch('/:id/report', async (request, result) => {
             })
         return;
     }
-
+    if (document.status == 'pending'){
+        result
+            .status(400)
+            .json({
+                success: false,
+                message: 'You cannot report documents that are still pending',
+            })
+        return;
+    }
     // check if logged user is mentor
     if (request.loggedUser.id == doc.author){
         return result
-            .status(401)
+            .status(403)
             .json({
                 success: false,
                 message: 'You cannot report your own document'
             })
     }
-
     // update reported attribute if it wasn't already reported by the logged user
     if (document.reported.indexOf(request.loggedUser.id) !== -1){
         result
@@ -282,14 +263,6 @@ router.patch('/:id/report', async (request, result) => {
 
 // add like or dislike to document
 router.patch('/:id/:vote', async (request, result) =>{
-    if (request.loggedUser.type=='moderator'){
-        return result
-            .status(401)
-            .json({
-                success: false,
-                message: 'Moderators cannot do this',
-            })
-    }
     // check id length and id string format (must be hex)
     if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
         result.status(400)
@@ -306,7 +279,7 @@ router.patch('/:id/:vote', async (request, result) =>{
         return result.status(404)
             .json({
                 success: false,
-                message: 'Document not found',
+                message: 'No document found with the given id',
             })
     }
     // check if current user has already liked/disliked
@@ -337,7 +310,7 @@ router.patch('/:id/:vote', async (request, result) =>{
             return result.status(400)
             .json({
                 success: false,
-                message: 'Invalid operation',
+                message: 'Invalid vote option given',
             })
     }
     // save changes to database 
@@ -348,7 +321,6 @@ router.patch('/:id/:vote', async (request, result) =>{
             rating,
             like: doc.like.length,
             dislike: doc.dislike.length,
-            //message: "Document "+ (!num?"un":'')+request.params.vote+"d successfully" 
         })
     }).catch( error => {
         // document save failure

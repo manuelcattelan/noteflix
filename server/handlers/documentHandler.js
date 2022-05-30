@@ -57,20 +57,10 @@ router.post('', async (request, result) => {
     // check if logged user is mentor
     if (request.loggedUser.type != "mentor"){
         return result
-            .status(401)
+            .status(403)
             .json({
                 success: false,
                 message: 'User is not a mentor'
-            })
-    }
-    // check for user existence in database
-    let user = await User.findById(request.loggedUser.id).exec();
-    if (!user){
-        return result
-            .status(404)
-            .json({
-                success: false,
-                message: 'User not found'
             })
     }
     // upload document sent in form to s3 storage
@@ -173,7 +163,7 @@ router.get('/:id', async (request, result) => {
         return result
             .status(404)
             .json({
-                success: true,
+                success: false,
                 message: 'No document found with the given id',
             })
     }
@@ -189,14 +179,14 @@ router.get('/:id', async (request, result) => {
     if (!(isModerator || isAuthor)){
         if (!hasSubscription)
             return result
-                .status(401)
+                .status(403)
                 .json({
                     success: false,
                     message: 'Your subscription plan does not allow you to view this document.',
                 })
         if (!hasValidSubscription) {
             return result
-                .status(401)
+                .status(403)
                 .json({
                     success: false,
                     message: 'Your subscription plan does not allow you to view this document.',
@@ -281,7 +271,7 @@ router.delete('/:id', async(request, result) => {
     if (request.loggedUser.type != "moderator" && 
         request.loggedUser.id   != document.author){
         return result
-            .status(401)
+            .status(403)
             .json({
                 success: false,
                 message: 'You cannot delete resources unless you are a moderator or the document author'
@@ -292,7 +282,7 @@ router.delete('/:id', async(request, result) => {
         return result
             .status(404)
             .json({
-                success: true,
+                success: false,
                 message: 'No document found with the given id',
             })
     }
@@ -341,20 +331,10 @@ router.get('/pending', async (request, result) => {
     // check if logged user is mentor
     if (request.loggedUser.type != "moderator"){
         return result
-            .status(401)
+            .status(403)
             .json({
                 success: false,
                 message: 'User is not a moderator'
-            })
-    }
-    // check for user existence in database
-    let user = await User.findById(request.loggedUser.id).exec();
-    if (!user){
-        return result
-            .status(404)
-            .json({
-                success: false,
-                message: 'User not found'
             })
     }
     // find all documents that are waiting for validation
@@ -392,20 +372,10 @@ router.get('/reported', async (request, result) => {
     // check if logged user is mentor
     if (request.loggedUser.type != "moderator"){
         return result
-            .status(401)
+            .status(403)
             .json({
                 success: false,
                 message: 'User is not a moderator'
-            })
-    }
-    // check for user existence in database
-    let user = await User.findById(request.loggedUser.id).exec();
-    if (!user){
-        return result
-            .status(404)
-            .json({
-                success: false,
-                message: 'User not found'
             })
     }
     // find all documents that have been reported
@@ -439,24 +409,14 @@ router.get('/uploaded', async (request, result) => {
     // check if logged user is mentor
     if (request.loggedUser.type != "mentor"){
         return result
-            .status(401)
+            .status(403)
             .json({
                 success: false,
                 message: 'User is not a mentor'
             })
     }
-    // check for user existence in database
-    let user = await User.findById(request.loggedUser.id).exec();
-    if (!user){
-        return result
-            .status(404)
-            .json({
-                success: false,
-                message: 'User not found'
-            })
-    }
     // find all documents that have been uploaded from current mentor
-    let documents = await Document.find({ author: user._id }).exec();
+    let documents = await Document.find({ author: request.loggedUser.id }).exec();
     // if no documents were found in the database
     if (!documents || documents.length == 0){
         return result
@@ -486,26 +446,9 @@ router.get('/uploaded', async (request, result) => {
 
 // route handler for listing all documents uploaded by logged mentor
 router.get('/saved', async (request, result) => {
-    // check for user existence in database
-    if (request.loggedUser.type=='moderator'){
-        return result
-            .status(401)
-            .json({
-                success: false,
-                message: 'Moderators cannot do this',
-            })
-    }
-
+    // find information of logged in user
     let user = await User.findById(request.loggedUser.id).exec();
-    if (!user){
-        return result
-            .status(404)
-            .json({
-                success: false,
-                message: 'User not found'
-            })
-    }
-    // find all documents that have been uploaded from current mentor
+    // find all documents that have been saved from currently logged in user
     let documents = await Document.find({ status: "public", _id: {$in: user.savedDocuments }}).exec();
     // if no documents were found in the database
     if (!documents || documents.length == 0){
@@ -523,7 +466,7 @@ router.get('/saved', async (request, result) => {
             url: doc.url,
         }
     })
-    // return needed information to show list of uploaded documents
+    // return needed information to show list of saved documents
     return result
         .status(200)
         .json({
@@ -547,7 +490,7 @@ router.patch('/:id/validate', async (request, result) => {
     // check if current user is a moderator
     if (request.loggedUser.type != "moderator"){
         return result
-            .status(401)
+            .status(403)
             .json({
                 success: false,
                 message: 'You cannot validate resources unless you are a moderator'
@@ -560,7 +503,7 @@ router.patch('/:id/validate', async (request, result) => {
         result
             .status(404)
             .json({
-                success: true,
+                success: false,
                 message: 'No document found with the given id',
             })
         return;
