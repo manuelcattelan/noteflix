@@ -1,7 +1,21 @@
 require('dotenv').config();
 
+const express = require('express');
+const router = express.Router();
+
 const jwt = require('jsonwebtoken');
 
+// return decoded token information of logged in user
+router.get('/', async (req, res) => {
+    return res
+        .status(200)
+        .json({ 
+            success: true, 
+            tokenData: req.loggedUser
+        });
+})
+
+// 
 function createToken(user){
     var payload = { id: user._id,
                     type: user.userType};
@@ -40,4 +54,5 @@ const tokenChecker = function ( req, res, next ) {
 module.exports = {
     tokenChecker: tokenChecker,
     createToken: createToken,
+    tokenApi: router
 }

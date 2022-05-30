@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const Document = require('./../models/documentModel');
 const User = require('./../models/userModel');
 
-
+// save document to display it in user library
 router.post('/:id/save', async (request, result) =>{
     // check id length and id string format (must be hex)
     if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
@@ -268,6 +268,5 @@ router.patch('/:id/:vote', async (request, result) =>{
             })
     })
 })
-
 
 module.exports = router
