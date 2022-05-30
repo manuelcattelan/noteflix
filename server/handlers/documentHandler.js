@@ -57,20 +57,10 @@ router.post('', async (request, result) => {
     // check if logged user is mentor
     if (request.loggedUser.type != "mentor"){
         return result
-            .status(401)
+            .status(403)
             .json({
                 success: false,
                 message: 'User is not a mentor'
-            })
-    }
-    // check for user existence in database
-    let user = await User.findById(request.loggedUser.id).exec();
-    if (!user){
-        return result
-            .status(404)
-            .json({
-                success: false,
-                message: 'User not found'
             })
     }
     // upload document sent in form to s3 storage
@@ -155,194 +145,6 @@ router.get('', async (request, result) => {
         })
 });
 
-// route handler for listing pending documents waiting for validation
-router.get('/pending', async (request, result) => {
-    // check if logged user is mentor
-    if (request.loggedUser.type != "moderator"){
-        return result
-            .status(401)
-            .json({
-                success: false,
-                message: 'User is not a moderator'
-            })
-    }
-    // check for user existence in database
-    let user = await User.findById(request.loggedUser.id).exec();
-    if (!user){
-        return result
-            .status(404)
-            .json({
-                success: false,
-                message: 'User not found'
-            })
-    }
-    // find all documents that are waiting for validation
-    let documents = await Document.find({ status: "pending" }).exec();
-    // if no documents were found in the database
-    if (!documents || documents.length == 0){
-        return result
-            .status(204)
-            .send()
-    }
-    // if documents were found, extract needed information to return
-    documents = await Promise.all(documents.map( async (doc) => {
-        let author = await User.findById(doc.author);
-        let authorEmail
-        if (!author){ authorEmail = '[deleted]'; }
-        else { authorEmail = author.email; }
-        return {
-            _id: doc._id,
-            title: doc.title,
-            authorEmail: authorEmail
-        }
-    }));
-    // return needed information to show list of pending documents 
-    return result
-        .status(200)
-        .json({
-            success: true,
-            message: 'Pending documents found',
-            documents: documents
-        })
-});
-
-// route handler for listing reported documents waiting for validation
-router.get('/reported', async (request, result) => {
-    // check if logged user is mentor
-    if (request.loggedUser.type != "moderator"){
-        return result
-            .status(401)
-            .json({
-                success: false,
-                message: 'User is not a moderator'
-            })
-    }
-    // check for user existence in database
-    let user = await User.findById(request.loggedUser.id).exec();
-    if (!user){
-        return result
-            .status(404)
-            .json({
-                success: false,
-                message: 'User not found'
-            })
-    }
-    // find all documents that have been reported
-    let documents = await Document.find({ 'reported.0':  { $exists: true }}).exec();
-    // if no documents were found in the database
-    if (!documents || documents.length == 0){
-        return result
-            .status(204)
-            .send()
-    }
-    // if documents were found, extract needed information to return
-    documents = documents.map( (doc)=>{
-        return {
-            _id: doc._id,
-            title: doc.title,
-            reportedTimes: doc.reported.length
-        }
-    })
-    // return needed information to show list of reported documents
-    return result
-        .status(200)
-        .json({
-            success: true,
-            message: 'Reported documents found',
-            documents: documents
-        })
-});
-
-// route handler for listing all documents uploaded by logged mentor
-router.get('/uploaded', async (request, result) => {
-    // check if logged user is mentor
-    if (request.loggedUser.type != "mentor"){
-        return result
-            .status(401)
-            .json({
-                success: false,
-                message: 'User is not a mentor'
-            })
-    }
-    // check for user existence in database
-    let user = await User.findById(request.loggedUser.id).exec();
-    if (!user){
-        return result
-            .status(404)
-            .json({
-                success: false,
-                message: 'User not found'
-            })
-    }
-    // find all documents that have been uploaded from current mentor
-    let documents = await Document.find({ author: user._id }).exec();
-    // if no documents were found in the database
-    if (!documents || documents.length == 0){
-        return result
-            .status(204)
-            .send()
-    }
-    // if documents were found, extract needed information to return
-    documents = documents.map( (doc)=>{
-        return {
-            _id: doc._id,
-            title: doc.title,
-            status: doc.status,
-            totalVotes: (doc.like.length + doc.dislike.length),
-            approval: 100 * doc.like.length/(doc.like.length + doc.dislike.length), 
-            totalComments: doc.comments.length
-        }
-    })
-    // return needed information to show list of uploaded documents
-    return result
-        .status(200)
-        .json({
-            success: true,
-            message: 'Uploaded documents found',
-            documents: documents
-        })
-})
-
-// route handler for listing all documents uploaded by logged mentor
-router.get('/saved', async (request, result) => {
-    // check for user existence in database
-    let user = await User.findById(request.loggedUser.id).exec();
-    if (!user){
-        return result
-            .status(404)
-            .json({
-                success: false,
-                message: 'User not found'
-            })
-    }
-    // find all documents that have been uploaded from current mentor
-    let documents = await Document.find({ status: "public", _id: {$in: user.savedDocuments }}).exec();
-    // if no documents were found in the database
-    if (!documents || documents.length == 0){
-        return result
-            .status(204)
-            .send()
-    }
-    // if documents were found, extract needed information to return
-    documents = documents.map( (doc)=>{
-        return {
-            _id: doc._id,
-            title: doc.title,
-            description: doc.description,
-            approval: 100 * doc.like.length/(doc.like.length + doc.dislike.length), 
-            url: doc.url,
-        }
-    })
-    // return needed information to show list of uploaded documents
-    return result
-        .status(200)
-        .json({
-            success: true,
-            message: 'Uploaded documents found',
-            documents: documents
-        })
-})
-
 // route handler for listing a document by ID
 router.get('/:id', async (request, result) => {
     // check id length and id string format (must be hex)
@@ -361,7 +163,7 @@ router.get('/:id', async (request, result) => {
         return result
             .status(404)
             .json({
-                success: true,
+                success: false,
                 message: 'No document found with the given id',
             })
     }
@@ -377,14 +179,14 @@ router.get('/:id', async (request, result) => {
     if (!(isModerator || isAuthor)){
         if (!hasSubscription)
             return result
-                .status(401)
+                .status(403)
                 .json({
                     success: false,
                     message: 'Your subscription plan does not allow you to view this document.',
                 })
         if (!hasValidSubscription) {
             return result
-                .status(401)
+                .status(403)
                 .json({
                     success: false,
                     message: 'Your subscription plan does not allow you to view this document.',
@@ -397,14 +199,13 @@ router.get('/:id', async (request, result) => {
         author = {username: '[deleted]'};
     else 
         author = {username: author.username, avatar: author.avatar};
-
     // Check the rating status (liked, disliked or none)
     let rating = 'none';
     if (document.like.indexOf( request.loggedUser.id) != -1)
         rating = 'liked'
     else if (document.dislike.indexOf( request.loggedUser.id) != -1)
         rating = 'disliked'
-
+    // create interaction object
     let interactions = {
         rating,
         saved: //check if document is in user's saved documents
@@ -470,7 +271,7 @@ router.delete('/:id', async(request, result) => {
     if (request.loggedUser.type != "moderator" && 
         request.loggedUser.id   != document.author){
         return result
-            .status(401)
+            .status(403)
             .json({
                 success: false,
                 message: 'You cannot delete resources unless you are a moderator or the document author'
@@ -481,7 +282,7 @@ router.delete('/:id', async(request, result) => {
         return result
             .status(404)
             .json({
-                success: true,
+                success: false,
                 message: 'No document found with the given id',
             })
     }
@@ -525,6 +326,156 @@ router.delete('/:id', async(request, result) => {
     })
 })
 
+// route handler for listing pending documents waiting for validation
+router.get('/pending', async (request, result) => {
+    // check if logged user is mentor
+    if (request.loggedUser.type != "moderator"){
+        return result
+            .status(403)
+            .json({
+                success: false,
+                message: 'User is not a moderator'
+            })
+    }
+    // find all documents that are waiting for validation
+    let documents = await Document.find({ status: "pending" }).exec();
+    // if no documents were found in the database
+    if (!documents || documents.length == 0){
+        return result
+            .status(204)
+            .send()
+    }
+    // if documents were found, extract needed information to return
+    documents = await Promise.all(documents.map( async (doc) => {
+        let author = await User.findById(doc.author);
+        let authorEmail
+        if (!author){ authorEmail = '[deleted]'; }
+        else { authorEmail = author.email; }
+        return {
+            _id: doc._id,
+            title: doc.title,
+            authorEmail: authorEmail
+        }
+    }));
+    // return needed information to show list of pending documents 
+    return result
+        .status(200)
+        .json({
+            success: true,
+            message: 'Pending documents found',
+            documents: documents
+        })
+});
+
+// route handler for listing reported documents waiting for validation
+router.get('/reported', async (request, result) => {
+    // check if logged user is mentor
+    if (request.loggedUser.type != "moderator"){
+        return result
+            .status(403)
+            .json({
+                success: false,
+                message: 'User is not a moderator'
+            })
+    }
+    // find all documents that have been reported
+    let documents = await Document.find({ 'reported.0':  { $exists: true }}).exec();
+    // if no documents were found in the database
+    if (!documents || documents.length == 0){
+        return result
+            .status(204)
+            .send()
+    }
+    // if documents were found, extract needed information to return
+    documents = documents.map( (doc)=>{
+        return {
+            _id: doc._id,
+            title: doc.title,
+            reportedTimes: doc.reported.length
+        }
+    })
+    // return needed information to show list of reported documents
+    return result
+        .status(200)
+        .json({
+            success: true,
+            message: 'Reported documents found',
+            documents: documents
+        })
+});
+
+// route handler for listing all documents uploaded by logged mentor
+router.get('/uploaded', async (request, result) => {
+    // check if logged user is mentor
+    if (request.loggedUser.type != "mentor"){
+        return result
+            .status(403)
+            .json({
+                success: false,
+                message: 'User is not a mentor'
+            })
+    }
+    // find all documents that have been uploaded from current mentor
+    let documents = await Document.find({ author: request.loggedUser.id }).exec();
+    // if no documents were found in the database
+    if (!documents || documents.length == 0){
+        return result
+            .status(204)
+            .send()
+    }
+    // if documents were found, extract needed information to return
+    documents = documents.map( (doc)=>{
+        return {
+            _id: doc._id,
+            title: doc.title,
+            status: doc.status,
+            totalVotes: (doc.like.length + doc.dislike.length),
+            approval: 100 * doc.like.length/(doc.like.length + doc.dislike.length), 
+            totalComments: doc.comments.length
+        }
+    })
+    // return needed information to show list of uploaded documents
+    return result
+        .status(200)
+        .json({
+            success: true,
+            message: 'Uploaded documents found',
+            documents: documents
+        })
+})
+
+// route handler for listing all documents uploaded by logged mentor
+router.get('/saved', async (request, result) => {
+    // find information of logged in user
+    let user = await User.findById(request.loggedUser.id).exec();
+    // find all documents that have been saved from currently logged in user
+    let documents = await Document.find({ status: "public", _id: {$in: user.savedDocuments }}).exec();
+    // if no documents were found in the database
+    if (!documents || documents.length == 0){
+        return result
+            .status(204)
+            .send()
+    }
+    // if documents were found, extract needed information to return
+    documents = documents.map( (doc)=>{
+        return {
+            _id: doc._id,
+            title: doc.title,
+            description: doc.description,
+            approval: 100 * doc.like.length/(doc.like.length + doc.dislike.length), 
+            url: doc.url,
+        }
+    })
+    // return needed information to show list of saved documents
+    return result
+        .status(200)
+        .json({
+            success: true,
+            message: 'Uploaded documents found',
+            documents: documents
+        })
+})
+
 // route handler for updating the "pending" attribute to "public" on document report
 router.patch('/:id/validate', async (request, result) => {
     // check id length and id string format (must be hex)
@@ -539,7 +490,7 @@ router.patch('/:id/validate', async (request, result) => {
     // check if current user is a moderator
     if (request.loggedUser.type != "moderator"){
         return result
-            .status(401)
+            .status(403)
             .json({
                 success: false,
                 message: 'You cannot validate resources unless you are a moderator'
@@ -552,7 +503,7 @@ router.patch('/:id/validate', async (request, result) => {
         result
             .status(404)
             .json({
-                success: true,
+                success: false,
                 message: 'No document found with the given id',
             })
         return;
