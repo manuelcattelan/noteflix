@@ -487,6 +487,15 @@ router.get('/uploaded', async (request, result) => {
 // route handler for listing all documents uploaded by logged mentor
 router.get('/saved', async (request, result) => {
     // check for user existence in database
+    if (request.loggedUser.type=='moderator'){
+        return result
+            .status(401)
+            .json({
+                success: false,
+                message: 'Moderators cannot do this',
+            })
+    }
+
     let user = await User.findById(request.loggedUser.id).exec();
     if (!user){
         return result

@@ -8,12 +8,19 @@ const User = require('./../models/userModel');
 
 // save document to display it in user library (implemented as a toggle option)
 router.post('/:id/save', async (request, result) =>{
+    if (request.loggedUser.type=='moderator'){
+        return result
+            .status(401)
+            .json({
+                success: false,
+                message: 'Moderators cannot do this',
+            })
+    }
     // check id length and id string format (must be hex)
     if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
         result.status(400)
             .json({
                 success: false,
-                saved: false,
                 message: 'Invalid ID',
             })
         return;
@@ -25,11 +32,20 @@ router.post('/:id/save', async (request, result) =>{
         return result
             .status(404)
             .json({
-                success: true,
+                success: false,
                 message: 'No document found with the given id',
             })
     }
     let user = await User.findById(request.loggedUser.id);
+
+    if (!user){
+        return result
+            .status(404)
+            .json({
+                success: false,
+                message: 'No user found with the given id',
+            })
+    }
     // find index of saved reference to logged user id, if it exists
     let savedIndex = user.savedDocuments.indexOf(document._id); 
     // if index == -1 it means that the document was not already saved
@@ -45,7 +61,7 @@ router.post('/:id/save', async (request, result) =>{
             result.status(200)
                 .json({
                     success: true,
-                    message: savedIndex == -1 ? 'Document saved successfully' : 'Document unsaved successfully'
+                    message: "Document " + (savedIndex == -1 ? 'saved' : 'unsaved')+ " successfully",
                 })
         })
         .catch( (error) => {
@@ -60,6 +76,14 @@ router.post('/:id/save', async (request, result) =>{
 
 // add a new comment to the document
 router.patch('/:id/comment', async (request, result) =>{
+    if (request.loggedUser.type=='moderator'){
+        return result
+            .status(401)
+            .json({
+                success: false,
+                message: 'Moderators cannot do this',
+            })
+    }
      // check id length and id string format (must be hex)
      if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
         result.status(400)
@@ -133,7 +157,7 @@ router.delete('/:id/comment/:commentId', async (request, result) =>{
         return result
             .status(404)
             .json({
-                success: true,
+                success: false,
                 message: 'No document found with the given id',
             })
     }
@@ -144,14 +168,24 @@ router.delete('/:id/comment/:commentId', async (request, result) =>{
         result
             .status(400)
             .json({
-                success: true,
+                success: false,
                 message: 'No comment exists with the given id',
             })
         return;
-    } else {
-        // if a comment with the given id was found, delete it
-        document.comments.splice(commentIndex, 1);
+    } 
+
+    if (document.commets[commentIndex].author != request.loggedUser.id || request.loggedUser.type != 'moderator'){
+        result
+            .status(401)
+            .json({
+                success: false,
+                message: 'You do not have the permissionto delete this comment',
+            })
+        return;
     }
+
+    // if a comment with the given id was found, delete it
+    document.comments.splice(commentIndex, 1);
     // save document changes to database
     document.save()
         .then( () => {
@@ -173,13 +207,12 @@ router.delete('/:id/comment/:commentId', async (request, result) =>{
 
 // route handler for updating the "reported" attribute on document report
 router.patch('/:id/report', async (request, result) => {
-    // check if logged user is mentor
-    if (request.loggedUser.type == "mentor"){
+    if (request.loggedUser.type=='moderator'){
         return result
             .status(401)
             .json({
                 success: false,
-                message: 'Mentors are not allowed to report documents'
+                message: 'Moderators cannot do this',
             })
     }
     // check id length and id string format (must be hex)
@@ -198,11 +231,22 @@ router.patch('/:id/report', async (request, result) => {
         result
             .status(404)
             .json({
-                success: true,
+                success: false,
                 message: 'No document found with the given id',
             })
         return;
     }
+
+    // check if logged user is mentor
+    if (request.loggedUser.id == doc.author){
+        return result
+            .status(401)
+            .json({
+                success: false,
+                message: 'You cannot report your own document'
+            })
+    }
+
     // update reported attribute if it wasn't already reported by the logged user
     if (document.reported.indexOf(request.loggedUser.id) !== -1){
         result
@@ -238,12 +282,19 @@ router.patch('/:id/report', async (request, result) => {
 
 // add like or dislike to document
 router.patch('/:id/:vote', async (request, result) =>{
+    if (request.loggedUser.type=='moderator'){
+        return result
+            .status(401)
+            .json({
+                success: false,
+                message: 'Moderators cannot do this',
+            })
+    }
     // check id length and id string format (must be hex)
     if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
         result.status(400)
             .json({
                 success: false,
-                liked: false,
                 message: 'Invalid ID',
             })
         return;
