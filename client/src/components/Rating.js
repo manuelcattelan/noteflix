@@ -16,15 +16,15 @@ const Rating = ({like, dislike, id, rating, token, saved, approval}) => {
         .then(data => {
             if(data.success){
                 if(data.rating === "liked"){
-                    document.getElementById("t-u").className="bi bi-hand-thumbs-up-fill"
-                    document.getElementById("t-d").className="bi bi-hand-thumbs-down"
+                    document.getElementById("t-u").className="bi bi-hand-thumbs-up-fill mx-1"
+                    document.getElementById("t-d").className="bi bi-hand-thumbs-down mx-1"
                 }
                 else{
-                    document.getElementById("t-u").className="bi bi-hand-thumbs-up"
-                    document.getElementById("t-d").className="bi bi-hand-thumbs-down"
+                    document.getElementById("t-u").className="bi bi-hand-thumbs-up mx-1"
+                    document.getElementById("t-d").className="bi bi-hand-thumbs-down mx-1"
                 }
-                document.getElementById("like").innerHTML = "Piace a " + data.like +" utenti, pari al " + percent(data.like, data.dislike) + "% dei voti"
-                document.getElementById("dislike").innerHTML = "Non piace a " + data.dislike +" utenti"
+                document.getElementById("like").innerHTML = data.like
+                document.getElementById("dislike").innerHTML = data.dislike
                 setProgress(percent(data.like, data.dislike))
             }
         })
@@ -36,15 +36,15 @@ const Rating = ({like, dislike, id, rating, token, saved, approval}) => {
         .then(data => {
             if(data.success){
                 if(data.rating === "disliked"){
-                    document.getElementById("t-u").className="bi bi-hand-thumbs-up"
-                    document.getElementById("t-d").className="bi bi-hand-thumbs-down-fill"
+                    document.getElementById("t-u").className="bi bi-hand-thumbs-up mx-1"
+                    document.getElementById("t-d").className="bi bi-hand-thumbs-down-fill mx-1"
                 }
                 else{
-                    document.getElementById("t-u").className="bi bi-hand-thumbs-up"
-                    document.getElementById("t-d").className="bi bi-hand-thumbs-down"
+                    document.getElementById("t-u").className="bi bi-hand-thumbs-up mx-1"
+                    document.getElementById("t-d").className="bi bi-hand-thumbs-down mx-1"
                 }
-                document.getElementById("like").innerHTML = "Piace a " + data.like +" utenti, pari al " + percent(data.like, data.dislike) + "% dei voti"
-                document.getElementById("dislike").innerHTML = "Non piace a " + data.dislike +" utenti"
+                document.getElementById("like").innerHTML = data.like
+                document.getElementById("dislike").innerHTML = data.dislike
                 setProgress(percent(data.like, data.dislike))
             }
         })
@@ -54,36 +54,31 @@ const Rating = ({like, dislike, id, rating, token, saved, approval}) => {
 
     return (
         <>
-            <Row>
-                <Col xs="auto">
+            <div className="d-flex align-items-center justify-content-center w-50">
+                <p id="like" className='mx-3 my-0 text-primary doc-descrizione' style={{lineHeight:"15px"}}>{like}</p>
                     {
                         rating === "liked" 
                         ?
                         <>
-                            <i id="t-u" class="bi bi-hand-thumbs-up-fill" style={{fontSize: "2rem", color: "#623FF0"}} onClick={handleLike}></i>
-                            <i id="t-d" class="bi bi-hand-thumbs-down" style={{fontSize: "2rem", color: "#623FF0"}} onClick={handleDislike}></i>
+                            <i id="t-u" class="bi bi-hand-thumbs-up-fill mx-1" style={{fontSize: "2rem", color: "#623FF0"}} onClick={handleLike}></i>
+                            <i id="t-d" class="bi bi-hand-thumbs-down mx-1" style={{fontSize: "2rem", color: "#623FF0"}} onClick={handleDislike}></i>
                         </>
                         :
                             rating === "disliked"
                             ?
                             <>
-                                <i id="t-u" class="bi bi-hand-thumbs-up" style={{fontSize: "2rem", color: "#623FF0"}} onClick={handleLike}></i>
-                                <i id="t-d" class="bi bi-hand-thumbs-down-fill" style={{fontSize: "2rem", color: "#623FF0"}} onClick={handleDislike}></i>
+                                <i id="t-u" class="bi bi-hand-thumbs-up mx-1" style={{fontSize: "2rem", color: "#623FF0"}} onClick={handleLike}></i>
+                                <i id="t-d" class="bi bi-hand-thumbs-down-fill mx-1" style={{fontSize: "2rem", color: "#623FF0"}} onClick={handleDislike}></i>
                             </>
                             :
                             <>
-                                <i id="t-u" class="bi bi-hand-thumbs-up" style={{fontSize: "2rem", color: "#623FF0"}} onClick={handleLike}></i>
-                                <i id="t-d" class="bi bi-hand-thumbs-down" style={{fontSize: "2rem", color: "#623FF0"}} onClick={handleDislike}></i>
+                                <i id="t-u" class="bi bi-hand-thumbs-up mx-1" style={{fontSize: "2rem", color: "#623FF0"}} onClick={handleLike}></i>
+                                <i id="t-d" class="bi bi-hand-thumbs-down mx-1" style={{fontSize: "2rem", color: "#623FF0"}} onClick={handleDislike}></i>
                             </>
                     }
-                </Col>
-                <Col className="mt-2 p-0">
-                    <p id="like" className='my-0 text-primary doc-descrizione' style={{lineHeight:"15px"}}>Piace a {like} utenti, pari al {percent(like, dislike)}% dei voti</p>
-                    <p id="dislike" className='my-0 text-primary doc-descrizione' style={{lineHeight:"15px"}}>Non piace a {dislike} utenti</p>
-                </Col>
-                
-            </Row>
-            <ProgressBar className="mx-2" animated now={progress?progress:approval} style={{height:"5px"}}/>
+                    <p id="dislike" className='mx-3 my-0 text-primary doc-descrizione' style={{lineHeight:"15px"}}>{dislike}</p>
+            </div>
+            <ProgressBar className="mx-1 w-50" now={progress?progress:approval} style={{height:"3px"}}/>
         </>
     );
 };

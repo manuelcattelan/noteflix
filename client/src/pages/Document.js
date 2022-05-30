@@ -13,6 +13,7 @@ import pdf from '../pdf/ns.pdf';
 
 import Avatar, { genConfig, AvatarConfig } from 'react-nice-avatar'
 import Rating from '../components/Rating';
+import Report from '../components/Report';
 
 
 
@@ -87,13 +88,7 @@ const Document = (props) => {
         .then(data => setDoc(data))
     }, [""])
 
-    const handleReport = (e) => {
-        e.preventDefault()
-
-        fetch("http://localhost:3001/api/v1/documents/"+id+"/report?token="+props.token, {method: 'PATCH'})
-        .then(res => res.json())
-        .then(data => alert(data.message))
-    }
+    
     
 
     return (
@@ -131,38 +126,18 @@ const Document = (props) => {
                         </p>
                         <Rating like={doc.document.like} dislike={doc.document.dislike} rating={doc.interactions.rating} saved={doc.interactions.saved} approval={doc.document.approval} id={id} token={props.token}/>
 
-                        <Form className="" onSubmit={handleReport}>
-                            <Form.Text>
-                                <OverlayTrigger
-                                    placement='right'
-                                    overlay={
-                                        <Tooltip>
-                                            <p className="mt-1"> Cliccando "invia una segnalazione" sottoponi il documento ad un controllo da parte dei nostri moderatori.</p>
-                                        </Tooltip>
-                                    }
-                                    >
-                                    <span className="mt-1 text-secondary">Qualcosa non va?</span>
-                                </OverlayTrigger>
-                                <input type="submit" size="sm" className="fw-bold text-secondary" value="Invia una segnalazione" style={{border:"none", background:"none", textDecoration:"underline"}}/> 
-                            </Form.Text>
-                        </Form>
+                       
                         {/* <Chat handleChatShow={handleChatShow} handleChatClose={handleChatClose} chatShow={chatShow}/> */}
 
                         
-                        <Form className="mt-5">
-                            <Form.Group controlId="formBasic">
-                                <Form.Control as="textarea" rows={4} placeholder="Commento..."/>
-                            </Form.Group>
-                            <ButtonToolbar aria-label="Toolbar with Button groups">
-                                <Button variant="outline-primary" className="mt-3 me-auto" size="sm" onClick={handleChatShow}>
-                                    Apri la sezione commenti
-                                </Button>
-                                <Button variant="primary" className="mt-3" size="sm" type="submit">
-                                    Commenta
-                                </Button>
-                            </ButtonToolbar>
+                       
+                        <ButtonToolbar aria-label="Toolbar with Button groups">
+                            <Report id={id} token={props.token}/>
+                            <Button variant="outline-primary" className="mt-3 me-1" size="sm" onClick={handleChatShow}>
+                                Apri la sezione commenti
+                            </Button>
+                        </ButtonToolbar>
                             
-                        </Form>
                         
                         
                         
