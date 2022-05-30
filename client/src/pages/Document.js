@@ -15,6 +15,7 @@ import Avatar, { genConfig, AvatarConfig } from 'react-nice-avatar'
 import Rating from '../components/Rating';
 import Report from '../components/Report';
 import Chat from '../components/Chat';
+import Save from '../components/Save';
 
 
 
@@ -130,7 +131,7 @@ const Document = (props) => {
                             
                         </p>
                         <p className='doc-titolo'>
-                        <i class="bi bi-bookmark pe-2" style={{fontSize: "2rem"}}></i>{doc.document.title}
+                        <Save id={id} saved={doc.interactions.saved}/>{doc.document.title}
                         </p>
                         <p className='doc-descrizione' style={{overflowWrap: "break-word"}}>
                             {doc.document.description}

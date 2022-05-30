@@ -28,7 +28,7 @@ const DocSpoil = (props) => {
 
     const link = "/document/?id="+props.id
 
-    
+   
 
     return (
         <>
@@ -51,21 +51,20 @@ const DocSpoil = (props) => {
                         </div>
                     </Worker>
                 <Card.Body>
-                    <Card.Title style={{overflowY:"hidden", height:"3rem"}}>
+                    <Card.Title style={{overflowY:"hidden", height:"3.5rem"}}>
                         {props.titolo}
                     </Card.Title>
                     <Card.Text className='doc-descrizione' style={{overflowY:"hidden", height:"6rem"}}>
-                        {props.descrizione}<br/>
-                        {
-                            props.approval?<Badge className="mt-2" bg="primary">Piace al {props.approval}%</Badge>:""
-                        }
+                        {props.descrizione}
                     </Card.Text>
                 </Card.Body>
                 <Card.Body>
                     <Link to={link}>
                         <Button variant="outline-primary" className='me-3 mb-2'>Visualizza</Button>
                     </Link>
-                    <Card.Link href="#">Salva nella libreria</Card.Link>
+                    {
+                        props.approval?<span className="text-secondary doc-descrizione" bg="primary">Piace al {props.approval}%</span>:""
+                    }
                 </Card.Body>
             </Card>
         </>

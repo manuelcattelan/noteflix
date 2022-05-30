@@ -38,9 +38,6 @@ const ModeratorFileItemReported = ({token, id, title, reportedTimes}) => {
                 {/* <span className="fw-bold text-primary me-3">Scrivi all'autore</span> */}
                 <ListGroup className="me-3" horizontal>
                     <ListGroup.Item>Segnalazioni ricevute: {reportedTimes}</ListGroup.Item>
-                    <ListGroup.Item>13 commenti</ListGroup.Item>
-                    <ListGroup.Item>129 valutazioni</ListGroup.Item>
-                    <ListGroup.Item>Piace al 90%</ListGroup.Item>
                 </ListGroup>
                 <Link to={"/document/?id="+id}>
                     <Button variant="outline-primary">Visualizza</Button>

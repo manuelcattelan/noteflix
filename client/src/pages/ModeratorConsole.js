@@ -36,6 +36,12 @@ const ModeratorConsole = (props) => {
                     <Tab eventKey="reported" title="File segnalati dagli utenti">
                         <ModeratorReportedList token={props.token}/>
                     </Tab>
+                    <Tab eventKey="user-pending" title="Richieste di upgrade a Mentor">
+                        
+                    </Tab>
+                    <Tab eventKey="mentor-list" title="Mentor del sito">
+                        
+                    </Tab>
                 </Tabs>
             </Container>
             
