@@ -14,6 +14,7 @@ import pdf from '../pdf/ns.pdf';
 import Avatar, { genConfig, AvatarConfig } from 'react-nice-avatar'
 import Rating from '../components/Rating';
 import Report from '../components/Report';
+import Chat from '../components/Chat';
 
 
 
@@ -36,7 +37,17 @@ const Document = (props) => {
             "description":"",
             "like":0,
             "dislike":0
-        }
+        },
+        "comments":[
+            {
+                "author":{
+                    "username":"",
+                    "avatar":""
+                },
+                "body":"",
+                "date":""
+            }
+        ]
     })
     
 
@@ -127,7 +138,7 @@ const Document = (props) => {
                         <Rating like={doc.document.like} dislike={doc.document.dislike} rating={doc.interactions.rating} saved={doc.interactions.saved} approval={doc.document.approval} id={id} token={props.token}/>
 
                        
-                        {/* <Chat handleChatShow={handleChatShow} handleChatClose={handleChatClose} chatShow={chatShow}/> */}
+                        <Chat handleChatShow={handleChatShow} handleChatClose={handleChatClose} chatShow={chatShow} comments={doc.comments}/>
 
                         
                        
