@@ -133,6 +133,7 @@ router.get('', async (request, result) => {
             description: doc.description,
             approval: 100 * doc.like.length/(doc.like.length + doc.dislike.length), 
             url: doc.url,
+            area: doc.area
         }
     })
     // return needed information to show document preview
@@ -283,6 +284,7 @@ router.get('/saved', async (request, result) => {
             description: doc.description,
             approval: 100 * doc.like.length/(doc.like.length + doc.dislike.length), 
             url: doc.url,
+            area: doc.area
         }
     })
     // return needed information to show list of saved documents
