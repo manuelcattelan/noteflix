@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const Document = require('./../models/documentModel');
 const User = require('./../models/userModel');
 
-// save document to display it in user library
+// save document to display it in user library (implemented as a toggle option)
 router.post('/:id/save', async (request, result) =>{
     // check id length and id string format (must be hex)
     if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
@@ -18,40 +18,48 @@ router.post('/:id/save', async (request, result) =>{
             })
         return;
     }
-
-    let updated = await User.updateOne({ _id: request.loggedUser.id },
-            { $pull:{
-                savedDocuments: request.params.id
-            }
-        }).exec();
-
-    if (updated.modifiedCount){
-        result.status(200)
+    // find document by id parameter
+    let document = await Document.findById(request.params.id);
+    // if no document was found in the database
+    if (!document){
+        return result
+            .status(404)
             .json({
                 success: true,
-                saved: false,
-                message: 'Document unsaved',
+                message: 'No document found with the given id',
             })
-        return;
     }
-
-    await User.updateOne({ _id: request.loggedUser.id },
-        { $push:{
-            savedDocuments: request.params.id
-        }
-    }).exec()
-    
-    result.status(200)
-        .json({
-            success: true,
-            saved: true,
-            message: 'Document saved',
+    let user = await User.findById(request.loggedUser.id);
+    // find index of saved reference to logged user id, if it exists
+    let savedIndex = user.savedDocuments.indexOf(document._id); 
+    // if index == -1 it means that the document was not already saved
+    if (savedIndex == -1){
+        user.savedDocuments.push(document._id);
+    } else {
+        // if document was already saved, unsave it
+        user.savedDocuments.pull(document._id);
+    }
+    // save document changes to database
+    user.save()
+        .then( () => {
+            result.status(200)
+                .json({
+                    success: true,
+                    message: savedIndex == -1 ? 'Document saved successfully' : 'Document unsaved successfully'
+                })
         })
-    return;
+        .catch( (error) => {
+            return result
+                .status(400)
+                .json({
+                    success: false,
+                    message: error.message
+                })
+        })
 })
 
-
-router.post('/:id/comment', async (request, result) =>{
+// add a new comment to the document
+router.patch('/:id/comment', async (request, result) =>{
      // check id length and id string format (must be hex)
      if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
         result.status(400)
@@ -61,7 +69,7 @@ router.post('/:id/comment', async (request, result) =>{
             })
         return;
     }
-
+    // check if any text was given for the comment
     if (!request.body.commentText) {
         result.status(400)
         .json({
@@ -69,26 +77,44 @@ router.post('/:id/comment', async (request, result) =>{
             message: 'Missing commentText in request body'
         })
     }
-
-    //push new comment to document
-    await Document.updateOne({ _id: request.params.id },
-        { $push:{
-            comments: {
-                author: request.loggedUser.id,
-                date: new Date(),
-                body: request.body.commentText
-            }
-        }
-    }).exec();
-
-    result.status(200)
-        .json({
-            success: true,
-            message: 'Comment added successfully'
+    // find document by id parameter
+    let document = await Document.findById(request.params.id);
+    // if no document was found in the database
+    if (!document){
+        return result
+            .status(404)
+            .json({
+                success: true,
+                message: 'No document found with the given id',
+            })
+    }
+    // create comment object
+    let comment = {
+        author: request.loggedUser.id,
+        body: request.body.commentText,
+        date: new Date()
+    }
+    // add comment to list of document comments and save changes to database 
+    document.comments.push(comment);
+    document.save()
+        .then( () => {
+            result.status(200)
+                .json({
+                    success: true,
+                    message: 'Comment added successfully'
+                })
         })
-
+        .catch( (error) => {
+            return result
+                .status(400)
+                .json({
+                    success: false,
+                    message: error.message
+                })
+        })
 });
 
+// remove a specific comment from a document
 router.delete('/:id/comment/:commentId', async (request, result) =>{
     // check id length and id string format (must be hex)
     if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/) ||
@@ -100,32 +126,49 @@ router.delete('/:id/comment/:commentId', async (request, result) =>{
             })
         return;
     }
-
-    //find and remove comment from document only if author matches token data
-    let updated = await Document.updateOne({ _id: request.params.id },
-        { $pull:{
-            comments: {
-                _id: request.params.commentId,
-                author: request.loggedUser.id
-            }
-        }
-    }).exec();
-
-    //if it was modified then show success
-    if (updated.modifiedCount){
-        return result.status(200)
-        .json({
-            success: true,
-            message: 'Comment deleted successfully'
-        })
+    // find document by id parameter
+    let document = await Document.findById(request.params.id);
+    // if no document was found in the database
+    if (!document){
+        return result
+            .status(404)
+            .json({
+                success: true,
+                message: 'No document found with the given id',
+            })
     }
-    
-    return result.status(400)
-        .json({
-            success: false,
-            message: 'Delete failed'
+    // find index of comment with given id, if it exists
+    let commentIndex = document.comments.map(function(comment) { return comment.id }).indexOf(request.params.commentId); 
+    // if index == -1 it means that no comment with the given id was found
+    if (commentIndex == -1){
+        result
+            .status(400)
+            .json({
+                success: true,
+                message: 'No comment exists with the given id',
+            })
+        return;
+    } else {
+        // if a comment with the given id was found, delete it
+        document.comments.splice(commentIndex, 1);
+    }
+    // save document changes to database
+    document.save()
+        .then( () => {
+            result.status(200)
+                .json({
+                    success: true,
+                    message: 'Comment deleted successfully'
+                })
         })
-
+        .catch( (error) => {
+            return result
+                .status(400)
+                .json({
+                    success: false,
+                    message: error.message
+                })
+        })
 });
 
 // route handler for updating the "reported" attribute on document report
@@ -193,7 +236,7 @@ router.patch('/:id/report', async (request, result) => {
         })
 })
 
-
+// add like or dislike to document
 router.patch('/:id/:vote', async (request, result) =>{
     // check id length and id string format (must be hex)
     if(request.params.id.length != 24 || request.params.id.match(/(?![a-f0-9])\w+/)){
@@ -205,10 +248,9 @@ router.patch('/:id/:vote', async (request, result) =>{
             })
         return;
     }
-
+    // check if document exists in the database
     let doc = await Document.findById(request.params.id);
-
-    //if can't find on DB send error
+    // if can't find on DB send error
     if (!doc){
         return result.status(404)
             .json({
@@ -216,19 +258,17 @@ router.patch('/:id/:vote', async (request, result) =>{
                 message: 'Document not found',
             })
     }
-
-    //check if current user has already liked/disliked
+    // check if current user has already liked/disliked
     let liked = doc.like.indexOf(request.loggedUser.id) != -1
     let disliked = doc.dislike.indexOf(request.loggedUser.id) != -1
-
-    //remove any previous votes
+    // remove any previous votes
     doc.like.pull(request.loggedUser.id)
     doc.dislike.pull(request.loggedUser.id)
-
+    // check for vote parameter
     let rating = 'none';
     switch (request.params.vote) {
         case 'like':
-            //if the document wasn't liked already add like
+            // if the document wasn't liked already add like
             if (!liked){
                 doc.like.push(request.loggedUser.id);
                 rating = "liked"
@@ -236,19 +276,20 @@ router.patch('/:id/:vote', async (request, result) =>{
             break;
         case 'dislike':
             if (!disliked){
+                // if the documet wasn't already disliked add dislike
                 doc.dislike.push(request.loggedUser.id);
                 rating = "disliked"
             }
             break;
         default:
-            //return error for any other :vote option
+            // return error for any other :vote option
             return result.status(400)
             .json({
                 success: false,
                 message: 'Invalid operation',
             })
     }
-    
+    // save changes to database 
     doc.save().then(()=>{
         return result.status(200)
         .json({
