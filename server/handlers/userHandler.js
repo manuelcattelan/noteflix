@@ -202,24 +202,16 @@ router.patch('/:id/downgrade', async (req, res) => {
             })
     }
     // if user is still pending, reject upgrade request
-    if (user.userType == 'pending'){ 
-        return res
-            .status(200)
-            .json({
-                success: true,
-                message: 'User request was rejected successfully'
-            })
-    };
-    if (user.userType == 'mentor'){
-        // change user status and save changes to database
-        user.userType = 'user';
+    // if user is mentor, downgrade to normal user
+    if (user.userType == 'pending' || user.userType == 'mentor'){ 
+        user.userType = 'user'
         user.save()
             .then ( () => {
                 return res
                     .status(200)
                     .json({ 
                         success: true,
-                        message: 'Mentor was successfully downgraded to user'
+                        message: 'Downgrade ok'
                     });
             })
             .catch( (error) => {
@@ -230,7 +222,7 @@ router.patch('/:id/downgrade', async (req, res) => {
                         message: error.message
                     });
             })
-    }
+    };
     return res
         .status(200)
         .json({
