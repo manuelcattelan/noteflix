@@ -33,6 +33,7 @@ const UserPendingList = (props) => {
                 pendingUsers.map((item) => 
                     <UserPendingItem
                         id={item.id}
+                        email={item.email}
                         username={item.username}
                         avatar={item.avatar}
                         token={props.token}

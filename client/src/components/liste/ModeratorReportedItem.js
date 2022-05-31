@@ -16,13 +16,11 @@ const ModeratorFileItemReported = ({token, id, title, reportedTimes}) => {
                 fetch("api/v1/documents/"+id+"/validate?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
                 .then(data => alert(data.message))
-                .then(document.getElementById("reported-item").className="d-none")
                 break;
             case "elimina":
                 fetch("api/v1/documents/"+id+"?token="+token, {method: 'DELETE'})
                 .then(res => res.json())
                 .then(data => alert(data.message))
-                .then(document.getElementById("reported-item").className="d-none")
                 break;
         }
     }
@@ -30,7 +28,6 @@ const ModeratorFileItemReported = ({token, id, title, reportedTimes}) => {
     return (
 
             <ListGroup.Item
-                id="reported-item"
                 as="li"
                 className="d-flex justify-content-between align-items-center"
             >

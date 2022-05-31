@@ -135,7 +135,7 @@ const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Scegli uno username</Form.Label>
-                    <Form.Control type="text" placeholder="Inserisci uno username" onChange={(e)=>setUsername(e.target.value)} required/>
+                    <Form.Control maxlength="30" type="text" placeholder="Inserisci uno username" onChange={(e)=>setUsername(e.target.value)} required/>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
