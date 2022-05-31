@@ -12,11 +12,11 @@ import Risultati from '../components/Risultati';
 
 const Platform = (props) => {
 
-
+    const token = JSON.parse(window.localStorage.getItem("token"))
     const [docArray, setDocArray] = useState({})
 
     const handleDoc = () => {
-        const url='http://localhost:3001/api/v1/documents/?token='+props.token
+        const url='http://localhost:3001/api/v1/documents/?token='+token
         fetch(url, {
             method: 'GET',
         })
@@ -39,7 +39,7 @@ const Platform = (props) => {
 
     return (
         <>    
-            <Navigation navbar={props.navbar} token={props.token}/>
+            <Navigation navbar={props.navbar} token={token}/>
             <Container>
                 <p className='doc-titolo text-center' style={{marginTop:"10vh"}}>Esplora e scopri nuovi dispense per la tua libreria</p>
                 <Form className="d-flex justify-content-center">

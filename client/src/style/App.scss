@@ -73,3 +73,21 @@ a{
     overflow: hidden;
     opacity: 0.9;
 }
+
+
+#console-panes{
+    height: "90vh" !important;
+    background-color: #f6f6f6;
+    overflow-y: scroll;
+    border-radius: 10px;
+
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll; 
+}
+/* nascondere la scrollbar */
+#console-panes::-webkit-scrollbar {
+    display: none;
+}
+
+

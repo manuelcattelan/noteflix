@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ListGroup, Button, ButtonGroup, ButtonToolbar, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-const ModeratorPendingItem = ({title, id, email, token}) => {
+const MentorPendingItem = ({title, id, email, token}) => {
 
     const mailto = "mailto:" + email
 
@@ -17,13 +17,13 @@ const ModeratorPendingItem = ({title, id, email, token}) => {
                 fetch("api/v1/documents/"+id+"/validate?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
                 .then(data => alert(data.message))
-                .then(document.getElementById("pending-item").className="d-none")
+                .then(document.getElementById("item").className="d-none")
                 break;
             case "elimina":
                 fetch("api/v1/documents/"+id+"?token="+token, {method: 'DELETE'})
                 .then(res => res.json())
                 .then(data => alert(data.message))
-                .then(document.getElementById("pending-item").className="d-none")
+                .then(document.getElementById("item").className="d-none")
                 break;
         }
     }
@@ -31,7 +31,7 @@ const ModeratorPendingItem = ({title, id, email, token}) => {
 
     return (
         <ListGroup.Item
-            id="pending-item"
+            id="item"
             as="li"
             className="d-flex justify-content-between align-items-center"
         >
@@ -55,4 +55,4 @@ const ModeratorPendingItem = ({title, id, email, token}) => {
     );
 };
 
-export default ModeratorPendingItem;
+export default MentorPendingItem;

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { ListGroup, Button, ButtonGroup, ButtonToolbar, Form } from 'react-bootstrap';
+import Avatar from 'react-nice-avatar';
 import { Link } from 'react-router-dom';
 
-const ModeratorPendingItem = ({title, id, email, token}) => {
+const UserPendingItem = ({username, avatar, token, id}) => {
 
-    const mailto = "mailto:" + email
+    const mailto = "mailto:" + "email"
 
     const [decision, setDecision] = useState()
 
@@ -14,16 +15,16 @@ const ModeratorPendingItem = ({title, id, email, token}) => {
 
         switch(decision){
             case "approva":
-                fetch("api/v1/documents/"+id+"/validate?token="+token, {method: 'PATCH'})
+                fetch("api/v1/users/"+id+"/upgrade?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
                 .then(data => alert(data.message))
-                .then(document.getElementById("pending-item").className="d-none")
+                .then(document.getElementById("user-item").className="d-none")
                 break;
-            case "elimina":
-                fetch("api/v1/documents/"+id+"?token="+token, {method: 'DELETE'})
+            case "rifiuta":
+                fetch("api/v1/users/"+id+"/downgrade?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
                 .then(data => alert(data.message))
-                .then(document.getElementById("pending-item").className="d-none")
+                .then(document.getElementById("user-item").className="d-none")
                 break;
         }
     }
@@ -31,22 +32,20 @@ const ModeratorPendingItem = ({title, id, email, token}) => {
 
     return (
         <ListGroup.Item
-            id="pending-item"
+            id="user-item"
             as="li"
             className="d-flex justify-content-between align-items-center"
         >
-            <div className="fw-bold ms-2 me-auto">{title}</div>
+            <Avatar className="ms-2" style={{ width: '3rem', height: '3rem' }} {...avatar}/>
+            <div className="fw-bold ms-2 me-auto">{username}</div>
             <a href={mailto} target="_blank">
-                <span className="fw-bold text-primary me-3">Scrivi a {email}</span>
+                <span className="fw-bold text-primary me-3">Scrivi a </span>
             </a>
-            <Link to={"/document/?id="+id}>
-                <Button variant="outline-primary">Visualizza</Button>
-            </Link>
             <Form className="d-flex" onSubmit={handleSubmit}>
                 <Form.Select className='mx-3' id="macroarea" maxlength="160" onChange={(e) => setDecision(e.target.value)}>
                     <option disabled selected value>- seleziona un'azione</option>
-                    <option value="approva">Approva documento</option>
-                    <option value="elimina">Elimina documento</option>
+                    <option value="approva">Approva richiesta</option>
+                    <option value="rifiuta">Rifiuta richiesta</option>
                 </Form.Select>
                 <Button type="submit" size="sm" variant="primary">Salva</Button>
             </Form>
@@ -55,4 +54,4 @@ const ModeratorPendingItem = ({title, id, email, token}) => {
     );
 };
 
-export default ModeratorPendingItem;
+export default UserPendingItem;
