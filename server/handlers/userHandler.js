@@ -51,7 +51,7 @@ router.get('/mentors', async (req, res) => {
                 message: "Only moderators can access the mentors list"
             })
     }
-    // find all users that have asked to be upgraded to mentors
+    // find all mentors in the platform
     let users = await User.find({ userType: "mentor" }).exec();
     // if no users were found in the database
     if (!users || users.length == 0){
@@ -67,7 +67,7 @@ router.get('/mentors', async (req, res) => {
             avatar: user.avatar
         }
     })
-    // return needed information to show list of pending users
+    // return needed information to show list of mentors
     return res
         .status(200)
         .json({
@@ -104,7 +104,8 @@ router.get('/:id', async (req, res) => {
         .json({
             success: true,
             username: user.username,
-            avatar: user.avatar
+            avatar: user.avatar,
+            email: user.email
         })
 })
 
@@ -139,7 +140,7 @@ router.patch('/:id/upgrade', async (req, res) => {
             })
     }
     // if user to upgrade is not a simple user, he/she cannot be upgraded
-    if (user.userType != 'user'){ 
+    if (user.userType != 'pending'){ 
         return res
             .status(400)
             .json({
