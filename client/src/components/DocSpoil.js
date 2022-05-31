@@ -63,7 +63,7 @@ const DocSpoil = (props) => {
                         <Button variant="outline-primary" className='me-3 mb-2'>Visualizza</Button>
                     </Link>
                     {
-                        props.approval?<span className="text-secondary doc-descrizione" bg="primary">Piace al {props.approval.toFixed(2)}%</span>:""
+                        props.approval?<span className="text-secondary doc-descrizione" bg="primary">Piace al {props.approval.toFixed()}%</span>:""
                     }
                 </Card.Body>
             </Card>

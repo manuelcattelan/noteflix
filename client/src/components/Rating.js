@@ -1,12 +1,8 @@
 import React, {useState} from 'react';
 import { Button, Col, Row, ProgressBar } from 'react-bootstrap';
 
-const Rating = ({like, dislike, id, rating, token, saved, approval}) => {
+const Rating = ({like, dislike, id, rating, token, saved}) => {
 
-    const percent = (nlike, ndislike) =>{
-        if(nlike + ndislike == 0) return 0;
-        else return (nlike*100)/(nlike+ndislike)
-    }
 
     const [progress, setProgress] = useState()
 
@@ -25,7 +21,6 @@ const Rating = ({like, dislike, id, rating, token, saved, approval}) => {
                 }
                 document.getElementById("like").innerHTML = data.like
                 document.getElementById("dislike").innerHTML = data.dislike
-                setProgress(percent(data.like, data.dislike))
             }
         })
     }
@@ -45,7 +40,6 @@ const Rating = ({like, dislike, id, rating, token, saved, approval}) => {
                 }
                 document.getElementById("like").innerHTML = data.like
                 document.getElementById("dislike").innerHTML = data.dislike
-                setProgress(percent(data.like, data.dislike))
             }
         })
     }
@@ -55,7 +49,7 @@ const Rating = ({like, dislike, id, rating, token, saved, approval}) => {
     return (
         <>
             <div className="d-flex align-items-center justify-content-center w-50">
-                <p id="like" className='mx-3 my-0 text-primary doc-descrizione' style={{lineHeight:"15px"}}>{like}</p>
+                <p id="like" className='mx-2 my-0 text-primary doc-descrizione' style={{lineHeight:"15px"}}>{like}</p>
                     {
                         rating === "liked" 
                         ?
@@ -76,9 +70,8 @@ const Rating = ({like, dislike, id, rating, token, saved, approval}) => {
                                 <i id="t-d" class="bi bi-hand-thumbs-down mx-1" style={{fontSize: "2rem", color: "#623FF0"}} onClick={handleDislike}></i>
                             </>
                     }
-                    <p id="dislike" className='mx-3 my-0 text-primary doc-descrizione' style={{lineHeight:"15px"}}>{dislike}</p>
+                    <p id="dislike" className='mx-2 my-0 text-primary doc-descrizione' style={{lineHeight:"15px"}}>{dislike}</p>
             </div>
-            <ProgressBar className="mx-1 w-50" now={progress?progress:approval} style={{height:"3px"}}/>
         </>
     );
 };

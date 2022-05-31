@@ -136,10 +136,10 @@ const Document = (props) => {
                         <p className='doc-descrizione' style={{overflowWrap: "break-word"}}>
                             {doc.document.description}
                         </p>
-                        <Rating like={doc.document.like} dislike={doc.document.dislike} rating={doc.interactions.rating} saved={doc.interactions.saved} approval={doc.document.approval} id={id} token={props.token}/>
+                        <Rating like={doc.document.like} dislike={doc.document.dislike} rating={doc.interactions.rating} saved={doc.interactions.saved} id={id} token={props.token}/>
 
                        
-                        <Chat handleChatShow={handleChatShow} handleChatClose={handleChatClose} chatShow={chatShow} comments={doc.comments}/>
+                        <Chat handleChatShow={handleChatShow} handleChatClose={handleChatClose} chatShow={chatShow} comments={doc.comments} id={id}/>
 
                         
                        
