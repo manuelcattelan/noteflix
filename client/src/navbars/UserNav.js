@@ -25,16 +25,17 @@ const UserNav = (props) => {
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
-                        <Nav className="mx-auto">
+                        <Nav className="ms-auto">
                             <Link to="/">
                                 <Nav.Link href="#def" className="Navtheme">Piattaforma</Nav.Link>
                             </Link>
                             <Link to="/library">
                                 <Nav.Link href="#def" className="Navtheme">Libreria personale</Nav.Link>
                             </Link>
-                        </Nav> 
-                        <Nav>
-                            <NavDropdown title={props.persona.username} className="fw-bold mt-1 me-2 text-decoration-underline">
+                        </Nav>
+                        <Nav className="ms-3 me-2">
+                            <Avatar style={{ width: '3rem', height: '3rem' }} {...props.persona.avatar}/>
+                            <NavDropdown title={props.persona.username} className="fw-bold mt-1 ms-2">
                                 <NavDropdown.Item href="#" onClick={props.handleLogout}>
                                     Disconnettiti
                                 </NavDropdown.Item>
@@ -44,8 +45,7 @@ const UserNav = (props) => {
                                     </Link>
                                 </NavDropdown.Item>
                             </NavDropdown>
-                            <Avatar style={{ width: '3rem', height: '3rem' }} {...props.persona.avatar}/>
-                        </Nav>
+                        </Nav>   
                     </Navbar.Collapse>
 
             </Navbar>

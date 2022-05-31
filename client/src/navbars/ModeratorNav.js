@@ -24,7 +24,7 @@ const ModeratorNav = (props) => {
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
-                        <Nav className="mx-auto">
+                        <Nav className="ms-auto">
                             <Link to="/moderatorconsole">
                                 <Nav.Link href="#def" className="Navtheme">Console moderatore</Nav.Link>
                             </Link>
@@ -35,13 +35,13 @@ const ModeratorNav = (props) => {
                                 <Nav.Link href="#def" className="Navtheme">Libreria personale</Nav.Link>
                             </Link>
                         </Nav>
-                        <Nav>
-                            <NavDropdown title={props.persona.username} className="fw-bold mt-1 me-2 text-decoration-underline">
+                        <Nav className="ms-3 me-2">
+                            <Avatar style={{ width: '3rem', height: '3rem' }} {...props.persona.avatar}/>
+                            <NavDropdown title={props.persona.username} className="fw-bold mt-1 ms-2">
                                 <NavDropdown.Item href="#" onClick={props.handleLogout}>
                                     Disconnettiti
                                 </NavDropdown.Item>
                             </NavDropdown>
-                            <Avatar style={{ width: '3rem', height: '3rem' }} {...props.persona.avatar}/>
                         </Nav>                        
                     </Navbar.Collapse>
 

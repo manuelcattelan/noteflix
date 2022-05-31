@@ -22,7 +22,7 @@ const VisitorNav = (props) => {
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
-                        <Nav className="mx-auto">
+                        <Nav className="ms-auto">
                             <Nav.Link href="#def" className="Navtheme">Prezzi</Nav.Link>
                             <Nav.Link href="#def" className="Navtheme">Chi siamo</Nav.Link>
                             <Link to="/policy">
