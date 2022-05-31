@@ -195,7 +195,7 @@ router.patch('/:id/downgrade', async (req, res) => {
     // only let moderators upgrade users to mentors
     if (req.loggedUser.type != "moderator"){
         return res
-            .status(401)
+            .status(403)
             .json({
                 success: false,
                 message: 'Only moderators are allowed to downgrade mentors to users'
@@ -203,31 +203,31 @@ router.patch('/:id/downgrade', async (req, res) => {
     }
     // if user is still pending, reject upgrade request
     // if user is mentor, downgrade to normal user
-    if (user.userType == 'pending' || user.userType == 'mentor'){ 
-        user.userType = 'user'
-        user.save()
-            .then ( () => {
-                return res
-                    .status(200)
-                    .json({ 
-                        success: true,
-                        message: 'Downgrade ok'
-                    });
+    if (!(user.userType == 'pending' || user.userType == 'mentor')){ 
+        return res
+            .status(400)
+            .json({
+                success: false,
+                message: 'User could not be downgraded'
             })
-            .catch( (error) => {
-                return res
-                    .status(400)
-                    .json({ 
-                        success: true,
-                        message: error.message
-                    });
-            })
-    };
-    return res
-        .status(200)
-        .json({
-            success: false,
-            message: 'User could not be downgraded'
+    }
+    user.userType = 'user'
+    user.save()
+        .then ( () => {
+            return res
+                .status(200)
+                .json({ 
+                    success: true,
+                    message: 'Downgrade ok'
+                });
+        })
+        .catch( (error) => {
+            return res
+                .status(400)
+                .json({ 
+                    success: true,
+                    message: error.message
+                });
         })
 })
 
