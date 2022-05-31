@@ -12,12 +12,12 @@ const MentorPendingItem = ({username, avatar, email, token, id}) => {
     const handleSubmit = (e) => {
 
         e.preventDefault();
-        e.target.className="d-none"
 
         switch(decision){
             case "downgrade":
                 fetch("api/v1/users/"+id+"/downgrade?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
+                .then(e.target.className="d-none")
                 .then(data => alert(data.message))
                 break;
         }
@@ -36,7 +36,7 @@ const MentorPendingItem = ({username, avatar, email, token, id}) => {
             </a>
             <Form className="d-flex" onSubmit={handleSubmit}>
                 <Form.Select className='mx-3' id="macroarea" maxlength="160" onChange={(e) => setDecision(e.target.value)}>
-                    <option disabled selected value>- seleziona un'azione</option>
+                    <option disabled selected value="">- seleziona un'azione</option>
                     <option value="downgrade">Downgrade a Utente</option>
                 </Form.Select>
                 <Button type="submit" size="sm" variant="primary">Salva</Button>

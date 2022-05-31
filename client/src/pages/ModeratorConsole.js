@@ -30,22 +30,6 @@ const ModeratorConsole = (props) => {
     return (
         <>
             <Navigation navbar={props.navbar} token={props.token}/>
-            {/* <Container className='my-5'>
-                <Tabs defaultActiveKey="pending" id="uncontrolled-tab-example" className="mb-3">
-                    <Tab eventKey="pending" title="File in attesa di approvazione">
-                        <ModeratorPendingList token={props.token}/>
-                    </Tab>
-                    <Tab eventKey="reported" title="File segnalati dagli utenti">
-                        <ModeratorReportedList token={props.token}/>
-                    </Tab>
-                    <Tab eventKey="user-pending" title="Richieste di upgrade a Mentor">
-                        
-                    </Tab>
-                    <Tab eventKey="mentor-list" title="Mentor del sito">
-                        
-                    </Tab>
-                </Tabs>
-            </Container> */}
             <Tab.Container defaultActiveKey="pending">
                 <Row className="mx-5 mt-5" style={{height:"80vh"}}>
                     <Col xs="auto">

@@ -23,7 +23,7 @@ function App() {
   const [navbar, setNavbar] = useState("visitor")                                           // la navbar potrà essere visitatore, user, moderator, mentor
   const [token, setToken] =  useLocalStorage('token', "")                                   //controllo di avere un token salvato nel local storage
   const [user, setUser] = useLocalStorage('user', "")                                       //creo uno stato per conservare l'oggetto utente
-  const [page, setPage] = useState(<Main token={token}   navbar="visitatore"/>)   //creo uno stato per la pagina principale
+  const [page, setPage] = useState(<Main token={token}   navbar="visitatore"/>)             //creo uno stato per la pagina principale
 
 
   useEffect(() => {
@@ -75,11 +75,11 @@ function App() {
           <Route path='/mentorwannabe'  exact element={<MentorWannaBe token={token} navbar={navbar}/>} />
           
           {/* pagine accessibili solo sotto verifica utente loggato (hanno la props user) */}
-          <Route path='/library'           exact element={<Library  token={token} navbar={navbar}/>} />
-          <Route path='/mentorconsole'     exact element={<MentorConsole    token={token} navbar={navbar}/>} />
-          <Route path='/moderatorconsole'  exact element={<ModeratorConsole   token={token} navbar={navbar}/>} />
-          <Route path='/upload'            exact element={<Upload     token={token} navbar={navbar}/>} />
-          <Route path='/document'          exact element={<Document   token={token} navbar={navbar}/>} />
+          <Route path='/library'           exact element={<Library           token={token} navbar={navbar}/>} />
+          <Route path='/mentorconsole'     exact element={<MentorConsole     token={token} navbar={navbar}/>} />
+          <Route path='/moderatorconsole'  exact element={<ModeratorConsole  token={token} navbar={navbar}/>} />
+          <Route path='/upload'            exact element={<Upload            token={token} navbar={navbar}/>} />
+          <Route path='/document'          exact element={<Document          token={token} navbar={navbar}/>} />
 
           {/* <Route render={() => <PageNotFound />}/> */}
         </Routes>
