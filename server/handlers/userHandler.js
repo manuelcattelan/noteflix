@@ -27,7 +27,8 @@ router.get('/pending', async (req, res) => {
         return {
             id: user._id,
             username: user.username,
-            avatar: user.avatar
+            avatar: user.avatar,
+            email: user.email
         }
     })
     // return needed information to show list of pending users
@@ -64,7 +65,8 @@ router.get('/mentors', async (req, res) => {
         return {
             id: user._id,
             username: user.username,
-            avatar: user.avatar
+            avatar: user.avatar,
+            email: user.email
         }
     })
     // return needed information to show list of mentors
@@ -199,33 +201,41 @@ router.patch('/:id/downgrade', async (req, res) => {
                 message: 'Only moderators are allowed to downgrade mentors to users'
             })
     }
-    // if user to downgrade is not a mentor, he/she cannot be downgraded
-    if (user.userType != 'mentor'){ 
+    // if user is still pending, reject upgrade request
+    if (user.userType == 'pending'){ 
         return res
-            .status(400)
+            .status(200)
             .json({
-                success: false,
-                message: 'User cannot be downgraded'
+                success: true,
+                message: 'User request was rejected successfully'
             })
     };
-    // change user status and save changes to database
-    user.userType = 'user';
-    user.save()
-        .then ( () => {
-            return res
-                .status(200)
-                .json({ 
-                    success: true,
-                    message: 'Mentor was successfully downgraded to user'
-                });
-        })
-        .catch( (error) => {
-            return res
-                .status(400)
-                .json({ 
-                    success: true,
-                    message: error.message
-                });
+    if (user.userType == 'mentor'){
+        // change user status and save changes to database
+        user.userType = 'user';
+        user.save()
+            .then ( () => {
+                return res
+                    .status(200)
+                    .json({ 
+                        success: true,
+                        message: 'Mentor was successfully downgraded to user'
+                    });
+            })
+            .catch( (error) => {
+                return res
+                    .status(400)
+                    .json({ 
+                        success: true,
+                        message: error.message
+                    });
+            })
+    }
+    return res
+        .status(200)
+        .json({
+            success: false,
+            message: 'User could not be downgraded'
         })
 })
 
