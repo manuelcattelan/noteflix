@@ -21,7 +21,7 @@ const ModeratorReportedList = (props) => {
                 setReportedDoc(data.documents)
             }
         })
-    }, [""]);
+    }, []);
 
     return (
         <ListGroup as="ol" numbered>
@@ -38,7 +38,7 @@ const ModeratorReportedList = (props) => {
                 ) 
                 :
                 <p className='text-center'>
-                    <img src={notfound} style={{height:"10rem"}}/> <br/>
+                    <img src={notfound} alt="no document reported" style={{height:"10rem"}}/> <br/>
                     Al momento nessun documento è segnalato.
                 </p>
             }

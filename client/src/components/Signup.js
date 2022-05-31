@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import Avatar, { genConfig, AvatarConfig } from 'react-nice-avatar'
 import { Link } from 'react-router-dom';
-import { Routes, Route, useNavigate} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import Platform from '../pages/Platform';
 
 const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
@@ -82,7 +82,7 @@ const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
     const validatePassword = () => {
         var password = document.getElementById("password-label").value;
         var confirmPassword = document.getElementById("confirm-password-label").value;
-        if (password != confirmPassword) {
+        if (password !== confirmPassword) {
             alert("Passwords do not match.");
             return false;
         }

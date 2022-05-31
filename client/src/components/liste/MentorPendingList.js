@@ -22,7 +22,7 @@ const MentorPendingList = (props) => {
                 setMentorList(data.users)
             }
         })
-    }, [""]);
+    }, []);
 
 
     return (

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import useLocalStorage from "../hooks/useLocalStorage";//hooks
-import { HashLink as Link } from 'react-router-hash-link';
-import { Routes, Route, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import Platform from '../pages/Platform';
 
 

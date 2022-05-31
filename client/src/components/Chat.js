@@ -1,7 +1,6 @@
-import { Offcanvas, Button, Form, FloatingLabel, Toast } from 'react-bootstrap';
+import { Offcanvas, Button, Form, FloatingLabel } from 'react-bootstrap';
 import React, {useEffect, useState} from 'react';
 import Message from './Message';
-import Avatar, { genConfig, AvatarConfig } from 'react-nice-avatar'
 
 
 const Chat = (props) => {
@@ -49,7 +48,7 @@ const Chat = (props) => {
         .then(resp => resp.json())
         .then(data => setPersona(data))
         // .then(alert(JSON.stringify(persona)))
-    }, [""])
+    }, [])
     
     const label = "Lascia un commento come "+persona.username
 

@@ -22,7 +22,7 @@ const ModeratorPendingList = (props) => {
                 setPendingDoc(data.documents)
             }
         })
-    }, [""]);
+    }, []);
 
 
     return (
@@ -40,7 +40,7 @@ const ModeratorPendingList = (props) => {
                 ) 
                 :
                 <p className='text-center'>
-                    <img src={notfound} style={{height:"10rem"}}/> <br/>
+                    <img src={notfound} alt="no file found" style={{height:"10rem"}}/> <br/>
                     Nessun documento in attesa di essere approvato.
                 </p>
             }

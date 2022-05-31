@@ -22,7 +22,7 @@ const UserPendingList = (props) => {
                 setPendingUsers(data.users)
             }
         })
-    }, [""]);
+    }, []);
 
 
     return (
@@ -41,7 +41,7 @@ const UserPendingList = (props) => {
                 ) 
                 :
                 <p className='text-center'>
-                    <img src={userswaiting} style={{height:"10rem"}}/> <br/>
+                    <img src={userswaiting} alt="users waiting to became mentor" style={{height:"10rem"}}/> <br/>
                     Nessun utente è in attesa di diventare Mentor.
                 </p>
             }

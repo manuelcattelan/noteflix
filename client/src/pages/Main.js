@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import Navigation from '../components/Navigation';
 import noteslight from "../media/noteslight.svg"

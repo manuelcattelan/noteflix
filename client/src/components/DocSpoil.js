@@ -1,8 +1,5 @@
 import React from 'react';
-import { Card, Button, Badge } from 'react-bootstrap';
-
-
-import pdf from '../pdf/ns.pdf';
+import { Card, Button } from 'react-bootstrap';
 
 import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';// Import the main component

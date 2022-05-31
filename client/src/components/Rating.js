@@ -1,10 +1,7 @@
-import React, {useState} from 'react';
-import { Button, Col, Row, ProgressBar } from 'react-bootstrap';
+import React from 'react';
 
 const Rating = ({like, dislike, id, rating, token, saved}) => {
 
-
-    const [progress, setProgress] = useState()
 
     const handleLike = (e) => {
         fetch("http://localhost:3001/api/v1/documents/"+id+"/like?token="+token, {method: 'PATCH'})

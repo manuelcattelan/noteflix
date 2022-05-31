@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
-import { Container, Tabs, Tab, Nav, Row, Col } from 'react-bootstrap';
+import { Tab, Nav, Row, Col } from 'react-bootstrap';
 import Navigation from '../components/Navigation';
-import Avatar, { AvatarConfig } from 'react-nice-avatar'
 import { useNavigate } from 'react-router-dom';
 import ModeratorReportedList from '../components/liste/ModeratorReportedList';
 import ModeratorPendingList from '../components/liste/ModeratorPendingList';
@@ -22,7 +21,7 @@ const ModeratorConsole = (props) => {
                 navigate('/')
             }
         })
-    }, [""]);
+    }, []);
 
 
 

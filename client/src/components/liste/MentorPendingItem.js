@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { ListGroup, Button, ButtonGroup, ButtonToolbar, Form } from 'react-bootstrap';
+import { ListGroup, Button, Form } from 'react-bootstrap';
 import Avatar from 'react-nice-avatar';
-import { Link } from 'react-router-dom';
 
 const MentorPendingItem = ({username, avatar, email, token, id}) => {
 
-    const mailto = "mailto:" + "email"
+    const mailto = "mailto:" + email
 
     const [decision, setDecision] = useState()
 
@@ -31,7 +30,7 @@ const MentorPendingItem = ({username, avatar, email, token, id}) => {
         >
             <Avatar className="ms-2" style={{ width: '3rem', height: '3rem' }} {...avatar}/>
             <div className="fw-bold ms-2 me-auto">{username}</div>
-            <a href={mailto} target="_blank">
+            <a href={mailto} target="_blank" rel="noreferrer">
                 <span className="fw-bold text-primary me-3">Scrivi a {email}</span>
             </a>
             <Form className="d-flex" onSubmit={handleSubmit}>

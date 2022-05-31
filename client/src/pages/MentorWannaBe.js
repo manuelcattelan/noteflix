@@ -18,7 +18,7 @@ const MentorWannaBe = (props) => {
                 navigate('/')
             }
         })
-    }, [""]);
+    }, []);
 
 
     return (
@@ -31,7 +31,7 @@ const MentorWannaBe = (props) => {
                         
                     <Row className='mt-5'>
                         <Col xs="12" lg="4">
-                            <img src={img} style={{width:"90%"}}/>
+                            <img src={img} alt="diventa mentor" style={{width:"90%"}}/>
                         </Col>
                         <Col>
                             <p className='special mb-4 mt-3'>Mandaci un’email con le seguenti <br/>informazioni e parlaci di te.</p>

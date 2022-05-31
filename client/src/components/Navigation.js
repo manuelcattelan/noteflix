@@ -23,7 +23,7 @@ const Navigation = (props) => {
         .then(resp => resp.json())
         .then(data => setPersona(data))
         // .then(alert(JSON.stringify(persona)))
-    }, [""])
+    }, [])
        
     switch(props.navbar){
         case "user":       return (<UserNav       handleLogout={handleLogout} persona={persona}/>)        

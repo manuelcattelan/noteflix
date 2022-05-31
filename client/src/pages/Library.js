@@ -20,7 +20,7 @@ const Library = (props) => {
         })
         .catch(error => console.log('error', error)); // Transform the data into json
     
-    }, [""]);
+    }, []);
 
 
 

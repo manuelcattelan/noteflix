@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ListGroup, Button, ButtonGroup, ButtonToolbar, Form } from 'react-bootstrap';
+import { ListGroup, Button, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const ModeratorPendingItem = ({title, id, email, token}) => {
@@ -35,7 +35,7 @@ const ModeratorPendingItem = ({title, id, email, token}) => {
             className="d-flex justify-content-between align-items-center"
         >
             <div className="fw-bold ms-2 me-auto">{title}</div>
-            <a href={mailto} target="_blank">
+            <a href={mailto} target="_blank" rel="noreferrer">
                 <span className="fw-bold text-primary me-3">Scrivi a {email}</span>
             </a>
             <Link to={"/document/?id="+id}>

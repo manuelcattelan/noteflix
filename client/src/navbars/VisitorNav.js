@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Nav, Container, NavDropdown, Button, Badge } from 'react-bootstrap';
+import { Navbar, Nav, Button } from 'react-bootstrap';
 import { HashLink as Link } from 'react-router-hash-link';
 import logolight from "../media/logolight.svg"
 

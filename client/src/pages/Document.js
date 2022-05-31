@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Container, Col, Row, Button, Form, ButtonToolbar, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { useLocation } from 'react-router-dom'
+import { Container, Col, Row, Button, ButtonToolbar } from 'react-bootstrap';
 import Navigation from '../components/Navigation';
 
 import { Worker } from '@react-pdf-viewer/core';
@@ -9,9 +8,8 @@ import '@react-pdf-viewer/core/lib/styles/index.css';// Import the styles
 import { toolbarPlugin } from '@react-pdf-viewer/toolbar';
 import { ToolbarSlot, TransformToolbarSlot } from '@react-pdf-viewer/toolbar';
 import '@react-pdf-viewer/toolbar/lib/styles/index.css';// Import styles
-import pdf from '../pdf/ns.pdf';
 
-import Avatar, { genConfig, AvatarConfig } from 'react-nice-avatar'
+import Avatar from 'react-nice-avatar'
 import Rating from '../components/Rating';
 import Report from '../components/Report';
 import Chat from '../components/Chat';
@@ -98,7 +96,7 @@ const Document = (props) => {
         fetch("http://localhost:3001/api/v1/documents/"+id+"?token="+props.token)
         .then(resp => resp.json())
         .then(data => setDoc(data))
-    }, [""])
+    }, [])
 
     
     

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import { Container, ButtonToolbar, ButtonGroup, Button, ListGroup, Row, Col, Form } from 'react-bootstrap';
+import { Container, Button, Row, Col, Form } from 'react-bootstrap';
 import Navigation from '../components/Navigation';
-import Avatar, { AvatarConfig } from 'react-nice-avatar'
+import Avatar from 'react-nice-avatar'
 import { useNavigate } from 'react-router-dom';
 import MentorFileList from '../components/liste/MentorFileList';
 
@@ -32,7 +32,7 @@ const MentorConsole = (props) => {
         // .then(alert(JSON.stringify(persona)))
 
 
-    }, [""]);
+    }, []);
 
     
 

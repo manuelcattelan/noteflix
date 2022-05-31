@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Container, Form, Row, Col, InputGroup, FormControl, Button } from 'react-bootstrap';
+import { Container, Form, Row, Col } from 'react-bootstrap';
 import Navigation from '../components/Navigation';
 
 import Flicking, { ViewportSlot } from "@egjs/react-flicking";
@@ -15,7 +15,14 @@ const Platform = (props) => {
     const token = JSON.parse(window.localStorage.getItem("token"))
     const [docArray, setDocArray] = useState({})
 
-    const handleDoc = () => {
+    
+
+    //Arrow for each carousel
+    const arrowSet1 = [new Arrow({moveCount:2}), new Fade("", 0.5)];
+
+
+    //esegue il fetch al caricamento dell'app e al cambiamento di token
+    useEffect(() => () => {
         const url='http://localhost:3001/api/v1/documents/?token='+token
         fetch(url, {
             method: 'GET',
@@ -23,16 +30,7 @@ const Platform = (props) => {
         .then((resp) => resp.json())
         .then(result => setDocArray(result))
         .catch(error => console.log('error', error)); // Transform the data into json
-    }
-
-
-
-    //Arrow for each carousel
-    const arrowSet1 = [new Arrow({moveCount:2}), new Fade("", 0.5)];
-
-
-    //esegue il fetch al caricamento dell'app e al cambiamento di token
-    useEffect(() => handleDoc,[]);
+    },[]);
 
 
 
