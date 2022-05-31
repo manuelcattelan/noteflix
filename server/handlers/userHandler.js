@@ -3,6 +3,80 @@ const router = express.Router();
 
 const User = require('./../models/userModel');
 
+// get list of users who asked to be upgraded to mentor
+router.get('/pending', async (req, res) => {
+    // only moderators can access the pending users list
+    if (req.loggedUser.type != "moderator"){
+        return res
+            .status(403)
+            .json({
+                success: false,
+                message: "Only moderators can access the pending users list"
+            })
+    }
+    // find all users that have asked to be upgraded to mentors
+    let users = await User.find({ userType: "pending" }).exec();
+    // if no users were found in the database
+    if (!users || users.length == 0){
+        return res
+            .status(204)
+            .send()
+    }
+    // if users were found, extract needed information to return
+    users = users.map( (user)=>{
+        return {
+            id: user._id,
+            username: user.username,
+            avatar: user.avatar
+        }
+    })
+    // return needed information to show list of pending users
+    return res
+        .status(200)
+        .json({
+            success: true,
+            message: 'Pending users found',
+            users: users
+        })
+})
+
+// get list of mentors in the platform
+router.get('/mentors', async (req, res) => {
+    // only moderators can access the pending users list
+    if (req.loggedUser.type != "moderator"){
+        return res
+            .status(403)
+            .json({
+                success: false,
+                message: "Only moderators can access the mentors list"
+            })
+    }
+    // find all users that have asked to be upgraded to mentors
+    let users = await User.find({ userType: "mentor" }).exec();
+    // if no users were found in the database
+    if (!users || users.length == 0){
+        return res
+            .status(204)
+            .send()
+    }
+    // if users were found, extract needed information to return
+    users = users.map( (user)=>{
+        return {
+            id: user._id,
+            username: user.username,
+            avatar: user.avatar
+        }
+    })
+    // return needed information to show list of pending users
+    return res
+        .status(200)
+        .json({
+            success: true,
+            message: 'Mentors found',
+            users: users
+        })
+})
+
 // get user information by id (only username and account avatar are needed here)
 router.get('/:id', async (req, res) => {
     // check id length and id string format (must be hex)
