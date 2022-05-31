@@ -6,7 +6,7 @@ const userSchema = new Schema ({
     passwordHash: String,
     passwordSalt: String,
     joinDate: Date,
-    userType: { type: String, enum: ["user","mentor", "moderator",], default: "user"},
+    userType: { type: String, enum: ["user", "pending", "mentor", "moderator",], default: "user"},
     username: String,
     subscription: {
         subType: { type: String, enum: ["matricole","studenti", "nerd",], default: "matricole"},

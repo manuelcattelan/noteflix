@@ -139,7 +139,7 @@ router.patch('/:id/upgrade', async (req, res) => {
             })
     }
     // if user to upgrade is not a simple user, he/she cannot be upgraded
-    if (user.userType != 'user'){ 
+    if (user.userType != 'pending'){ 
         return res
             .status(400)
             .json({
