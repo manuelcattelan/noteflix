@@ -104,7 +104,8 @@ router.get('/:id', async (req, res) => {
         .json({
             success: true,
             username: user.username,
-            avatar: user.avatar
+            avatar: user.avatar,
+            email: user.email
         })
 })
 
