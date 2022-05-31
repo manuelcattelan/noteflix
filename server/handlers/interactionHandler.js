@@ -111,7 +111,7 @@ router.patch('/:id/comment', async (request, result) =>{
                     success: true,
                     message: 'Comment added successfully',
                     commentBody: comment.body,
-                    commentDate: comment.date
+                    commentDate: comment.date,
                 })
         })
         .catch( (error) => {
