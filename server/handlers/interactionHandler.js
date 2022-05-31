@@ -222,7 +222,7 @@ router.patch('/:id/report', async (request, result) => {
         return;
     }
     // check if logged user is mentor
-    if (request.loggedUser.id == doc.author){
+    if (request.loggedUser.id == document.author){
         return result
             .status(403)
             .json({
