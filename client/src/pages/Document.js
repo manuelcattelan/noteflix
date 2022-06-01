@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Container, Col, Row, Button, ButtonToolbar } from 'react-bootstrap';
+import { Container, Col, Row, Button, ButtonToolbar, Spinner } from 'react-bootstrap';
 import Navigation from '../components/Navigation';
 
 import { Worker } from '@react-pdf-viewer/core';
@@ -23,32 +23,7 @@ const Document = (props) => {
 
     const id = window.location.href.split("?id=")[1] //ottengo l'id del doc
     
-    const[doc, setDoc] = useState({
-        "author": {
-            "username": ""
-        },
-        "interactions":{
-            "liked": false,
-            "saved": false
-        },
-        "document":{
-            "url":"https://noteflix.s3.eu-central-1.amazonaws.com/1653654581000.pdf",
-            "title":"",
-            "description":"",
-            "like":0,
-            "dislike":0
-        },
-        "comments":[
-            {
-                "author":{
-                    "username":"",
-                    "avatar":""
-                },
-                "body":"",
-                "date":""
-            }
-        ]
-    })
+    const[doc, setDoc] = useState()
     
 
 
@@ -112,60 +87,69 @@ const Document = (props) => {
     return (
         <>
             <Navigation navbar={props.navbar} token={props.token}/>
-            <Container>
-                <Row className='my-5'>
-                    <Col md="9">
-                        <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.13.216/build/pdf.worker.min.js">
-                            <div
-                                style={{
-                                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                                    height: '950px',
-                                }}
-                            >
-                                <Toolbar>{renderDefaultToolbar(transform)}</Toolbar>
-                                <Viewer plugins={[toolbarPluginInstance]} fileUrl={doc.document.url} />
-                            </div>
-                        </Worker>
-                    </Col>
-                    <Col md="3">
-                        <p className='doc-autore d-flex align-items-center'>
-                            <Avatar className="my-3 me-2" style={{ width: '5rem', height: '5rem' }} {...doc.author.avatar}/>
-                            <div className='mt-2'>
-                                Mentore
-                                <p className='text-primary fs-2 mt-2'>{doc.author.username}</p>
-                            </div>
-                            
-                        </p>
-                        <p className='Save text-muted'>
-                            <Save id={id} saved={doc.interactions.saved}/>
-                        </p>
-                        <p className='doc-titolo'>
-                            {doc.document.title}
-                        </p>
-                        <p className='doc-descrizione' style={{overflowWrap: "break-word"}}>
-                            {doc.document.description}
-                        </p>
-
-                       
-                        <Chat handleChatShow={handleChatShow} handleChatClose={handleChatClose} chatShow={chatShow} comments={doc.comments} id={id}/>
+            {
+                doc
+                ?
+                <Container>
+                    <Row className='my-5'>
+                        <Col md="9">
+                            <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.13.216/build/pdf.worker.min.js">
+                                <div
+                                    style={{
+                                        border: '1px solid rgba(0, 0, 0, 0.3)',
+                                        height: '950px',
+                                    }}
+                                >
+                                    <Toolbar>{renderDefaultToolbar(transform)}</Toolbar>
+                                    <Viewer plugins={[toolbarPluginInstance]} fileUrl={doc.document.url} />
+                                </div>
+                            </Worker>
+                        </Col>
+                        <Col md="3">
+                            <p className='doc-autore d-flex align-items-center'>
+                                <Avatar className="my-3 me-2" style={{ width: '5rem', height: '5rem' }} {...doc.author.avatar}/>
+                                <div className='mt-2'>
+                                    Mentore
+                                    <p className='text-primary fs-2 mt-2'>{doc.author.username}</p>
+                                </div>
+                                
+                            </p>
+                            <p className='Save text-muted'>
+                                <Save id={id} saved={doc.interactions.saved}/>
+                            </p>
+                            <p className='doc-titolo'>
+                                {doc.document.title}
+                            </p>
+                            <p className='doc-descrizione' style={{overflowWrap: "break-word"}}>
+                                {doc.document.description}
+                            </p>
 
                         
-                       
-                        <Rating like={doc.document.like} dislike={doc.document.dislike} rating={doc.interactions.rating} saved={doc.interactions.saved} id={id} token={props.token}/>
+                            <Chat handleChatShow={handleChatShow} handleChatClose={handleChatClose} chatShow={chatShow} comments={doc.comments} id={id}/>
 
-                        <ButtonToolbar aria-label="Toolbar with Button groups">
-                            <Report id={id} token={props.token}/>
-                            <Button variant="outline-primary" className="mt-3 me-1" size="sm" onClick={handleChatShow}>
-                                Apri la sezione commenti
-                            </Button>
-                        </ButtonToolbar>
                             
                         
-                        
-                        
-                    </Col>
-                </Row>
-            </Container>
+                            <Rating like={doc.document.like} dislike={doc.document.dislike} rating={doc.interactions.rating} saved={doc.interactions.saved} id={id} token={props.token}/>
+
+                            <ButtonToolbar aria-label="Toolbar with Button groups">
+                                <Report id={id} token={props.token}/>
+                                <Button variant="outline-primary" className="mt-3 me-1" size="sm" onClick={handleChatShow}>
+                                    Apri la sezione commenti
+                                </Button>
+                            </ButtonToolbar>
+                                
+                            
+                            
+                            
+                        </Col>
+                    </Row>
+                </Container>
+                :
+                <Container className="d-flex justify-content-center align-items-center" style={{height:"80vh"}}>
+                    <Spinner animation="border" variant="primary" />
+                </Container>
+            }
+            
         </>
     );
 };
