@@ -27,6 +27,7 @@ router.get('/', async (req, res) => {
             id: user._id,
             username: user.username,
             avatar: user.avatar,
+            email: user.email
         }
     })
     // return needed information to show list of users
