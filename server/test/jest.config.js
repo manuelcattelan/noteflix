@@ -1,7 +1,7 @@
 
 const config = {
     verbose: true,
-    collectCoverage: true,
+    //collectCoverage: true,
     setupFiles: ["./setEnvVars.js"],
   };
   
