@@ -4,7 +4,7 @@ require('dotenv').config();
 const app = require('./app.js')
 const mongoose = require('mongoose');
 
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 // connect to mongodb instance
 db = mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true })
