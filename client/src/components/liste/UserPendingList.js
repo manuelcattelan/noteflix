@@ -12,7 +12,7 @@ const UserPendingList = (props) => {
     const [pendingUsers, setPendingUsers] = useState()
 
     useEffect(() => {
-        fetch("../api/v2/users/pending?token="+props.token)
+        fetch("http://localhost:3001/api/v1/users/pending?token="+props.token)
         .then(resp => resp.json())
         .then(data => {
             if(!data.success){
@@ -22,7 +22,7 @@ const UserPendingList = (props) => {
                 setPendingUsers(data.users)
             }
         })
-    }, []);
+    }, [""]);
 
 
     return (
@@ -41,7 +41,7 @@ const UserPendingList = (props) => {
                 ) 
                 :
                 <p className='text-center'>
-                    <img src={userswaiting} alt="users waiting to became mentor" style={{height:"10rem"}}/> <br/>
+                    <img src={userswaiting} style={{height:"10rem"}}/> <br/>
                     Nessun utente è in attesa di diventare Mentor.
                 </p>
             }

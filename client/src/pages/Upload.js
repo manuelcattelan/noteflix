@@ -63,7 +63,7 @@ const Upload = (props) => {
             redirect: 'follow'
         };
 
-        const url='../api/v2/documents/?token='+props.token
+        const url='http://localhost:3001/api/v1/documents/?token='+props.token
         fetch(url, requestOptions)
         .then( res => console.log(res))
         .then(navigate('/'))

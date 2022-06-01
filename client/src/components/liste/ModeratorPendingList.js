@@ -12,7 +12,7 @@ const ModeratorPendingList = (props) => {
     const [pendingDoc, setPendingDoc] = useState()
 
     useEffect(() => {
-        fetch("../api/v2/documents/pending?token="+props.token)
+        fetch("http://localhost:3001/api/v1/documents/pending?token="+props.token)
         .then(resp => resp.json())
         .then(data => {
             if(!data.success){
@@ -22,7 +22,7 @@ const ModeratorPendingList = (props) => {
                 setPendingDoc(data.documents)
             }
         })
-    }, []);
+    }, [""]);
 
 
     return (
@@ -40,7 +40,7 @@ const ModeratorPendingList = (props) => {
                 ) 
                 :
                 <p className='text-center'>
-                    <img src={notfound} alt="no file found" style={{height:"10rem"}}/> <br/>
+                    <img src={notfound} style={{height:"10rem"}}/> <br/>
                     Nessun documento in attesa di essere approvato.
                 </p>
             }

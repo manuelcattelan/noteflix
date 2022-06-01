@@ -12,7 +12,7 @@ const MentorPendingList = (props) => {
     const [mentorList, setMentorList] = useState()
 
     useEffect(() => {
-        fetch("../api/v2/users/mentors?token="+props.token)
+        fetch("http://localhost:3001/api/v1/users/mentors?token="+props.token)
         .then(resp => resp.json())
         .then(data => {
             if(!data.success){
@@ -22,7 +22,7 @@ const MentorPendingList = (props) => {
                 setMentorList(data.users)
             }
         })
-    }, []);
+    }, [""]);
 
 
     return (

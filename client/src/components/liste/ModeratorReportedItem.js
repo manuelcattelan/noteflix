@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
-import { ListGroup, Button, Form } from 'react-bootstrap';
+import { ListGroup, Button, ButtonGroup, ButtonToolbar, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { useAlert } from 'react-alert'
 
 const ModeratorFileItemReported = ({token, id, title, reportedTimes}) => {
 
-    const alert = useAlert()
+
     const [decision, setDecision] = useState()
 
     const handleSubmit = (e) => {
@@ -14,16 +13,14 @@ const ModeratorFileItemReported = ({token, id, title, reportedTimes}) => {
 
         switch(decision){
             case "rimuovi":
-                fetch("../api/v2/documents/"+id+"/validate?token="+token, {method: 'PATCH'})
+                fetch("api/v1/documents/"+id+"/validate?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
-                .then(e.target.className="d-none")
-                .then(data => alert.show(data.message))
+                .then(data => alert(data.message))
                 break;
             case "elimina":
-                fetch("../api/v2/documents/"+id+"?token="+token, {method: 'DELETE'})
+                fetch("api/v1/documents/"+id+"?token="+token, {method: 'DELETE'})
                 .then(res => res.json())
-                .then(e.target.className="d-none")
-                .then(data => alert.show(data.message))
+                .then(data => alert(data.message))
                 break;
         }
     }
@@ -44,7 +41,7 @@ const ModeratorFileItemReported = ({token, id, title, reportedTimes}) => {
                 </Link>
                 <Form id="form" className="d-flex" onSubmit={handleSubmit}>
                     <Form.Select className='mx-3' id="macroarea" maxlength="160" onChange={(e) => setDecision(e.target.value)}>
-                        <option disabled selected value="">- seleziona un'azione</option>
+                        <option disabled selected value>- seleziona un'azione</option>
                         <option value="rimuovi">Rimuovi segnalazione</option>
                         <option value="elimina">Elimina documento</option>
                     </Form.Select>

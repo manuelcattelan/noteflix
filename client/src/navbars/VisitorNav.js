@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Nav, Button } from 'react-bootstrap';
+import { Navbar, Nav, Container, NavDropdown, Button, Badge } from 'react-bootstrap';
 import { HashLink as Link } from 'react-router-hash-link';
 import logolight from "../media/logolight.svg"
 
@@ -22,7 +22,7 @@ const VisitorNav = (props) => {
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
-                        <Nav className="ms-auto">
+                        <Nav className="mx-auto">
                             <Nav.Link href="#def" className="Navtheme">Prezzi</Nav.Link>
                             <Nav.Link href="#def" className="Navtheme">Chi siamo</Nav.Link>
                             <Link to="/policy">

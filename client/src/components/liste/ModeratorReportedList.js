@@ -11,7 +11,7 @@ const ModeratorReportedList = (props) => {
     const [reportedDoc, setReportedDoc] = useState()
 
     useEffect(() => {
-        fetch("../api/v2/documents/reported?token="+props.token)
+        fetch("http://localhost:3001/api/v1/documents/reported?token="+props.token)
         .then(resp => resp.json())
         .then(data => {
             if(!data.success){
@@ -21,7 +21,7 @@ const ModeratorReportedList = (props) => {
                 setReportedDoc(data.documents)
             }
         })
-    }, []);
+    }, [""]);
 
     return (
         <ListGroup as="ol" numbered>
@@ -38,7 +38,7 @@ const ModeratorReportedList = (props) => {
                 ) 
                 :
                 <p className='text-center'>
-                    <img src={notfound} alt="no document reported" style={{height:"10rem"}}/> <br/>
+                    <img src={notfound} style={{height:"10rem"}}/> <br/>
                     Al momento nessun documento è segnalato.
                 </p>
             }
