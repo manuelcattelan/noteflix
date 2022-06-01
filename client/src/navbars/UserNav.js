@@ -2,6 +2,7 @@ import React from 'react';
 import { Navbar, Nav, NavDropdown, Badge } from 'react-bootstrap';
 import Avatar from 'react-nice-avatar';
 import { HashLink as Link } from 'react-router-hash-link';
+import ChangePassword from '../components/ChangePassword';
 import DeleteAccount from '../components/DeleteAccount';
 import logolight from "../media/logolight.svg"
 
@@ -45,6 +46,7 @@ const UserNav = (props) => {
                                         Diventa Mentor
                                     </Link>
                                 </NavDropdown.Item>
+                                <ChangePassword/>
                                 <DeleteAccount/>
                             </NavDropdown>
                         </Nav>   

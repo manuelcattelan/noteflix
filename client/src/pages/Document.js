@@ -128,19 +128,23 @@ const Document = (props) => {
                             </div>
                             
                         </p>
+                        <p className='Save text-muted'>
+                            <Save id={id} saved={doc.interactions.saved}/>
+                        </p>
                         <p className='doc-titolo'>
-                        <Save id={id} saved={doc.interactions.saved}/>{doc.document.title}
+                            {doc.document.title}
                         </p>
                         <p className='doc-descrizione' style={{overflowWrap: "break-word"}}>
                             {doc.document.description}
                         </p>
-                        <Rating like={doc.document.like} dislike={doc.document.dislike} rating={doc.interactions.rating} saved={doc.interactions.saved} id={id} token={props.token}/>
 
                        
                         <Chat handleChatShow={handleChatShow} handleChatClose={handleChatClose} chatShow={chatShow} comments={doc.comments} id={id}/>
 
                         
                        
+                        <Rating like={doc.document.like} dislike={doc.document.dislike} rating={doc.interactions.rating} saved={doc.interactions.saved} id={id} token={props.token}/>
+
                         <ButtonToolbar aria-label="Toolbar with Button groups">
                             <Report id={id} token={props.token}/>
                             <Button variant="outline-primary" className="mt-3 me-1" size="sm" onClick={handleChatShow}>

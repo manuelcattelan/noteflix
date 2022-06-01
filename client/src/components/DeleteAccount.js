@@ -49,13 +49,13 @@ const DeleteAccount = () => {
                 <Modal.Body>
                     Stai per eliminare il tuo account <span className='text-danger'>{persona.username}</span> perdendo tutti i documenti salvati nella tua libreria personale e tutti
                     i tuoi progressi nella piattaforma. 
+                    <Form.Group className="my-4">
+                        <Form.Control id="typed-username" type="email" placeholder="Username" required/>
+                        <Form.Text className="text-danger">
+                            Inserisci il tuo username {persona.username} per confermare.
+                        </Form.Text>
+                    </Form.Group>
                 </Modal.Body>
-                <Form.Group className="m-4">
-                    <Form.Control id="typed-username" type="email" placeholder="Username" required/>
-                    <Form.Text className="text-danger">
-                        Inserisci il tuo username {persona.username} per confermare.
-                    </Form.Text>
-                </Form.Group>
                 <Modal.Footer>
                 <Button variant="danger" onClick={handleDelete}>
                     Sono sicuro di voler eliminare il mio account
