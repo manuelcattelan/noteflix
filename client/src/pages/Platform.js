@@ -50,7 +50,7 @@ const Platform = (props) => {
                         </Col>                        
                     </Row>
                 </Form>
-                <br/><br/><br/>
+                <br/>
             </Container> 
 
            {/*  <Container>

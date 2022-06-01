@@ -4,6 +4,8 @@ import Avatar, { genConfig, AvatarConfig } from 'react-nice-avatar'
 import { Link } from 'react-router-dom';
 import { useNavigate} from 'react-router-dom';
 import Platform from '../pages/Platform';
+import macroaree from '../data/macroaree.json'
+    
 
 const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
 
@@ -158,13 +160,13 @@ const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
                 </Form.Group>
                 <Form.Group id="macroarea" className="d-none">
                     <Form.Label>Scegli una macroarea</Form.Label>
-                    <Form.Select onChange={(e)=>setMacroarea(e.target.value)} >
+                    <Form.Select id="macroarea"  onChange={(e)=>{setMacroarea(e.target.value)}} maxlength="160" required>
                         <option disabled selected value>-</option>
-                        <option value="opzione">opzione</option>
-                        <option value="opzione">opzione</option>
-                        <option value="opzione">opzione</option>
-                        <option value="opzione">opzione</option>
-                        <option value="opzione">opzione</option>
+                        {
+                            macroaree.map((item) => 
+                                <option value={item.nome}>{item.nome}</option>
+                            )
+                        }
                     </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3 d-flex" controlId="formBasicCheckbox">
