@@ -18,19 +18,19 @@ const token = require('./handlers/tokenHandler.js');
 app.use(express.static(path.join(__dirname, '../client/build')))
 
 // routes for authentication api
-app.use('/api/v1/auth', authentication)
+app.use('/api/v2/auth', authentication)
 
 // from here, every route request requires a token to be validated
-app.use('/api/v1', token.tokenChecker);
+app.use('/api/v2', token.tokenChecker);
 
 // routes for decoding token data of users
-app.use('/api/v1/token', token.tokenApi)
+app.use('/api/v2/token', token.tokenApi)
 // routes for users api
-app.use('/api/v1/users', users);
+app.use('/api/v2/users', users);
 // routes for documents api
-app.use('/api/v1/documents', documents);
+app.use('/api/v2/documents', documents);
 // routes for documents interactions api
-app.use('/api/v1/documents', interactions);
+app.use('/api/v2/documents', interactions);
 
 // AFTER defining routes: Anything that doesn't match what's above, send back index.html; (the beginning slash ('/') in the string is important!)
 app.get('*', (req, res) => {
