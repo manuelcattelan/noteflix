@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors')
+const path = require('path')
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -12,6 +13,9 @@ const users = require('./handlers/userHandler');
 const documents = require('./handlers/documentHandler')
 const interactions = require('./handlers/interactionHandler.js');
 const token = require('./handlers/tokenHandler.js');
+
+// serve static files from react frontend
+app.use(express.static(path.join(__dirname, '../client/build')))
 
 // routes for authentication api
 app.use('/api/v1/auth', authentication)
@@ -27,6 +31,11 @@ app.use('/api/v1/users', users);
 app.use('/api/v1/documents', documents);
 // routes for documents interactions api
 app.use('/api/v1/documents', interactions);
+
+// AFTER defining routes: Anything that doesn't match what's above, send back index.html; (the beginning slash ('/') in the string is important!)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname + '/../client/build/index.html'))
+})
 
 //return 404 message in JSON when API is not found
 app.use((req, res) => {
