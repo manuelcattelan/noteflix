@@ -23,12 +23,9 @@ const Platform = (props) => {
 
     //esegue il fetch al caricamento dell'app e al cambiamento di token
     useEffect(() => () => {
-        const url='../api/v2/documents/?token='+token
-        fetch(url, {
-            method: 'GET',
-        })
+        fetch("../api/v2/documents/?token="+token, {method: 'GET'})
         .then((resp) => resp.json())
-        .then(result => setDocArray(result))
+        .then(data => setDocArray(data))
         .catch(error => console.log('error', error)); // Transform the data into json
     },[]);
 
