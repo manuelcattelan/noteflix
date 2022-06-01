@@ -14,6 +14,7 @@ import Rating from '../components/Rating';
 import Report from '../components/Report';
 import Chat from '../components/Chat';
 import Save from '../components/Save';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -89,13 +90,20 @@ const Document = (props) => {
     const [chatShow, setChatShow] = useState(false);
     const handleChatClose = () => setChatShow(false);
     const handleChatShow = () => setChatShow(true);
-
+    const navigate = useNavigate()
 
                
     useEffect(()=>{                          
         fetch("http://localhost:3001/api/v1/documents/"+id+"?token="+props.token)
         .then(resp => resp.json())
-        .then(data => setDoc(data))
+        .then(data => {
+            if(data.success){
+                setDoc(data)
+            }
+            else{
+                navigate("/")
+            }
+        })
     }, [])
 
     
