@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import Avatar, { genConfig, AvatarConfig } from 'react-nice-avatar'
 import { Link } from 'react-router-dom';
-import { Routes, Route, useNavigate} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import Platform from '../pages/Platform';
+import macroaree from '../data/macroaree.json'
+    
 
 const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
 
@@ -33,7 +35,7 @@ const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
             return;
         }
 
-        fetch('../api/v1/auth/signup', {
+        fetch('../api/v2/auth/signup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify( { email: email, password: password, avatar: avatarConfig, username: username, subscriptionType: subplan, subscriptionArea: macroarea } ),
@@ -45,7 +47,7 @@ const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
                 
                 const provToken = data.token
 
-                fetch("../api/v1/token/?token="+provToken)
+                fetch("../api/v2/token/?token="+provToken)
                 .then(resp => resp.json())
                 .then(data => {
                     setUser(data.tokenData.id)
@@ -82,7 +84,7 @@ const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
     const validatePassword = () => {
         var password = document.getElementById("password-label").value;
         var confirmPassword = document.getElementById("confirm-password-label").value;
-        if (password != confirmPassword) {
+        if (password !== confirmPassword) {
             alert("Passwords do not match.");
             return false;
         }
@@ -114,7 +116,7 @@ const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
 
     return (
         <>
-            <Form className="my-5" onSubmit={handleSubmit}>
+            <Form className="my-5 mx-5" onSubmit={handleSubmit}>
                 <div className="d-flex justify-content-center">
                     <span onClick={handleAvatarChange} style={{ cursor:"pointer" }}>
                         <Avatar style={{ width: '7rem', height: '7rem' }} {...avatarConfig}/>
@@ -153,18 +155,18 @@ const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
                         <option value="nerd">Nerd</option>
                     </Form.Select>
                     <Form.Text id="info-abbonamento" className="text-muted">
-                        Non condivideremo la tua email con terze parti.
+                        Non sono previsti costi per il piano selezionato
                     </Form.Text>
                 </Form.Group>
                 <Form.Group id="macroarea" className="d-none">
                     <Form.Label>Scegli una macroarea</Form.Label>
-                    <Form.Select onChange={(e)=>setMacroarea(e.target.value)} >
+                    <Form.Select id="macroarea"  onChange={(e)=>{setMacroarea(e.target.value)}} maxlength="160" required>
                         <option disabled selected value>-</option>
-                        <option value="opzione">opzione</option>
-                        <option value="opzione">opzione</option>
-                        <option value="opzione">opzione</option>
-                        <option value="opzione">opzione</option>
-                        <option value="opzione">opzione</option>
+                        {
+                            macroaree.map((item) => 
+                                <option value={item.nome}>{item.nome}</option>
+                            )
+                        }
                     </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3 d-flex" controlId="formBasicCheckbox">

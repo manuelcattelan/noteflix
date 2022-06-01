@@ -1,7 +1,6 @@
-import { Offcanvas, Button, Form, FloatingLabel, Toast } from 'react-bootstrap';
+import { Offcanvas, Button, Form, FloatingLabel } from 'react-bootstrap';
 import React, {useEffect, useState} from 'react';
 import Message from './Message';
-import Avatar, { genConfig, AvatarConfig } from 'react-nice-avatar'
 
 
 const Chat = (props) => {
@@ -15,7 +14,7 @@ const Chat = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        fetch('http://localhost:3001/api/v1/documents/'+props.id+'/comment?token='+token, {
+        fetch('../api/v2/documents/'+props.id+'/comment?token='+token, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify( { commentText: comment } ),
@@ -45,11 +44,11 @@ const Chat = (props) => {
 
     
     useEffect(()=>{
-        fetch("http://localhost:3001/api/v1/users/"+userId+"?token="+token)
+        fetch("../api/v2/users/"+userId+"?token="+token)
         .then(resp => resp.json())
         .then(data => setPersona(data))
         // .then(alert(JSON.stringify(persona)))
-    }, [""])
+    }, [])
     
     const label = "Lascia un commento come "+persona.username
 
