@@ -11,7 +11,7 @@ const Library = (props) => {
     const [docArray, setDocArray] = useState({})
 
     useEffect(() => {
-        fetch('http://localhost:3001/api/v1/documents/saved?token='+props.token, {
+        fetch('../api/v2/documents/saved?token='+props.token, {
             method: 'GET',
         })
         .then((resp) => resp.json())

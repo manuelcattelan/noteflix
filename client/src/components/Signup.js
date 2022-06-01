@@ -35,7 +35,7 @@ const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
             return;
         }
 
-        fetch('http://localhost:3001/api/v1/auth/signup', {
+        fetch('../api/v2/auth/signup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify( { email: email, password: password, avatar: avatarConfig, username: username, subscriptionType: subplan, subscriptionArea: macroarea } ),
@@ -47,7 +47,7 @@ const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
                 
                 const provToken = data.token
 
-                fetch("http://localhost:3001/api/v1/token/?token="+provToken)
+                fetch("../api/v2/token/?token="+provToken)
                 .then(resp => resp.json())
                 .then(data => {
                     setUser(data.tokenData.id)

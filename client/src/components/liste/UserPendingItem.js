@@ -16,13 +16,13 @@ const UserPendingItem = ({username, avatar, email, token, id}) => {
 
         switch(decision){
             case "approva":
-                fetch("api/v1/users/"+id+"/upgrade?token="+token, {method: 'PATCH'})
+                fetch("../api/v2/users/"+id+"/upgrade?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
                 .then(e.target.className="d-none")
                 .then(data => alert.show(data.message))
                 break;
             case "rifiuta":
-                fetch("api/v1/users/"+id+"/downgrade?token="+token, {method: 'PATCH'})
+                fetch("../api/v2/users/"+id+"/downgrade?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
                 .then(e.target.className="d-none")
                 .then(data => alert.show(data.message))

@@ -14,13 +14,13 @@ const ModeratorPendingItem = ({title, id, email, token}) => {
 
         switch(decision){
             case "approva":
-                fetch("api/v1/documents/"+id+"/validate?token="+token, {method: 'PATCH'})
+                fetch("../api/v2/documents/"+id+"/validate?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
                 .then(e.target.className="d-none")
                 .then(data => alert(data.message))
                 break;
             case "elimina":
-                fetch("api/v1/documents/"+id+"?token="+token, {method: 'DELETE'})
+                fetch("../api/v2/documents/"+id+"?token="+token, {method: 'DELETE'})
                 .then(res => res.json())
                 .then(e.target.className="d-none")
                 .then(data => alert(data.message))

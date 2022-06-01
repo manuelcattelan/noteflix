@@ -15,7 +15,7 @@ const AllUsersItem = ({username, avatar, email, token, id}) => {
 
         switch(decision){
             case "elimina":
-                fetch("api/v1/users/"+id+"?token="+token, {method: 'DELETE'})
+                fetch("../api/v2/users/"+id+"?token="+token, {method: 'DELETE'})
                 .then(res => res.json())
                 .then(e.target.className="d-none")
                 .then(data => alert.show(data.message))

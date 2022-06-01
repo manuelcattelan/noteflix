@@ -15,7 +15,7 @@ const ModeratorConsole = (props) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch("http://localhost:3001/api/v1/token/?token="+props.token)
+        fetch("../api/v2/token/?token="+props.token)
         .then(resp => resp.json())
         .then(data => {
             if(!data.success){

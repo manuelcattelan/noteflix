@@ -15,7 +15,7 @@ const MentorConsole = (props) => {
     const [persona, setPersona] = useState({})
 
     useEffect(() => {
-        fetch("http://localhost:3001/api/v1/documents/uploaded?token="+props.token)
+        fetch("../api/v2/documents/uploaded?token="+props.token)
         .then(resp => resp.json())
         .then(data => {
             if(!data.success){
@@ -26,7 +26,7 @@ const MentorConsole = (props) => {
             }
         })
 
-        fetch("http://localhost:3001/api/v1/users/"+userId+"?token="+props.token)
+        fetch("../api/v2/users/"+userId+"?token="+props.token)
         .then(resp => resp.json())
         .then(data => setPersona(data))
         // .then(alert(JSON.stringify(persona)))

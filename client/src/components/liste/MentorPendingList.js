@@ -12,7 +12,7 @@ const MentorPendingList = (props) => {
     const [mentorList, setMentorList] = useState()
 
     useEffect(() => {
-        fetch("http://localhost:3001/api/v1/users/mentors?token="+props.token)
+        fetch("../api/v2/users/mentors?token="+props.token)
         .then(resp => resp.json())
         .then(data => {
             if(!data.success){

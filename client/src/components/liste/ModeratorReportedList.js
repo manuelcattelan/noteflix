@@ -11,7 +11,7 @@ const ModeratorReportedList = (props) => {
     const [reportedDoc, setReportedDoc] = useState()
 
     useEffect(() => {
-        fetch("http://localhost:3001/api/v1/documents/reported?token="+props.token)
+        fetch("../api/v2/documents/reported?token="+props.token)
         .then(resp => resp.json())
         .then(data => {
             if(!data.success){

@@ -12,7 +12,7 @@ const AllUsersList = (props) => {
     const [userList, setUserList] = useState()
 
     useEffect(() => {
-        fetch("http://localhost:3001/api/v1/users?token="+props.token)
+        fetch("../api/v2/users?token="+props.token)
         .then(resp => resp.json())
         .then(data => {
             if(!data.success){

@@ -12,7 +12,7 @@ const UserPendingList = (props) => {
     const [pendingUsers, setPendingUsers] = useState()
 
     useEffect(() => {
-        fetch("http://localhost:3001/api/v1/users/pending?token="+props.token)
+        fetch("../api/v2/users/pending?token="+props.token)
         .then(resp => resp.json())
         .then(data => {
             if(!data.success){

@@ -14,7 +14,7 @@ const MentorPendingItem = ({username, avatar, email, token, id}) => {
 
         switch(decision){
             case "downgrade":
-                fetch("api/v1/users/"+id+"/downgrade?token="+token, {method: 'PATCH'})
+                fetch("../api/v2/users/"+id+"/downgrade?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
                 .then(e.target.className="d-none")
                 .then(data => alert(data.message))

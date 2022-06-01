@@ -15,7 +15,7 @@ const MentorWannaBe = (props) => {
     const token = JSON.parse(window.localStorage.getItem("token"))
 
     useEffect(() => {
-        fetch("http://localhost:3001/api/v1/token/?token="+token)
+        fetch("../api/v2/token/?token="+token)
         .then(resp => resp.json())
         .then(data => {
             if(!data.success){
@@ -25,7 +25,7 @@ const MentorWannaBe = (props) => {
     }, []);
 
     const handleRequest = () => {
-        // fetch("api/v1//users/changeSubscription?token="+token, {
+        // fetch("api/v2/users/changeSubscription?token="+token, {
         //     method: 'PATCH',
         //     headers: { 'Content-Type': 'application/json' },
         //     body: JSON.stringify( { subscriptionType: subplan, subscriptionArea: macroarea } ),

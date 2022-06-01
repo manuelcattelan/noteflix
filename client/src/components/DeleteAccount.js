@@ -16,7 +16,7 @@ const DeleteAccount = () => {
         e.preventDefault()
         const typedUsername = document.getElementById("typed-username").value
         if(persona.username === typedUsername){
-            fetch("api/v1/users/"+id+"?token="+token, {method: 'DELETE'})
+            fetch("../api/v2/users/"+id+"?token="+token, {method: 'DELETE'})
             .then(res => res.json())
             .then(e.target.className="d-none")
             //logout
@@ -30,7 +30,7 @@ const DeleteAccount = () => {
     
     const [persona, setPersona] = useState({})
     useEffect(()=>{
-        fetch("http://localhost:3001/api/v1/users/"+id+"?token="+token)
+        fetch("../api/v2/users/"+id+"?token="+token)
         .then(resp => resp.json())
         .then(data => setPersona(data))
         // .then(alert(JSON.stringify(persona)))

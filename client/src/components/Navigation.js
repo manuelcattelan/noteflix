@@ -19,7 +19,7 @@ const Navigation = (props) => {
     const userId = JSON.parse(window.localStorage.getItem("user"))
     const [persona, setPersona] = useState({})
     useEffect(()=>{
-        fetch("http://localhost:3001/api/v1/users/"+userId+"?token="+props.token)
+        fetch("../api/v2/users/"+userId+"?token="+props.token)
         .then(resp => resp.json())
         .then(data => setPersona(data))
         // .then(alert(JSON.stringify(persona)))

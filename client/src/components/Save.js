@@ -5,7 +5,7 @@ const Save = ({id, saved}) => {
     const token = JSON.parse(window.localStorage.getItem("token"))
 
     const handleSave = () => {
-        fetch("http://localhost:3001/api/v1/documents/"+id+"/save?token="+token, {method: 'POST'})
+        fetch("../api/v2/documents/"+id+"/save?token="+token, {method: 'POST'})
         .then(res => res.json())
         .then(data => {
             if(data.success){

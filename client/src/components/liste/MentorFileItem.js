@@ -12,7 +12,7 @@ const MentorFileItem = ({token, id, title, status, votes, like, comments}) => {
                 //da implementare
                 break;
             case "elimina":
-                fetch("api/v1/documents/"+id+"?token="+token, {method: 'DELETE'})
+                fetch("../api/v2/documents/"+id+"?token="+token, {method: 'DELETE'})
                 .then(res => res.json())
                 .then(data => alert(data.message))
                 break;

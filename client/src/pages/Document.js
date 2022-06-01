@@ -69,7 +69,7 @@ const Document = (props) => {
 
                
     useEffect(()=>{                          
-        fetch("http://localhost:3001/api/v1/documents/"+id+"?token="+props.token)
+        fetch("../api/v2/documents/"+id+"?token="+props.token)
         .then(resp => resp.json())
         .then(data => {
             if(data.success){

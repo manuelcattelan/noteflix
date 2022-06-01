@@ -5,7 +5,7 @@ const Rating = ({like, dislike, id, rating, token, saved}) => {
 
 
     const handleLike = (e) => {
-        fetch("http://localhost:3001/api/v1/documents/"+id+"/like?token="+token, {method: 'PATCH'})
+        fetch("../api/v2/documents/"+id+"/like?token="+token, {method: 'PATCH'})
         .then(res => res.json())
         .then(data => {
             if(data.success){
@@ -24,7 +24,7 @@ const Rating = ({like, dislike, id, rating, token, saved}) => {
     }
 
     const handleDislike = (e) => {
-        fetch("http://localhost:3001/api/v1/documents/"+id+"/dislike?token="+token, {method: 'PATCH'})
+        fetch("../api/v2/documents/"+id+"/dislike?token="+token, {method: 'PATCH'})
         .then(res => res.json())
         .then(data => {
             if(data.success){

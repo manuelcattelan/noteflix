@@ -14,13 +14,13 @@ const ModeratorFileItemReported = ({token, id, title, reportedTimes}) => {
 
         switch(decision){
             case "rimuovi":
-                fetch("api/v1/documents/"+id+"/validate?token="+token, {method: 'PATCH'})
+                fetch("../api/v2/documents/"+id+"/validate?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
                 .then(e.target.className="d-none")
                 .then(data => alert.show(data.message))
                 break;
             case "elimina":
-                fetch("api/v1/documents/"+id+"?token="+token, {method: 'DELETE'})
+                fetch("../api/v2/documents/"+id+"?token="+token, {method: 'DELETE'})
                 .then(res => res.json())
                 .then(e.target.className="d-none")
                 .then(data => alert.show(data.message))

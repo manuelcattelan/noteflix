@@ -25,7 +25,7 @@ const ChangePassword = () => {
             return false;
         }
 
-        fetch("api/v1/users/changePassword?token="+token, {
+        fetch("../api/v2/users/changePassword?token="+token, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify( { oldPassword: oldPwd, newPassword: newPwd } ),
@@ -38,7 +38,7 @@ const ChangePassword = () => {
     
     const [persona, setPersona] = useState({})
     useEffect(()=>{
-        fetch("http://localhost:3001/api/v1/users/"+id+"?token="+token)
+        fetch("../api/v2/users/"+id+"?token="+token)
         .then(resp => resp.json())
         .then(data => setPersona(data))
         // .then(alert(JSON.stringify(persona)))

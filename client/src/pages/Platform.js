@@ -23,7 +23,7 @@ const Platform = (props) => {
 
     //esegue il fetch al caricamento dell'app e al cambiamento di token
     useEffect(() => () => {
-        const url='http://localhost:3001/api/v1/documents/?token='+token
+        const url='../api/v2/documents/?token='+token
         fetch(url, {
             method: 'GET',
         })
