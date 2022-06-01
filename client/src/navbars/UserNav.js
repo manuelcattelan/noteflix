@@ -1,8 +1,9 @@
 import React from 'react';
-import { Navbar, Nav, NavDropdown, Badge } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Badge, Dropdown } from 'react-bootstrap';
 import Avatar from 'react-nice-avatar';
 import { HashLink as Link } from 'react-router-hash-link';
 import ChangePassword from '../components/ChangePassword';
+import ChangePlan from '../components/ChangePlan';
 import DeleteAccount from '../components/DeleteAccount';
 import logolight from "../media/logolight.svg"
 
@@ -41,12 +42,15 @@ const UserNav = (props) => {
                                 <NavDropdown.Item href="#" onClick={props.handleLogout}>
                                     Disconnettiti
                                 </NavDropdown.Item>
+                                <hr />
                                 <NavDropdown.Item>
                                     <Link to="/mentorwannabe" className='text-dark'>
                                         Diventa Mentor
                                     </Link>
                                 </NavDropdown.Item>
                                 <ChangePassword/>
+                                <ChangePlan/>
+                                <hr />
                                 <DeleteAccount/>
                             </NavDropdown>
                         </Nav>   

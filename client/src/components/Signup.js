@@ -116,7 +116,7 @@ const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
 
     return (
         <>
-            <Form className="my-5" onSubmit={handleSubmit}>
+            <Form className="my-5 mx-5" onSubmit={handleSubmit}>
                 <div className="d-flex justify-content-center">
                     <span onClick={handleAvatarChange} style={{ cursor:"pointer" }}>
                         <Avatar style={{ width: '7rem', height: '7rem' }} {...avatarConfig}/>
@@ -155,7 +155,7 @@ const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
                         <option value="nerd">Nerd</option>
                     </Form.Select>
                     <Form.Text id="info-abbonamento" className="text-muted">
-                        Non condivideremo la tua email con terze parti.
+                        Non sono previsti costi per il piano selezionato
                     </Form.Text>
                 </Form.Group>
                 <Form.Group id="macroarea" className="d-none">

@@ -84,14 +84,9 @@ const Platform = (props) => {
             </Flicking> */}
 
 
-            <Container>
-                <p className="text-center titoletti">Tutti i documenti</p>
-            </Container>
-
-            <Container className="d-flex justify-content-center flex-wrap">
-                <Risultati documenti={docArray.documents}/>
-            </Container>
-
+            
+            <Risultati documenti={docArray.documents}/>
+            
 
         </>
     );

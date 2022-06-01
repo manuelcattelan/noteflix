@@ -68,7 +68,7 @@ const Login = ({setToken, token, setUser, user, setPage, setNavbar}) => {
 
     return (
         <>
-            <Form className="mt-5" onSubmit={handleSubmit}>
+            <Form className="mt-5 mx-5" onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Indirizzo Email</Form.Label>
                     <Form.Control type="email" placeholder="Inserisci la tua email" onChange={(e)=>setEmail(e.target.value)} required/>

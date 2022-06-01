@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Accordion, ListGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import notfound from '../../media/not-found.svg'
+import nolib from '../../media/empty-library.svg'
 import LibraryItem from './LibraryItem';
 
 const LibraryList = ({documenti}) => {
@@ -41,7 +41,10 @@ const LibraryList = ({documenti}) => {
                 }
                 </Accordion>
                 :
-                ""
+                <p className='text-center'>
+                    <img src={nolib} alt="no document reported" style={{height:"20rem"}}/> <br/>
+                    Seleziona un file della piattaforma e salvalo per aggiungerlo alla libreria.
+                </p>
             }
         </ListGroup>
     );

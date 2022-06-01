@@ -50,7 +50,7 @@ const ChangePassword = () => {
                 Cambia password
             </NavDropdown.Item>
 
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={show} onHide={handleClose} centered>
                 <Modal.Header closeButton>
                 <Modal.Title>Modifica la tua password</Modal.Title>
                 </Modal.Header>

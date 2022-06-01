@@ -145,8 +145,9 @@ const Document = (props) => {
                     </Row>
                 </Container>
                 :
-                <Container className="d-flex justify-content-center align-items-center" style={{height:"80vh"}}>
-                    <Spinner animation="border" variant="primary" />
+                <Container className="d-flex flex-column justify-content-center align-items-center" style={{height:"80vh"}}>
+                        <Spinner animation="border" variant="primary" className='text-center'/>
+                        <p className="mt-2 text-center">Stiamo caricando il tuo documento, tieni duro.</p>
                 </Container>
             }
             

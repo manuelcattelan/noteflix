@@ -42,7 +42,7 @@ const DeleteAccount = () => {
                 Elimina l'account
             </NavDropdown.Item>
 
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={show} onHide={handleClose} centered>
                 <Modal.Header closeButton>
                 <Modal.Title>Elimina il tuo account</Modal.Title>
                 </Modal.Header>
