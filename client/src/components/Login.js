@@ -55,7 +55,8 @@ const Login = ({setToken, token, setUser, user, setPage, setNavbar}) => {
                           break;
                         default:
                           setNavbar("user")
-                          setPage(<Platform token={data.token} navbar="user"/>) navigate('/')
+                          setPage(<Platform token={data.token} navbar="user"/>)
+                          navigate('/')
                     }
                 })
                 
