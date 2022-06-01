@@ -27,7 +27,7 @@ function App() {
 
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/v1/token/?token="+token)
+    fetch("../api/v2/token/?token="+token)
     .then(resp => resp.json())
     .then(data => {
       setUser(data.tokenData.id)
