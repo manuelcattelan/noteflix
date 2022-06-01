@@ -6,6 +6,7 @@ import ModeratorReportedList from '../components/liste/ModeratorReportedList';
 import ModeratorPendingList from '../components/liste/ModeratorPendingList';
 import UserPendingList from '../components/liste/UserPendingList';
 import MentorPendingList from '../components/liste/MentorPendingList';
+import AllUsersList from '../components/liste/AllUsersList';
 
 
 
@@ -45,6 +46,9 @@ const ModeratorConsole = (props) => {
                             <Nav.Item>
                                 <Nav.Link eventKey="mentor-list">Mentor del sito</Nav.Link>
                             </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link eventKey="user-list">Utenti del sito</Nav.Link>
+                            </Nav.Item>
                         </Nav>
                     </Col>
                     <Col id="console-panes" sm={9}>
@@ -60,6 +64,9 @@ const ModeratorConsole = (props) => {
                             </Tab.Pane>
                             <Tab.Pane eventKey="mentor-list">
                                 <MentorPendingList token={props.token}/>
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="user-list">
+                                <AllUsersList token={props.token}/>
                             </Tab.Pane>
                         </Tab.Content>
                     </Col>
