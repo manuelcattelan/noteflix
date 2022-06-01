@@ -337,7 +337,7 @@ router.delete('/:id', async (req, res) => {
             })
     }
     // only moderators or account owners can delete their account
-    if (req.loggedUser.type != "moderator" || req.loggedUser.id != req.params.id){
+    if (req.loggedUser.type != "moderator" && req.loggedUser.id != req.params.id){
         return res
             .status(403)
             .json({
@@ -349,17 +349,17 @@ router.delete('/:id', async (req, res) => {
     user.deleteOne()
         .then( () => {
             console.log('-> user deleted successfully')
-            return result
+            return res
                 .status(200)
                 .json({
                     success: true,
                     message: 'User deleted successfully'
                 })
         })
-        .catch( error => {
+        .catch( (error) => {
             // document deletion failed
             console.log('-> user deletion failed')
-            return result
+            return res
                 .status(400)
                 .json({
                     success: false,
