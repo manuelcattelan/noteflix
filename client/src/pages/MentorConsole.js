@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import { Container, ButtonToolbar, ButtonGroup, Button, ListGroup, Row, Col, Form } from 'react-bootstrap';
+import { Container, Button, Row, Col, Form } from 'react-bootstrap';
 import Navigation from '../components/Navigation';
-import Avatar, { AvatarConfig } from 'react-nice-avatar'
+import Avatar from 'react-nice-avatar'
 import { useNavigate } from 'react-router-dom';
 import MentorFileList from '../components/liste/MentorFileList';
 
@@ -15,7 +15,7 @@ const MentorConsole = (props) => {
     const [persona, setPersona] = useState({})
 
     useEffect(() => {
-        fetch("http://localhost:3001/api/v1/documents/uploaded?token="+props.token)
+        fetch("../api/v2/documents/uploaded?token="+props.token)
         .then(resp => resp.json())
         .then(data => {
             if(!data.success){
@@ -26,13 +26,13 @@ const MentorConsole = (props) => {
             }
         })
 
-        fetch("http://localhost:3001/api/v1/users/"+userId+"?token="+props.token)
+        fetch("../api/v2/users/"+userId+"?token="+props.token)
         .then(resp => resp.json())
         .then(data => setPersona(data))
         // .then(alert(JSON.stringify(persona)))
 
 
-    }, [""]);
+    }, []);
 
     
 

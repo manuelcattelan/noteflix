@@ -11,6 +11,9 @@
               user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 
+.Save{
+    cursor: pointer;
+}
 
 /* nascondere la scrollbar */
 html::-webkit-scrollbar {
@@ -47,21 +50,25 @@ a{
 .dropdown-menu.show{
     padding: 0;
     margin-top: 20px !important;
-    background: var(--page-background);
+    background:#fff;
     border-color: var(--text) !important;
 }
 .dropdown-toggle.nav-link{
     color: #623FF0 !important;
 }
 .dropdown-item{
+    padding-top: 2 !important;
+    padding-bottom: 2 !important;
     color: var(--text) !important;
-    
+}
+hr{
+    margin: 0 !important;
 }
 .dropdown-item:hover{
     background: var(--page-background) !important;
 }
 .dropdown-toggle::after {
-    display: none !important;
+    vertical-align: 0.12em !important;
 }
 
 
@@ -91,3 +98,12 @@ a{
 }
 
 
+.accordion-button{
+    padding: 1px !important;
+    padding-right: 10px !important;
+    background-color: #fff !important;
+}
+
+.modal-open .container-fluid, .modal-open  .container {
+    -webkit-filter: blur(5px) grayscale(90%);
+}

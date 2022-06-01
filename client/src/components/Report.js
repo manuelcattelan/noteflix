@@ -11,7 +11,7 @@ const Report = ({id, token}) => {
     const handleReport = (e) => {
         e.preventDefault()
 
-        fetch("http://localhost:3001/api/v1/documents/"+id+"/report?token="+token, {method: 'PATCH'})
+        fetch("../api/v2/documents/"+id+"/report?token="+token, {method: 'PATCH'})
         .then(res => res.json())
         .then(handleClose)
         .then(data => alert(data.message))   

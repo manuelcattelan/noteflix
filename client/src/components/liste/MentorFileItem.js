@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { ListGroup, Button, ButtonGroup, ButtonToolbar, Badge, Form, ModalTitle } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { ListGroup, Button, Badge, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const MentorFileItem = ({token, id, title, status, votes, like, comments}) => {
@@ -12,7 +12,7 @@ const MentorFileItem = ({token, id, title, status, votes, like, comments}) => {
                 //da implementare
                 break;
             case "elimina":
-                fetch("api/v1/documents/"+id+"?token="+token, {method: 'DELETE'})
+                fetch("../api/v2/documents/"+id+"?token="+token, {method: 'DELETE'})
                 .then(res => res.json())
                 .then(data => alert(data.message))
                 break;
@@ -41,8 +41,8 @@ const MentorFileItem = ({token, id, title, status, votes, like, comments}) => {
                 
             </div>
             <ListGroup className="me-3" horizontal>
-                <ListGroup.Item>{comments == 1 ? "1 commento" : comments + " commenti"}</ListGroup.Item>
-                <ListGroup.Item>{votes == 1 ? "1 valutazione" : votes + " valutazioni"}</ListGroup.Item>
+                <ListGroup.Item>{comments === 1 ? "1 commento" : comments + " commenti"}</ListGroup.Item>
+                <ListGroup.Item>{votes === 1 ? "1 valutazione" : votes + " valutazioni"}</ListGroup.Item>
                 <ListGroup.Item>{like == null ? "Nessun like" : "Piace al " + like + "%"}</ListGroup.Item>
             </ListGroup>
             <Link to={"/document/?id="+id}>

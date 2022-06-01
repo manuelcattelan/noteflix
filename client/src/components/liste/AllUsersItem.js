@@ -1,29 +1,24 @@
 import React, { useState } from 'react';
 import { ListGroup, Button, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import Avatar from 'react-nice-avatar';
+import { useAlert } from 'react-alert'
 
-const ModeratorPendingItem = ({title, id, email, token}) => {
+const AllUsersItem = ({username, avatar, email, token, id}) => {
 
     const mailto = "mailto:" + email
+    const alert = useAlert()
 
     const [decision, setDecision] = useState()
-
     const handleSubmit = (e) => {
 
         e.preventDefault();
 
         switch(decision){
-            case "approva":
-                fetch("../api/v2/documents/"+id+"/validate?token="+token, {method: 'PATCH'})
-                .then(res => res.json())
-                .then(e.target.className="d-none")
-                .then(data => alert(data.message))
-                break;
             case "elimina":
-                fetch("../api/v2/documents/"+id+"?token="+token, {method: 'DELETE'})
+                fetch("../api/v2/users/"+id+"?token="+token, {method: 'DELETE'})
                 .then(res => res.json())
                 .then(e.target.className="d-none")
-                .then(data => alert(data.message))
+                .then(data => alert.show(data.message))
                 break;
         }
     }
@@ -34,18 +29,15 @@ const ModeratorPendingItem = ({title, id, email, token}) => {
             as="li"
             className="d-flex justify-content-between align-items-center"
         >
-            <div className="fw-bold ms-2 me-auto">{title}</div>
+            <Avatar className="ms-2" style={{ width: '3rem', height: '3rem' }} {...avatar}/>
+            <div className="fw-bold ms-2 me-auto">{username}</div>
             <a href={mailto} target="_blank" rel="noreferrer">
                 <span className="fw-bold text-primary me-3">Scrivi a {email}</span>
             </a>
-            <Link to={"/document/?id="+id}>
-                <Button variant="outline-primary">Visualizza</Button>
-            </Link>
             <Form className="d-flex" onSubmit={handleSubmit}>
                 <Form.Select className='mx-3' id="macroarea" maxlength="160" onChange={(e) => setDecision(e.target.value)}>
                     <option disabled selected value="">- seleziona un'azione</option>
-                    <option value="approva">Approva documento</option>
-                    <option value="elimina">Elimina documento</option>
+                    <option value="elimina">Elimina l'utente</option>
                 </Form.Select>
                 <Button type="submit" size="sm" variant="primary">Salva</Button>
             </Form>
@@ -54,4 +46,4 @@ const ModeratorPendingItem = ({title, id, email, token}) => {
     );
 };
 
-export default ModeratorPendingItem;
+export default AllUsersItem;

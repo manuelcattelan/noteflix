@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Nav, Form, Button, Col, Row } from 'react-bootstrap';
+import { Container, Col, Row } from 'react-bootstrap';
 import Navigation from '../components/Navigation';
 import check from '../media/completed.svg'
 
@@ -10,7 +10,7 @@ const Policy = (props) => {
             <Container>
                 <Container>
                     <p className='h1 my-5 fw-bold'>Processo di verifica documenti <br/> della piattaforma <span className='font-italic text-primary'>Noteflix</span></p>
-                    <p className=''> Scritto dai membri dello <a style={{textDecoration:"none"}} href="" target="_blank">staff</a> </p>
+                    <p className=''> Scritto dai membri dello staff </p>
                     <Row>
                         <Col md="5">
                             <p>
@@ -49,14 +49,14 @@ const Policy = (props) => {
                             </p>
                         </Col>
                         <Col md="7" className='d-flex justify-content-center'>
-                            <img src={check} style={{height:"44vh"}}/>
+                            <img src={check} alt="document checking process" style={{height:"44vh"}}/>
                         </Col>
                     </Row>
                 </Container>
                 <Container className='my-5'>
                     
                     <p className='h1 my-5 fw-bold'>Tutela dei dati personali,<br/> l'importanza della <span className='font-italic text-primary'>trasparenza</span></p>
-                    <p className=''> Scritto dai membri dello <a style={{textDecoration:"none"}} href="" target="_blank">staff</a> </p>
+                    <p className=''> Scritto dai membri dello staff </p>
                     <Row>
                         <Col md="9">
                             <p>

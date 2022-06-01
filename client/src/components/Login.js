@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import useLocalStorage from "../hooks/useLocalStorage";//hooks
-import { HashLink as Link } from 'react-router-hash-link';
-import { Routes, Route, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import Platform from '../pages/Platform';
 
 
@@ -21,7 +19,7 @@ const Login = ({setToken, token, setUser, user, setPage, setNavbar}) => {
         
         e.preventDefault()
 
-        fetch('../api/v1/auth/login', {
+        fetch('../api/v2/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify( { email: email, password: password } ),
@@ -33,7 +31,7 @@ const Login = ({setToken, token, setUser, user, setPage, setNavbar}) => {
                 
                 const provToken = data.token
 
-                fetch("../api/v1/token/?token="+provToken)
+                fetch("../api/v2/token/?token="+provToken)
                 .then(resp => resp.json())
                 .then(data => {
                     setUser(data.tokenData.id)
@@ -70,7 +68,7 @@ const Login = ({setToken, token, setUser, user, setPage, setNavbar}) => {
 
     return (
         <>
-            <Form className="mt-5" onSubmit={handleSubmit}>
+            <Form className="mt-5 mx-5" onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Indirizzo Email</Form.Label>
                     <Form.Control type="email" placeholder="Inserisci la tua email" onChange={(e)=>setEmail(e.target.value)} required/>
