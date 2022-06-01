@@ -21,7 +21,7 @@ const Login = ({setToken, token, setUser, user, setPage, setNavbar}) => {
         
         e.preventDefault()
 
-        fetch('http://localhost:3001/api/v1/auth/login', {
+        fetch('../api/v1/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify( { email: email, password: password } ),
@@ -33,7 +33,7 @@ const Login = ({setToken, token, setUser, user, setPage, setNavbar}) => {
                 
                 const provToken = data.token
 
-                fetch("http://localhost:3001/api/v1/token/?token="+provToken)
+                fetch("../api/v1/token/?token="+provToken)
                 .then(resp => resp.json())
                 .then(data => {
                     setUser(data.tokenData.id)
@@ -55,8 +55,7 @@ const Login = ({setToken, token, setUser, user, setPage, setNavbar}) => {
                           break;
                         default:
                           setNavbar("user")
-                          setPage(<Platform token={data.token} navbar="user"/>)
-                          navigate('/')
+                          setPage(<Platform token={data.token} navbar="user"/>) navigate('/')
                     }
                 })
                 
