@@ -2,6 +2,7 @@ import React from 'react';
 import { Navbar, Nav, NavDropdown, Badge } from 'react-bootstrap';
 import Avatar from 'react-nice-avatar';
 import { HashLink as Link } from 'react-router-hash-link';
+import DeleteAccount from '../components/DeleteAccount';
 import logolight from "../media/logolight.svg"
 
 const ModeratorNav = (props) => {
@@ -41,6 +42,7 @@ const ModeratorNav = (props) => {
                                 <NavDropdown.Item href="#" onClick={props.handleLogout}>
                                     Disconnettiti
                                 </NavDropdown.Item>
+                                <DeleteAccount/>
                             </NavDropdown>
                         </Nav>                        
                     </Navbar.Collapse>
