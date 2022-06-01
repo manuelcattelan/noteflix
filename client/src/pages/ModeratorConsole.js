@@ -49,7 +49,7 @@ const ModeratorConsole = (props) => {
                             <Nav.Item>
                                 <Nav.Link eventKey="user-list">Utenti del sito</Nav.Link>
                             </Nav.Item>
-                        </Nav>
+                      </Nav>
                     </Col>
                     <Col id="console-panes" sm={9}>
                         <Tab.Content className='mt-3'>
