@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { ListGroup, Button, Form } from 'react-bootstrap';
 import Avatar from 'react-nice-avatar';
-import { useAlert } from 'react-alert'
+
 
 const UserPendingItem = ({username, avatar, email, token, id}) => {
 
     const mailto = "mailto:" + email
-    const alert = useAlert()
+    
 
     const [decision, setDecision] = useState()
 
@@ -19,13 +19,13 @@ const UserPendingItem = ({username, avatar, email, token, id}) => {
                 fetch("../api/v2/users/"+id+"/upgrade?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
                 .then(e.target.className="d-none")
-                .then(data => alert.show(data.message))
+                .then(data => alert(data.message))
                 break;
             case "rifiuta":
                 fetch("../api/v2/users/"+id+"/downgrade?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
                 .then(e.target.className="d-none")
-                .then(data => alert.show(data.message))
+                .then(data => alert(data.message))
                 break;
         }
     }

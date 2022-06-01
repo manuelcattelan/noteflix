@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import { ListGroup, Button, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { useAlert } from 'react-alert'
+
 
 const ModeratorFileItemReported = ({token, id, title, reportedTimes}) => {
 
-    const alert = useAlert()
+    
     const [decision, setDecision] = useState()
 
     const handleSubmit = (e) => {
@@ -17,13 +17,13 @@ const ModeratorFileItemReported = ({token, id, title, reportedTimes}) => {
                 fetch("../api/v2/documents/"+id+"/validate?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
                 .then(e.target.className="d-none")
-                .then(data => alert.show(data.message))
+                .then(data => alert(data.message))
                 break;
             case "elimina":
                 fetch("../api/v2/documents/"+id+"?token="+token, {method: 'DELETE'})
                 .then(res => res.json())
                 .then(e.target.className="d-none")
-                .then(data => alert.show(data.message))
+                .then(data => alert(data.message))
                 break;
         }
     }

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Button, Form, Modal, NavDropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { useAlert } from 'react-alert'
+
 import macroaree from '../data/macroaree.json'
     
 
@@ -14,7 +14,7 @@ const ChangePlan = () => {
     const id = JSON.parse(window.localStorage.getItem("user"))
     const token = JSON.parse(window.localStorage.getItem("token"))
     const navigate = useNavigate()
-    const alert = useAlert()
+    
 
     const [subplan, setSubplan] = useState("matricole")
     const [macroarea, setMacroarea] = useState("")
@@ -47,7 +47,7 @@ const ChangePlan = () => {
 
         })
         .then(res => res.json())
-        .then(data => alert.show(data.message))
+        .then(data => alert(data.message))
         
         //logout
         localStorage.removeItem("token")

@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import './style/Custom.scss' //customization of bootstrap colors
 import logolight from "./media/logolight.svg"
 
-// CUSTOM ALERTS
+/*// CUSTOM ALERTS
 import { transitions, positions, Provider as AlertProvider } from 'react-alert'
 import { ToastContainer, Toast } from 'react-bootstrap';
 const options = {
@@ -30,16 +30,14 @@ const Notifica = ({ message, close }) => {
         </Toast>
     </ToastContainer>
   );
-};
+};*/
 
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <AlertProvider template={Notifica}  {...options}>
       <App />
-    </AlertProvider>
   </React.StrictMode>
 );
 

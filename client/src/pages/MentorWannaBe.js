@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '../components/Navigation';
-import { useAlert } from 'react-alert'
+
 import img from '../media/mentorwannabe.svg'
 
 
@@ -10,7 +10,7 @@ import img from '../media/mentorwannabe.svg'
 const MentorWannaBe = (props) => {
 
     const navigate = useNavigate();
-    const alert = useAlert()
+    
 
     const token = JSON.parse(window.localStorage.getItem("token"))
 
@@ -32,7 +32,7 @@ const MentorWannaBe = (props) => {
 
         // })
         // .then(res => res.json())
-        // .then(data => alert.show(data.message))
+        // .then(data => alert(data.message))
     }
 
 

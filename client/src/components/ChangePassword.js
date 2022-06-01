@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Button, Form, Modal, NavDropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { useAlert } from 'react-alert'
+
 
 const ChangePassword = () => {
 
@@ -12,7 +12,7 @@ const ChangePassword = () => {
     const id = JSON.parse(window.localStorage.getItem("user"))
     const token = JSON.parse(window.localStorage.getItem("token"))
     const navigate = useNavigate()
-    const alert = useAlert()
+    
 
     const handlePwdChange = (e) => {
         e.preventDefault()
@@ -21,7 +21,7 @@ const ChangePassword = () => {
         var newPwdConfirm = document.getElementById("new-password-confirm").value
 
         if (newPwd !== newPwdConfirm) {
-            alert.show("Passwords do not match.");
+            alert("Passwords do not match.");
             return false;
         }
 
@@ -32,7 +32,7 @@ const ChangePassword = () => {
 
         })
         .then(res => res.json())
-        .then(data => alert.show(data.message))
+        .then(data => alert(data.message))
     }        
 
     
