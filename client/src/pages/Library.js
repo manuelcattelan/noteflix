@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import LibraryList from '../components/liste/LibraryList';
 import Navigation from '../components/Navigation';
 import Risultati from '../components/Risultati';
 
@@ -39,8 +40,8 @@ const Library = (props) => {
                 <p className='titolo text-center mt-5'>Ecco la tua <span className='text-primary'>libreria</span> personale.</p>
                 <p className='testo text-center'>Qui troverai i documenti che hai salvato dalla sezione esplora.</p>        
             </Container>
-            <Container className="d-flex justify-content-center flex-wrap">
-                <Risultati documenti={docArray.documents}/>
+            <Container>
+                <LibraryList documenti={docArray.documents}/>
             </Container>
         </>
     );

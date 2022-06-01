@@ -12,7 +12,6 @@ const Risultati = (props) => {
                         descrizione={item.description}
                         url={item.url}
                         macroarea={item.area}
-                        autore={item.author}
                         id={item._id}
                         approval={item.approval}
                     /> 
