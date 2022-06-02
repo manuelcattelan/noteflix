@@ -7,7 +7,7 @@ import Platform from '../pages/Platform';
 import macroaree from '../data/macroaree.json'
     
 
-const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
+const Signup = ({setPage, setNavbar, setUser, setPersona, user, setToken}) => {
 
 
     //handling avatar
@@ -50,7 +50,14 @@ const Signup = ({setPage, setNavbar, setUser, user, setToken}) => {
                 fetch("../api/v2/token/?token="+provToken)
                 .then(resp => resp.json())
                 .then(data => {
+
                     setUser(data.tokenData.id)
+
+                    //fetch per ottenere username e avatar utente
+                    fetch("../api/v2/users/"+data.tokenData.id+"?token="+provToken)
+                    .then(resp => resp.json())
+                    .then(data => setPersona(data))
+
                     switch(data.tokenData.type) {
                         case "mentor":
                           setNavbar("mentor")

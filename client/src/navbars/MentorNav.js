@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Navbar, Nav, NavDropdown, Badge } from 'react-bootstrap';
 import Avatar from 'react-nice-avatar';
 import { HashLink as Link } from 'react-router-hash-link';
@@ -8,9 +8,15 @@ import DeleteAccount from '../components/DeleteAccount';
 import logolight from "../media/logolight.svg"
 
 const MentorNav = (props) => {
+
+    const persona = JSON.parse(window.localStorage.getItem("persona"))
+    
     return (
         <>
-            <Navbar className="mx-5 mt-1" collapseOnSelect expand="lg" style={{position:"sticky", top: "0", zIndex:"100"}}>
+            {
+                persona
+                ?
+                <Navbar className="mx-5 mt-1" collapseOnSelect expand="lg" style={{position:"sticky", top: "0", zIndex:"100"}}>
                     <Navbar.Brand href="#home">
                         <Link to="/">
                             <img
@@ -41,8 +47,8 @@ const MentorNav = (props) => {
                             </Link>
                         </Nav>
                         <Nav className="ms-3 me-2">
-                            <Avatar style={{ width: '3rem', height: '3rem' }} {...props.persona.avatar}/>
-                            <NavDropdown title={props.persona.username} className="fw-bold mt-1 ms-2">
+                            <Avatar style={{ width: '3rem', height: '3rem' }} {...persona.avatar}/>
+                            <NavDropdown title={persona.username} className="fw-bold mt-1 ms-2">
                                 <NavDropdown.Item href="#" onClick={props.handleLogout}>
                                     Disconnettiti
                                 </NavDropdown.Item>
@@ -54,7 +60,11 @@ const MentorNav = (props) => {
                             </NavDropdown>
                         </Nav>    
                     </Navbar.Collapse>
-            </Navbar>
+                </Navbar>
+                :
+                ""
+            }
+            
         </>
     );
 };

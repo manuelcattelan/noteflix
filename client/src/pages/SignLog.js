@@ -14,10 +14,10 @@ const SignLog = (props) => {
                             <p className="titolo text-center my-5">Tutte le risorse di cui hai <br/>bisogno, a portata di <span className='text-primary'>click.</span></p>
                             <Tabs justify defaultActiveKey="login">
                                 <Tab eventKey="login" title="Accedi">
-                                    <Login token={props.token} setToken={props.setToken} setPage={props.setPage} setUser={props.setUser} setNavbar={props.setNavbar}/>
+                                    <Login token={props.token} setToken={props.setToken} setPage={props.setPage} setUser={props.setUser} setPersona={props.setPersona} setNavbar={props.setNavbar}/>
                                 </Tab>
                                 <Tab eventKey="signup" title="Registrati">
-                                    <Signup token={props.token} setToken={props.setToken} setPage={props.setPage} setUser={props.setUser} setNavbar={props.setNavbar}/>
+                                    <Signup token={props.token} setToken={props.setToken} setPage={props.setPage} setUser={props.setUser} setPersona={props.setPersona} setNavbar={props.setNavbar}/>
                                 </Tab>
                             </Tabs>
                         </div>

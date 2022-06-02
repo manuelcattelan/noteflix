@@ -4,7 +4,7 @@ import {useNavigate} from 'react-router-dom';
 import Platform from '../pages/Platform';
 
 
-const Login = ({setToken, token, setUser, user, setPage, setNavbar}) => {
+const Login = ({setToken, token, setUser, setPersona, user, setPage, setNavbar}) => {
 
     
     //stato per il form
@@ -35,6 +35,12 @@ const Login = ({setToken, token, setUser, user, setPage, setNavbar}) => {
                 .then(resp => resp.json())
                 .then(data => {
                     setUser(data.tokenData.id)
+
+                    //fetch per ottenere username e avatar utente
+                    fetch("../api/v2/users/"+data.tokenData.id+"?token="+provToken)
+                    .then(resp => resp.json())
+                    .then(data => setPersona(data))
+
                     switch(data.tokenData.type) {
                         case "mentor":
                           setNavbar("mentor")
