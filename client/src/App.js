@@ -13,7 +13,6 @@ import Upload from './pages/Upload';
 import Policy from './pages/Policy';
 import Document from './pages/Document';
 import MentorWannaBe from './pages/MentorWannaBe';
-import Test from './pages/Test';
 import ModeratorConsole from './pages/ModeratorConsole';
 
 
@@ -70,9 +69,6 @@ function App() {
           
           {/* carica una pagina a "/" a seconda se l'utente è loggato o meno */}
           <Route path='/' exact element={page} />
-
-
-          <Route path='/test' exact element={<Test/>} />
 
 
           {/* pagine accessibili da tutti (anche non loggati) */}

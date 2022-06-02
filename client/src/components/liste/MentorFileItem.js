@@ -51,7 +51,7 @@ const MentorFileItem = ({token, id, title, status, votes, like, comments}) => {
             <Form className="d-flex" onSubmit={handleSubmit}>
                 <Form.Select className='mx-3' id="macroarea" maxlength="160" onChange={(e) => setDecision(e.target.value)}>
                     <option disabled selected value>- seleziona un'azione</option>
-                    <option value="modifica">Modifica</option>
+                    {/* <option value="modifica">Modifica</option> */}
                     <option value="elimina">Elimina</option>
                 </Form.Select>
                 <Button type="submit" size="sm" variant="primary">Salva</Button>
