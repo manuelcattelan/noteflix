@@ -14,6 +14,7 @@ import Policy from './pages/Policy';
 import Document from './pages/Document';
 import MentorWannaBe from './pages/MentorWannaBe';
 import ModeratorConsole from './pages/ModeratorConsole';
+import NoAccess from './pages/NoAccess';
 
 
 
@@ -69,7 +70,7 @@ function App() {
           
           {/* carica una pagina a "/" a seconda se l'utente è loggato o meno */}
           <Route path='/' exact element={page} />
-
+          <Route path='noaccess/' exact element={<NoAccess navbar={navbar}/>}/>
 
           {/* pagine accessibili da tutti (anche non loggati) */}
           <Route path='/signlog'        exact element={<SignLog token={token} setToken={setToken} setPage={setPage}  setUser={setUser} setPersona={setPersona} /*qui il set user è necessario*/ navbar={navbar} setNavbar={setNavbar}/>} />

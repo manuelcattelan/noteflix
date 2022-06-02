@@ -76,7 +76,7 @@ const Document = (props) => {
                 setDoc(data)
             }
             else{
-                navigate("/")
+                navigate("/noaccess")
             }
         })
     }, [])
