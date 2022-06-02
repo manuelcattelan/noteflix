@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../components/Footer';
 import LibraryList from '../components/liste/LibraryList';
 import Navigation from '../components/Navigation';
 
@@ -32,9 +33,10 @@ const Library = (props) => {
                 <p className='titolo text-center mt-5'>Ecco la tua <span className='text-primary'>libreria</span> personale.</p>
                 <p className='testo text-center'>Qui troverai i documenti che hai salvato dalla sezione esplora.</p>        
             </Container>
-            <Container>
+            <Container style={{height:"50vh"}}>
                 <LibraryList documenti={docArray.documents}/>
             </Container>
+            <Footer/>
         </>
     );
 };

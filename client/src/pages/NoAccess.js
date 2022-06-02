@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { Button, Container } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import ChangePlan from '../components/ChangePlan';
+import Footer from '../components/Footer';
 import Navigation from '../components/Navigation';
 
 import gif from '../media/paper.gif'
@@ -36,7 +37,7 @@ const NoAccess = (props) => {
     return (
         <>
             <Navigation navbar={props.navbar} token={token}/>
-            <Container className='d-flex flex-column align-items-center' style={{height:"90vh"}}>
+            <Container className='d-flex flex-column align-items-center' style={{minHeight:"70vh"}}>
                 
                 <img src={gif} alt="floating papers" style={{height:"20rem"}}/>
             
@@ -79,6 +80,7 @@ const NoAccess = (props) => {
                 </div>
                 
             </Container>
+            <Footer/>
         </>
     );
 };

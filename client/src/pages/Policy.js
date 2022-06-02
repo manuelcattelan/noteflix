@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Col, Row } from 'react-bootstrap';
+import Footer from '../components/Footer';
 import Navigation from '../components/Navigation';
 import check from '../media/completed.svg'
 
@@ -73,7 +74,7 @@ const Policy = (props) => {
                     </Row>
                 </Container>
             </Container>
-            
+            <Footer/>
         </>
     );
 };

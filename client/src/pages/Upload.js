@@ -3,6 +3,7 @@ import { Container, Form, Button } from 'react-bootstrap';
 import Navigation from '../components/Navigation';
 import { useNavigate} from 'react-router-dom';
 import macroaree from '../data/macroaree.json'
+import Footer from '../components/Footer';
     
 const Upload = (props) => {
 
@@ -138,7 +139,7 @@ const Upload = (props) => {
                     </div>
                 </Container>
             </Container>
-            
+            <Footer/>
         </>
     );
 };

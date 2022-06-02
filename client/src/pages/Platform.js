@@ -12,6 +12,7 @@ import "swiper/css/navigation";
 import "swiper/css/effect-coverflow";
 
 import DocSpoil from '../components/DocSpoil';
+import Footer from '../components/Footer';
 
 const Platform = (props) => {
 
@@ -42,7 +43,7 @@ const Platform = (props) => {
         <>    
             <Navigation navbar={props.navbar} token={token}/>
 
-            <div className="d-none d-lg-block">     
+            <div className="d-none d-lg-block" >     
             {
                 popolariArray
                 ?
@@ -108,12 +109,12 @@ const Platform = (props) => {
                     </Container>
                 </>
                 : 
-                <Container className="d-flex flex-column justify-content-center align-items-center" style={{height:"30vh"}}>
+                <Container className="d-flex flex-column justify-content-center align-items-center" style={{minHeight:"80vh"}}>
                     <Spinner animation="border" variant="primary" className='text-center'/>
                     <p className="mt-2 text-center">Stiamo caricando i file, tieniti forte.</p>
                 </Container>
             }
-
+            <Footer/>
         </>
     );
 };

@@ -4,6 +4,7 @@ import Navigation from '../components/Navigation';
 import noteslight from "../media/noteslight.svg"
 import notesdark from "../media/notesdark.svg"
 import { Link } from 'react-router-dom';
+import Footer from '../components/Footer';
 
 
 const Main = (props) => {
@@ -12,7 +13,7 @@ const Main = (props) => {
         <>   
             <Navigation navbar={props.navbar} token={props.token}/>
             <Container>
-                <Row style={{height:"90vh"}}>        
+                <Row style={{minHeight:"90vh"}}>        
                     <Col className="d-flex justify-content-center align-items-center">
                         <img
                             alt=""
@@ -47,7 +48,7 @@ const Main = (props) => {
                     </Col>
                 </Row>
             </Container>
-
+            <Footer/>
         </>
     );
 };
