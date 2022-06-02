@@ -151,6 +151,48 @@ router.get('/:id', async (req, res) => {
         })
 })
 
+// user request to be upgraded to mentor
+router.patch('/userToMentor', async (req, res) => {
+    // check for user existence in database
+    let user = await User.findById(req.loggedUser.id).exec();
+    if (!user){
+        return res
+            .status(404)
+            .json({
+                success: false,
+                message: 'User not found'
+            })
+    }
+    // only let users require to become mentors
+    if (req.loggedUser.type != "user"){
+        return res
+            .status(403)
+            .json({
+                success: false,
+                message: 'Only users can require to become mentors'
+            })
+    }
+    // user is authorized to make request
+    user.userType = 'pending'
+    user.save()
+        .then ( () => {
+            return res
+                .status(200)
+                .json({ 
+                    success: true,
+                    message: 'User request was sent successfully'
+                });
+        })
+        .catch( (error) => {
+            return res
+                .status(400)
+                .json({ 
+                    success: true,
+                    message: error.message 
+                });
+        })
+})
+
 // upgrade user status (from simple user to mentor which can upload documents)
 router.patch('/:id/upgrade', async (req, res) => {
     // check id length and id string format (must be hex)
