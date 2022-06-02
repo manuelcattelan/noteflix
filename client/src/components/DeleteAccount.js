@@ -19,11 +19,14 @@ const DeleteAccount = () => {
             fetch("../api/v2/users/"+id+"?token="+token, {method: 'DELETE'})
             .then(res => res.json())
             .then(e.target.className="d-none")
-            //logout
-            localStorage.removeItem("token")
-            localStorage.removeItem("user")
-            navigate("/")
-            window.location.reload(false)
+            .then(()=>{
+                //logout
+                localStorage.removeItem("token")
+                localStorage.removeItem("user")
+                navigate("/")
+                window.location.reload(false)
+            })
+            
         }        
     }
 

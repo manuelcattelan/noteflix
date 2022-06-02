@@ -29,11 +29,12 @@ const MentorWannaBe = (props) => {
     const handleRequest = () => {
         fetch("../api/v2/users/userToMentor?token="+token, { method: 'PATCH'} )
         .then(res => res.json())
-        
-        localStorage.removeItem("token")
-        localStorage.removeItem("user")
-        localStorage.removeItem("persona")
-        window.location.reload(false)
+        .then(() => {
+            localStorage.removeItem("token")
+            localStorage.removeItem("user")
+            localStorage.removeItem("persona")
+            window.location.reload(false)
+        })
     }
 
 

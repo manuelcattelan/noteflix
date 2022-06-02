@@ -48,12 +48,14 @@ const ChangePlan = () => {
         })
         .then(res => res.json())
         .then(data => alert(data.message))
+        .then(()=>{
+            //logout
+            localStorage.removeItem("token")
+            localStorage.removeItem("user")
+            navigate("/")
+            window.location.reload(false)
+        })
         
-        //logout
-        localStorage.removeItem("token")
-        localStorage.removeItem("user")
-        navigate("/")
-        window.location.reload(false)
 
     }
     
