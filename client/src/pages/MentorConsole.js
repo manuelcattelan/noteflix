@@ -43,28 +43,11 @@ const MentorConsole = (props) => {
             <Navigation navbar={props.navbar} token={props.token}/>
             <Container className='my-5'>
                 <Row>
-                    <Col md="3" className='d-flex justify-content-center align-content-center'>
+                    <Col md="3" className='d-flex justify-content-center align-items-center'>
                         <Avatar className="" style={{ width: '10rem', height: '10rem' }} {...persona.avatar}/>
                     </Col>
-                    <Col className='d-flex align-content-center'>
-                        <div>
-                            <p className='h1 fw-bold'>Pagina personale da mentore <br/> di Noteflix, ciao <span className='text-primary'>{persona.username}</span></p>
-                            <Form>
-                                    <Row>
-                                        <Col md="9">
-                                            <Form.Control id="descrizione" as="textarea" className="me-2 mb-2" cols={120} rows={4} required
-                                                placeholder="Biografia pubblica dell’utente: titoli di studio, aree di interesse, informazioni utili per gli studenti che visitano questo profilo. Biografia pubblica dell’utente: titoli di studio, aree di interesse, informazioni utili per gli studenti che visitano questo profilo. Biografia pubblica dell’utente: titoli di studio, aree di interesse."
-                                            />
-                                        </Col>
-                                        <Col>
-                                            <Button variant="outline-primary" size="sm" type="submit">
-                                                Aggiorna la biografia
-                                            </Button>
-                                            <p style={{fontSize:"11px"}} className="mt-2">La nuova biografia sarà resa pubblica e gli utenti avranno la possibilità di leggerla e segnalarla se lo ritengono opportuno.</p>
-                                        </Col>
-                                    </Row>
-                            </Form>
-                        </div>
+                    <Col className='d-flex align-items-center'>
+                        <p className='h1 fw-bold'>Benvenuto <span className='text-primary'>{persona.username}</span> nella tua pagina <br/> da mentore, gestisci da qui i tuoi file.</p>
                     </Col>
                 </Row>
             </Container>

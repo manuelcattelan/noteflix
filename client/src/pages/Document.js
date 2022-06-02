@@ -110,7 +110,7 @@ const Document = (props) => {
                                 <Avatar className="my-3 me-2" style={{ width: '5rem', height: '5rem' }} {...doc.author.avatar}/>
                                 <div className='mt-2'>
                                     Mentore
-                                    <p className='text-primary fs-2 mt-2'>{doc.author.username}</p>
+                                    <p className='text-primary doc-mentore mt-2'>{doc.author.username}</p>
                                 </div>
                                 
                             </p>

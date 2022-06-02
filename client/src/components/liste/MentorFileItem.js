@@ -43,7 +43,7 @@ const MentorFileItem = ({token, id, title, status, votes, like, comments}) => {
             <ListGroup className="me-3" horizontal>
                 <ListGroup.Item>{comments === 1 ? "1 commento" : comments + " commenti"}</ListGroup.Item>
                 <ListGroup.Item>{votes === 1 ? "1 valutazione" : votes + " valutazioni"}</ListGroup.Item>
-                <ListGroup.Item>{like == null ? "Nessun like" : "Piace al " + like + "%"}</ListGroup.Item>
+                <ListGroup.Item>{like == null ? "Nessun like" : "Piace al " + like.toFixed() + "%"}</ListGroup.Item>
             </ListGroup>
             <Link to={"/document/?id="+id}>
                 <Button variant="outline-primary">Visualizza</Button>
