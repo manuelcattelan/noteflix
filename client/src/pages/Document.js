@@ -15,6 +15,7 @@ import Report from '../components/Report';
 import Chat from '../components/Chat';
 import Save from '../components/Save';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../components/Footer';
 
 
 
@@ -150,7 +151,7 @@ const Document = (props) => {
                         <p className="mt-2 text-center">Stiamo caricando il tuo documento, tieni duro.</p>
                 </Container>
             }
-            
+            <Footer/>
         </>
     );
 };

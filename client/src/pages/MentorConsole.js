@@ -4,6 +4,7 @@ import Navigation from '../components/Navigation';
 import Avatar from 'react-nice-avatar'
 import { useNavigate } from 'react-router-dom';
 import MentorFileList from '../components/liste/MentorFileList';
+import Footer from '../components/Footer';
 
 
 
@@ -41,20 +42,22 @@ const MentorConsole = (props) => {
     return (
         <>
             <Navigation navbar={props.navbar} token={props.token}/>
-            <Container className='my-5'>
-                <Row>
-                    <Col md="3" className='d-flex justify-content-center align-items-center'>
-                        <Avatar className="" style={{ width: '10rem', height: '10rem' }} {...persona.avatar}/>
-                    </Col>
-                    <Col className='d-flex align-items-center'>
-                        <p className='h1 fw-bold'>Benvenuto <span className='text-primary'>{persona.username}</span> nella tua pagina <br/> da mentore, gestisci da qui i tuoi file.</p>
-                    </Col>
-                </Row>
-            </Container>
-            <Container>
-                <MentorFileList docArray={docArray} token={props.token}/>
-            </Container>
-            
+            <div  style={{minHeight:"65vh"}}>
+                <Container className='my-5'>
+                    <Row>
+                        <Col md="3" className='d-flex justify-content-center align-items-center'>
+                            <Avatar className="" style={{ width: '10rem', height: '10rem' }} {...persona.avatar}/>
+                        </Col>
+                        <Col className='d-flex align-items-center'>
+                            <p className='h1 fw-bold'>Benvenuto <span className='text-primary'>{persona.username}</span> nella tua pagina <br/> da mentore, gestisci da qui i tuoi file.</p>
+                        </Col>
+                    </Row>
+                </Container>
+                <Container>
+                    <MentorFileList docArray={docArray} token={props.token}/>
+                </Container>
+            </div>
+            <Footer/>
         </>
     );
 };

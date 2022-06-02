@@ -7,6 +7,7 @@ import ModeratorPendingList from '../components/liste/ModeratorPendingList';
 import UserPendingList from '../components/liste/UserPendingList';
 import MentorPendingList from '../components/liste/MentorPendingList';
 import AllUsersList from '../components/liste/AllUsersList';
+import Footer from '../components/Footer';
 
 
 
@@ -72,6 +73,7 @@ const ModeratorConsole = (props) => {
                     </Col>
                 </Row>
             </Tab.Container>
+            <Footer/>
         </>
     );
 };

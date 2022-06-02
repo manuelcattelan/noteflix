@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../components/Footer';
 import Navigation from '../components/Navigation';
 
 import img from '../media/mentorwannabe.svg'
@@ -75,7 +76,7 @@ const MentorWannaBe = (props) => {
                 }
                 
             </Container>
-            
+            <Footer/>
         </>
     );
 };
