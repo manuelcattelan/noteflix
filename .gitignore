@@ -5,6 +5,7 @@ node_modules
 coverage
 /server/node_modules
 /client/node_modules
+/node_modules
 /client/.pnp
 /client/.pnp.js
 

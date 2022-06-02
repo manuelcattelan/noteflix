@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 
 const User = require('./../models/userModel');
+const tokenHandler = require('./tokenHandler.js');
+
 
 // get list of all users in the platform except for moderators
 router.get('/', async (req, res) => {
@@ -312,7 +314,7 @@ router.patch('/changeSubscription', async (req, result) => {
     user.subscription = sub;
     await user.save();   
     result.status(201).json({ success: true, message: 'Enjoy your token!',
-                token: tokenChecker.createToken(user) });
+                token: tokenHandler.createToken(user) });
     return;
 });
 

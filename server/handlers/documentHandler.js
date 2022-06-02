@@ -292,7 +292,7 @@ router.get('/saved', async (request, result) => {
         .status(200)
         .json({
             success: true,
-            message: 'Uploaded documents found',
+            message: 'Saved documents found',
             documents: documents
         })
 })
