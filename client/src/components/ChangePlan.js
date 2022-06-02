@@ -40,7 +40,7 @@ const ChangePlan = () => {
     }   
 
     const handlePlanChange = () => {
-        fetch("../api/v2//users/changeSubscription?token="+token, {
+        fetch("../api/v2/users/changeSubscription?token="+token, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify( { subscriptionType: subplan, subscriptionArea: macroarea } ),
