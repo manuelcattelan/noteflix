@@ -142,7 +142,7 @@ const Signup = ({setPage, setNavbar, setUser, setPersona, user, setToken}) => {
                         Non condivideremo la tua email con terze parti.
                     </Form.Text>
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Group className="mb-3" controlId="formBasicText">
                     <Form.Label>Scegli uno username</Form.Label>
                     <Form.Control maxlength="30" type="text" placeholder="Inserisci uno username" onChange={(e)=>setUsername(e.target.value)} required/>
                 </Form.Group>

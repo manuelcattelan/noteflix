@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Navigation from '../components/Navigation';
@@ -10,9 +10,9 @@ import img from '../media/mentorwannabe.svg'
 const MentorWannaBe = (props) => {
 
     const navigate = useNavigate();
-    
-
     const token = JSON.parse(window.localStorage.getItem("token"))
+
+    const[userType, setUserType] = useState()
 
     useEffect(() => {
         fetch("../api/v2/token/?token="+token)
@@ -20,19 +20,20 @@ const MentorWannaBe = (props) => {
         .then(data => {
             if(!data.success){
                 navigate('/')
+            }else{
+               setUserType(data.tokenData.type)
             }
         })
     }, []);
 
     const handleRequest = () => {
-        // fetch("api/v2/users/changeSubscription?token="+token, {
-        //     method: 'PATCH',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify( { subscriptionType: subplan, subscriptionArea: macroarea } ),
-
-        // })
-        // .then(res => res.json())
-        // .then(data => alert(data.message))
+        fetch("../api/v2/users/userToMentor?token="+token, { method: 'PATCH'} )
+        .then(res => res.json())
+        
+        localStorage.removeItem("token")
+        localStorage.removeItem("user")
+        localStorage.removeItem("persona")
+        window.location.reload(false)
     }
 
 
@@ -44,9 +45,34 @@ const MentorWannaBe = (props) => {
                     <p className='titolo text-center'><span className='text-primary'>Guadagnare</span> vendendo <span className='text-primary'>appunti</span> di <br/> qualità sulla nostra piattafroma.</p>
                     <p className='testo text-center'>Prima di cominciare permetti al nostro team di valutare il tuo profilo.</p>
                     {/* <img src={img} alt="diventa mentor" style={{width:"20rem"}}/> */}
-                    <p className='special mb-4 mt-3 text-center'>Effettua la rischiesta e <span>diventa mentore</span>.</p>
+                    {
+                        userType
+                        ?
+                            userType === "pending"
+                            ?
+                            <p className='special mb-4 mt-3 text-center'>La tua richiesta è in attesa di essere approvata.</p>
+                            :
+                                userType === "user"
+                                ?
+                                <>
+                                    <p className='special mb-1 mt-3 text-center'>Effettua la richiesta e <span>diventa mentore</span>.</p>
+                                    <p className="small text-center">Verrai disconnesso dal tuo attuale account per rendere definitiva la richiesta</p>
+                                </>
+                                :
+                                ""
+                        :
+                        ""
+                    }
+                    
                 </div>
-                <Button className="text-center" onClick={handleRequest}>Richiedi</Button>
+                {
+                    userType === "user"
+                    ?
+                    <Button className="text-center" onClick={handleRequest}>Richiedi</Button>
+                    :
+                    <Button className="text-center" disabled>Richiedi</Button>
+                }
+                
             </Container>
             
         </>
