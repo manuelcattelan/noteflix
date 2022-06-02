@@ -185,7 +185,7 @@ router.patch('/userToMentor', async (req, res) => {
             return res
                 .status(400)
                 .json({ 
-                    success: true,
+                    success: false,
                     message: error.message 
                 });
         })
@@ -305,7 +305,7 @@ router.patch('/:id/downgrade', async (req, res) => {
             return res
                 .status(400)
                 .json({ 
-                    success: true,
+                    success: false,
                     message: error.message
                 });
         })
