@@ -45,7 +45,7 @@ const ModeratorNav = (props) => {
                             </Nav>
                             <Nav className="ms-3 me-2">
                                 <Avatar style={{ width: '3rem', height: '3rem' }} {...persona.avatar}/>
-                                <NavDropdown title={persona.username} className="fw-bold mt-1 ms-2">
+                                <NavDropdown title={persona.username} align="end" className="fw-bold mt-1 ms-2">
                                     <NavDropdown.Item href="#" onClick={props.handleLogout}>
                                         Disconnettiti
                                     </NavDropdown.Item>

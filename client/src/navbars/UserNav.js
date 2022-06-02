@@ -17,7 +17,6 @@ const UserNav = (props) => {
                 persona
                 ?
                 <Navbar className="mx-5 mt-1" collapseOnSelect expand="lg" style={{position:"sticky", top: "0", zIndex:"100"}}>
-
                     <Navbar.Brand href="#home">
                         <Link to="/">
                             <img
@@ -43,7 +42,7 @@ const UserNav = (props) => {
                         </Nav>
                         <Nav className="ms-3 me-2">
                             <Avatar style={{ width: '3rem', height: '3rem' }} {...persona.avatar}/>
-                            <NavDropdown title={persona.username} className="fw-bold mt-1 ms-2">
+                            <NavDropdown title={persona.username} align="end" className="fw-bold mt-1 ms-2">
                                 <NavDropdown.Item href="#" onClick={props.handleLogout}>
                                     Disconnettiti
                                 </NavDropdown.Item>
