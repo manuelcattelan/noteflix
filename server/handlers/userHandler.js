@@ -164,7 +164,7 @@ router.patch('/userToMentor', async (req, res) => {
             })
     }
     // only let users require to become mentors
-    if (req.loggedUser.type != "user"){
+    if (user.userType != "user"){
         return res
             .status(403)
             .json({
