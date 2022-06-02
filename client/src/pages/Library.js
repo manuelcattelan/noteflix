@@ -3,7 +3,6 @@ import { Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import LibraryList from '../components/liste/LibraryList';
 import Navigation from '../components/Navigation';
-import Risultati from '../components/Risultati';
 
 const Library = (props) => {
    
@@ -22,13 +21,6 @@ const Library = (props) => {
         .catch(error => console.log('error', error)); // Transform the data into json
     
     }, []);
-
-
-
-    
-
-    
-        
 
 
 

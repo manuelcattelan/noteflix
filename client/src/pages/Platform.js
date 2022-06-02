@@ -1,32 +1,38 @@
 import React, {useState, useEffect} from 'react';
-import { Container, Form, Row, Col } from 'react-bootstrap';
+import { Container, Form, Row, Col, Spinner } from 'react-bootstrap';
 import Navigation from '../components/Navigation';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation as Arrows, EffectCoverflow } from "swiper";
 
-import Flicking, { ViewportSlot } from "@egjs/react-flicking";
-import "@egjs/react-flicking/dist/flicking.css";
-import "@egjs/react-flicking/dist/flicking-inline.css";// Or, if you have to support IE9
-import { Arrow, Fade } from "@egjs/flicking-plugins";
-import "@egjs/flicking-plugins/dist/arrow.css";
 
-import Risultati from '../components/Risultati';
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/navigation";
+import "swiper/css/effect-coverflow";
+
+import DocSpoil from '../components/DocSpoil';
 
 const Platform = (props) => {
 
     const token = JSON.parse(window.localStorage.getItem("token"))
-    const [docArray, setDocArray] = useState({})
-
-    
-
-    //Arrow for each carousel
-    const arrowSet1 = [new Arrow({moveCount:2}), new Fade("", 0.5)];
-
+    const [docArray, setDocArray] = useState()
+    const [popolariArray, setPopolariArray] = useState()
+ 
 
     //esegue il fetch al caricamento dell'app e al cambiamento di token
     useEffect(() => {
+
         fetch("../api/v2/documents/?token="+token, {method: 'GET'})
         .then((resp) => resp.json())
-        .then(data => setDocArray(data))
+        .then(data => setDocArray(data.documents))
         .catch(error => console.log('error', error)); // Transform the data into json
+
+        fetch("../api/v2/documents/mostLiked?token="+token, {method: 'GET'})
+        .then((resp) => resp.json())
+        .then(data => setPopolariArray(data.documents))
+        .catch(error => console.log('error', error)); // Transform the data into json
+
     },[]);
 
 
@@ -36,40 +42,77 @@ const Platform = (props) => {
         <>    
             <Navigation navbar={props.navbar} token={token}/>
 
-           {/*  <Container>
-                <p className="text-center titoletti">Raccomandati per te</p>
-            </Container> 
-            <Flicking
-                circular={true}
-                circularFallback="linear"
-                moveType="freeScroll"
-                plugins={arrowSet1}
-            >
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
-                <div><DocSpoil/></div>
+            <div className="d-none d-lg-block">     
+            {
+                popolariArray
+                ?
+                <>
+                    <p className="text-center titoletti">I preferiti dai nostri utenti</p>
+                    <Container>
+                        <Swiper
+                            spaceBetween={10}
+                            slidesPerView={3}
+                            navigation={true}
+                            effect={"coverflow"}
+                            grabCursor={true}
+                            coverflowEffect={{
+                                rotate: 50,
+                                stretch: 0,
+                                depth: 100,
+                                modifier: 1,
+                                slideShadows: false,
+                              }}
+                            modules={[Arrows, EffectCoverflow]}
+                            
+                        >
+                            {
+                                popolariArray.map((item) =>
+                                    <SwiperSlide className='d-flex justify-content-center'>
+                                        <DocSpoil 
+                                            titolo={item.title}
+                                            descrizione={item.description}
+                                            url={item.url}
+                                            macroarea={item.area}
+                                            id={item._id}
+                                            approval={item.approval}
+                                        />
+                                    </SwiperSlide>
+                                )
+                            }
+                        </Swiper>
+                    </Container>
+                </>
+                :
+                ""
+            }
+            </div>  
 
-
-
-                <ViewportSlot>
-                    <span className="flicking-arrow-prev is-circle mx-5" style={{backgroundColor:"#623FF0"}}></span>
-                    <span className="flicking-arrow-next is-circle mx-5" style={{backgroundColor:"#623FF0"}}></span>
-                </ViewportSlot>
-            </Flicking> */}
-
-
-            
-            <Risultati documenti={docArray.documents}/>
-            
+            {
+                docArray
+                ? 
+                <>
+                    <p className="text-center titoletti">Tutti i documenti</p>
+                    <Container className="d-flex justify-content-center flex-wrap">
+                    {
+                        docArray.map((item) => 
+                            <DocSpoil 
+                                titolo={item.title}
+                                descrizione={item.description}
+                                url={item.url}
+                                macroarea={item.area}
+                                id={item._id}
+                                approval={item.approval}
+                            /> 
+                        )
+                    }
+                    </Container>
+                </>
+                : 
+                <Container className="d-flex flex-column justify-content-center align-items-center" style={{height:"30vh"}}>
+                    <Spinner animation="border" variant="primary" className='text-center'/>
+                    <p className="mt-2 text-center">Stiamo caricando i file, tieniti forte.</p>
+                </Container>
+            }
 
         </>
     );
