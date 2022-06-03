@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Button, Form, Modal, NavDropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import swal from 'sweetalert';
 
 const DeleteAccount = () => {
 
@@ -36,7 +37,7 @@ const DeleteAccount = () => {
         fetch("../api/v2/users/"+id+"?token="+token)
         .then(resp => resp.json())
         .then(data => setPersona(data))
-        // .then(alert(JSON.stringify(persona)))
+        // .then(swal(JSON.stringify(persona)))
     }, [])
 
     return (

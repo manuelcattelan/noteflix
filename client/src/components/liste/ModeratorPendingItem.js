@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ListGroup, Button, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import swal from 'sweetalert';
+
 
 const ModeratorPendingItem = ({title, id, email, token}) => {
 
@@ -17,13 +19,13 @@ const ModeratorPendingItem = ({title, id, email, token}) => {
                 fetch("../api/v2/documents/"+id+"/validate?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
                 .then(e.target.className="d-none")
-                .then(data => alert(data.message))
+                .then(data => swal(data.message))
                 break;
             case "elimina":
                 fetch("../api/v2/documents/"+id+"?token="+token, {method: 'DELETE'})
                 .then(res => res.json())
                 .then(e.target.className="d-none")
-                .then(data => alert(data.message))
+                .then(data => swal(data.message))
                 break;
         }
     }

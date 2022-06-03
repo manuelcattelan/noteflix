@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Button, Form, Modal, NavDropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import swal from 'sweetalert';
 
 
 const ChangePassword = () => {
@@ -21,7 +22,7 @@ const ChangePassword = () => {
         var newPwdConfirm = document.getElementById("new-password-confirm").value
 
         if (newPwd !== newPwdConfirm) {
-            alert("Passwords do not match.");
+            swal("Passwords do not match.");
             return false;
         }
 
@@ -32,7 +33,7 @@ const ChangePassword = () => {
 
         })
         .then(res => res.json())
-        .then(data => alert(data.message))
+        .then(data => swal(data.message))
     }        
 
     
@@ -41,7 +42,7 @@ const ChangePassword = () => {
         fetch("../api/v2/users/"+id+"?token="+token)
         .then(resp => resp.json())
         .then(data => setPersona(data))
-        // .then(alert(JSON.stringify(persona)))
+        // .then(swal(JSON.stringify(persona)))
     }, [])
 
     return (
