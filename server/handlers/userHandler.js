@@ -217,7 +217,7 @@ router.patch('/:id/upgrade', async (req, res) => {
     // only let moderators upgrade users to mentors
     if (req.loggedUser.type != "moderator"){
         return res
-            .status(401)
+            .status(403)
             .json({
                 success: false,
                 message: 'Only moderators are allowed to upgrade users to mentors'
@@ -355,7 +355,7 @@ router.patch('/changeSubscription', async (req, result) => {
     // replace old subscription plan with the new one and store change in the database
     user.subscription = sub;
     await user.save();   
-    result.status(201).json({ success: true, message: 'Enjoy your token!',
+    result.status(200).json({ success: true, message: 'Enjoy your token!',
                 token: tokenHandler.createToken(user) });
     return;
 });
