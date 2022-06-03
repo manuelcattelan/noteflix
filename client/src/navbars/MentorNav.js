@@ -1,13 +1,22 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Navbar, Nav, NavDropdown, Badge } from 'react-bootstrap';
 import Avatar from 'react-nice-avatar';
 import { HashLink as Link } from 'react-router-hash-link';
+import ChangePassword from '../components/ChangePassword';
+import ChangePlan from '../components/ChangePlan';
+import DeleteAccount from '../components/DeleteAccount';
 import logolight from "../media/logolight.svg"
 
 const MentorNav = (props) => {
+
+    const persona = JSON.parse(window.localStorage.getItem("persona"))
+    
     return (
         <>
-            <Navbar className="mx-5 mt-1" collapseOnSelect expand="lg" style={{position:"sticky", top: "0", zIndex:"100"}}>
+            {
+                persona
+                ?
+                <Navbar className="mx-5 mt-1" collapseOnSelect expand="lg" style={{position:"sticky", top: "0", zIndex:"100"}}>
                     <Navbar.Brand href="#home">
                         <Link to="/">
                             <img
@@ -23,7 +32,7 @@ const MentorNav = (props) => {
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
-                        <Nav className="mx-auto">
+                        <Nav className="ms-auto">
                             <Link to="/mentorconsole">
                                 <Nav.Link href="#def" className="Navtheme">Console mentore</Nav.Link>
                             </Link>
@@ -37,17 +46,25 @@ const MentorNav = (props) => {
                                 <Nav.Link href="#def" className="Navtheme">Libreria personale</Nav.Link>
                             </Link>
                         </Nav>
-                        <Nav>
-                            <NavDropdown title={props.persona.username} className="fw-bold mt-1 me-2 text-decoration-underline">
+                        <Nav className="ms-3 me-2">
+                            <Avatar style={{ width: '3rem', height: '3rem' }} {...persona.avatar}/>
+                            <NavDropdown title={persona.username} align="end" className="fw-bold mt-1 ms-2">
                                 <NavDropdown.Item href="#" onClick={props.handleLogout}>
                                     Disconnettiti
                                 </NavDropdown.Item>
+                                <hr/>
+                                <ChangePassword/>
+                                <ChangePlan/>
+                                <hr />
+                                <DeleteAccount/>
                             </NavDropdown>
-                            <Avatar style={{ width: '3rem', height: '3rem' }} {...props.persona.avatar}/>
-                        </Nav>
-                        
+                        </Nav>    
                     </Navbar.Collapse>
-            </Navbar>
+                </Navbar>
+                :
+                ""
+            }
+            
         </>
     );
 };

@@ -1,21 +1,23 @@
-import { Offcanvas, Button, Form, FloatingLabel, Toast } from 'react-bootstrap';
+import { Offcanvas, Button, Form, FloatingLabel } from 'react-bootstrap';
 import React, {useEffect, useState} from 'react';
 import Message from './Message';
-import Avatar, { genConfig, AvatarConfig } from 'react-nice-avatar'
+import swal from 'sweetalert';
 
 
 const Chat = (props) => {
     
     const token = JSON.parse(window.localStorage.getItem("token"))
 
-    const [comment, setComment] = useState()
+    const [comment, setComment] = useState("")
     const [commentArray, setCommentArray] = useState()
 
     
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        fetch('http://localhost:3001/api/v1/documents/'+props.id+'/comment?token='+token, {
+        if(comment === "") return;
+
+        fetch('../api/v2/documents/'+props.id+'/comment?token='+token, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify( { commentText: comment } ),
@@ -24,6 +26,7 @@ const Chat = (props) => {
         .then(data => {
             if(data.success){
                 document.getElementById("textarea").value=""
+                setComment("")
                 setCommentArray(
                     <>
                         {commentArray}
@@ -32,6 +35,7 @@ const Chat = (props) => {
                             avatar={persona.avatar}
                             body={data.commentBody}
                             date={data.commentDate}
+                            id={data.id}
                         />
                     </>
                 )
@@ -45,11 +49,11 @@ const Chat = (props) => {
 
     
     useEffect(()=>{
-        fetch("http://localhost:3001/api/v1/users/"+userId+"?token="+token)
+        fetch("../api/v2/users/"+userId+"?token="+token)
         .then(resp => resp.json())
         .then(data => setPersona(data))
-        // .then(alert(JSON.stringify(persona)))
-    }, [""])
+        // .then(swal(JSON.stringify(persona)))
+    }, [])
     
     const label = "Lascia un commento come "+persona.username
 
@@ -68,6 +72,7 @@ const Chat = (props) => {
                                 avatar={item.author.avatar}
                                 body={item.body}
                                 date={item.date}
+                                id={item.id}
                             />
                         )
                     }

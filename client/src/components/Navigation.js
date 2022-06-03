@@ -7,28 +7,21 @@ import VisitorNav from '../navbars/VisitorNav';
 
 const Navigation = (props) => {
 
-  
-    const navigate = useNavigate(); //navigate nel caso di logout
+    //Gestione del logout dalla navbar
+    const navigate = useNavigate(); 
     const handleLogout = () => {
         localStorage.removeItem("token")
         localStorage.removeItem("user")
+        localStorage.removeItem("persona")
         navigate("/")
         window.location.reload(false)
     }
 
-    const userId = JSON.parse(window.localStorage.getItem("user"))
-    const [persona, setPersona] = useState({})
-    useEffect(()=>{
-        fetch("http://localhost:3001/api/v1/users/"+userId+"?token="+props.token)
-        .then(resp => resp.json())
-        .then(data => setPersona(data))
-        // .then(alert(JSON.stringify(persona)))
-    }, [""])
-       
+    //scelta della navbar a seconda dell'utente
     switch(props.navbar){
-        case "user":       return (<UserNav       handleLogout={handleLogout} persona={persona}/>)        
-        case "moderator":  return (<ModeratorNav  handleLogout={handleLogout} persona={persona}/>)   
-        case "mentor":     return (<MentorNav     handleLogout={handleLogout} persona={persona}/>)    
+        case "user":       return (<UserNav       handleLogout={handleLogout}/>)        
+        case "moderator":  return (<ModeratorNav  handleLogout={handleLogout}/>)   
+        case "mentor":     return (<MentorNav     handleLogout={handleLogout}/>)    
         default:           return (<VisitorNav    handleLogout={handleLogout}/>) 
     }
   

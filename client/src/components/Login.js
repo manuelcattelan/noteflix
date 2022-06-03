@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import useLocalStorage from "../hooks/useLocalStorage";//hooks
-import { HashLink as Link } from 'react-router-hash-link';
-import { Routes, Route, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import Platform from '../pages/Platform';
+import swal from 'sweetalert';
 
-
-const Login = ({setToken, token, setUser, user, setPage, setNavbar}) => {
+const Login = ({setToken, token, setUser, setPersona, user, setPage, setNavbar}) => {
 
     
     //stato per il form
@@ -21,7 +19,7 @@ const Login = ({setToken, token, setUser, user, setPage, setNavbar}) => {
         
         e.preventDefault()
 
-        fetch('../api/v1/auth/login', {
+        fetch('../api/v2/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify( { email: email, password: password } ),
@@ -33,10 +31,16 @@ const Login = ({setToken, token, setUser, user, setPage, setNavbar}) => {
                 
                 const provToken = data.token
 
-                fetch("../api/v1/token/?token="+provToken)
+                fetch("../api/v2/token/?token="+provToken)
                 .then(resp => resp.json())
                 .then(data => {
                     setUser(data.tokenData.id)
+
+                    //fetch per ottenere username e avatar utente
+                    fetch("../api/v2/users/"+data.tokenData.id+"?token="+provToken)
+                    .then(resp => resp.json())
+                    .then(data => setPersona(data))
+
                     switch(data.tokenData.type) {
                         case "mentor":
                           setNavbar("mentor")
@@ -61,7 +65,7 @@ const Login = ({setToken, token, setUser, user, setPage, setNavbar}) => {
                 })
                 
             }else{
-                alert(data.message)
+                swal(data.message)
             }
         })
     }
@@ -70,7 +74,7 @@ const Login = ({setToken, token, setUser, user, setPage, setNavbar}) => {
 
     return (
         <>
-            <Form className="mt-5" onSubmit={handleSubmit}>
+            <Form className="mt-5 mx-5" onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Indirizzo Email</Form.Label>
                     <Form.Control type="email" placeholder="Inserisci la tua email" onChange={(e)=>setEmail(e.target.value)} required/>

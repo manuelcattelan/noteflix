@@ -1,7 +1,47 @@
+const crypto = require('crypto');
 const express = require('express');
 const router = express.Router();
 
 const User = require('./../models/userModel');
+const tokenHandler = require('./tokenHandler.js');
+
+
+// get list of all users in the platform except for moderators
+router.get('/', async (req, res) => {
+    // only moderators can access the users list
+    if (req.loggedUser.type != "moderator"){
+        return res
+            .status(403)
+            .json({
+                success: false,
+                message: "Only moderators can access the users list"
+            })
+    }
+    // find all users in the platform, except for moderators
+    let users = await User.find({ userType: {$ne: 'moderator'} }).exec();
+    // if no users were found in the database
+    if (!users || users.length == 0){
+        return res
+            .status(204)
+            .send()
+    }
+    users = users.map( (user) => {
+        return {
+            id: user._id,
+            username: user.username,
+            avatar: user.avatar,
+            email: user.email
+        }
+    })
+    // return needed information to show list of users
+    return res
+        .status(200)
+        .json({
+            success: true,
+            message: 'Users found',
+            users: users
+        })
+})
 
 // get list of users who asked to be upgraded to mentor
 router.get('/pending', async (req, res) => {
@@ -111,6 +151,48 @@ router.get('/:id', async (req, res) => {
         })
 })
 
+// user request to be upgraded to mentor
+router.patch('/userToMentor', async (req, res) => {
+    // check for user existence in database
+    let user = await User.findById(req.loggedUser.id).exec();
+    if (!user){
+        return res
+            .status(404)
+            .json({
+                success: false,
+                message: 'User not found'
+            })
+    }
+    // only let users require to become mentors
+    if (user.userType != "user"){
+        return res
+            .status(403)
+            .json({
+                success: false,
+                message: 'Only users can require to become mentors'
+            })
+    }
+    // user is authorized to make request
+    user.userType = 'pending'
+    user.save()
+        .then ( () => {
+            return res
+                .status(200)
+                .json({ 
+                    success: true,
+                    message: 'User request was sent successfully'
+                });
+        })
+        .catch( (error) => {
+            return res
+                .status(400)
+                .json({ 
+                    success: true,
+                    message: error.message 
+                });
+        })
+})
+
 // upgrade user status (from simple user to mentor which can upload documents)
 router.patch('/:id/upgrade', async (req, res) => {
     // check id length and id string format (must be hex)
@@ -135,7 +217,7 @@ router.patch('/:id/upgrade', async (req, res) => {
     // only let moderators upgrade users to mentors
     if (req.loggedUser.type != "moderator"){
         return res
-            .status(401)
+            .status(403)
             .json({
                 success: false,
                 message: 'Only moderators are allowed to upgrade users to mentors'
@@ -273,9 +355,62 @@ router.patch('/changeSubscription', async (req, result) => {
     // replace old subscription plan with the new one and store change in the database
     user.subscription = sub;
     await user.save();   
-    result.status(201).json({ success: true, message: 'Enjoy your token!',
-                token: tokenChecker.createToken(user) });
+    result.status(200).json({ success: true, message: 'Enjoy your token!',
+                token: tokenHandler.createToken(user) });
     return;
 });
+
+// delete a user by id
+router.delete('/:id', async (req, res) => {
+    // check id length and id string format (must be hex)
+    if(req.params.id.length != 24 || req.params.id.match(/(?![a-f0-9])\w+/)){
+        return res
+            .status(400)
+            .json({
+                success: false,
+                message: 'Invalid ID',
+            })
+    }
+    // check for user existence in database
+    let user = await User.findById(req.params.id).exec();
+    if (!user){
+        return res
+            .status(404)
+            .json({
+                success: false,
+                message: 'User not found'
+            })
+    }
+    // only moderators or account owners can delete their account
+    if (req.loggedUser.type != "moderator" && req.loggedUser.id != req.params.id){
+        return res
+            .status(403)
+            .json({
+                success: false,
+                message: "Only moderators or account owners can delete their account"
+            })
+    }
+    // delete user from database
+    user.deleteOne()
+        .then( () => {
+            console.log('-> user deleted successfully')
+            return res
+                .status(200)
+                .json({
+                    success: true,
+                    message: 'User deleted successfully'
+                })
+        })
+        .catch( (error) => {
+            // document deletion failed
+            console.log('-> user deletion failed')
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    message: error.message
+                })
+        })
+})
 
 module.exports = router

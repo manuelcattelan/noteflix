@@ -2,24 +2,24 @@ import React, {useEffect, useState} from 'react';
 import { ListGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import userswaiting from '../../media/waiting-user.svg'
-import UserPendingItem from './UserPendingItem';
+import AllUsersItem from './AllUsersItem';
 
-const UserPendingList = (props) => {
+const AllUsersList = (props) => {
 
 
     const navigate = useNavigate();
 
-    const [pendingUsers, setPendingUsers] = useState()
+    const [userList, setUserList] = useState()
 
     useEffect(() => {
-        fetch("../api/v2/users/pending?token="+props.token)
+        fetch("../api/v2/users?token="+props.token)
         .then(resp => resp.json())
         .then(data => {
             if(!data.success){
                 navigate('/')
             }
             else{
-                setPendingUsers(data.users)
+                setUserList(data.users)
             }
         })
     }, []);
@@ -28,25 +28,25 @@ const UserPendingList = (props) => {
     return (
         <ListGroup as="ol" numbered>
             {
-                pendingUsers
+                userList
                 ?
-                pendingUsers.map((item) => 
-                    <UserPendingItem
-                        id={item.id}
-                        email={item.email}
+                userList.map((item) => 
+                    <AllUsersItem
                         username={item.username}
                         avatar={item.avatar}
+                        id={item.id}
+                        email={item.email}
                         token={props.token}
                     />
                 ) 
                 :
                 <p className='text-center'>
-                    <img src={userswaiting} alt="users waiting to became mentor" style={{height:"10rem"}}/> <br/>
-                    Nessun utente è in attesa di diventare Mentor.
+                    <img src={userswaiting} style={{height:"10rem"}}/> <br/>
+                    Nessun Utente nella piattaforma.
                 </p>
             }
         </ListGroup>
     );
 };
 
-export default UserPendingList;
+export default AllUsersList;

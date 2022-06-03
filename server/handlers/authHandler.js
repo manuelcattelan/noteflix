@@ -43,7 +43,7 @@ router.post('/login', async (request, result) => {
 router.post('/signup', async (request, result) => {
     // check if email and passwords were provided, else return error
     if ( !(request.body.email && request.body.password && request.body.avatar && request.body.username && request.body.subscriptionType)){
-        result.status(400).json({ success: false, message: 'Missing parameters in rerquest body'});
+        result.status(400).json({ success: false, message: 'Missing parameters in request body'});
         return;
     }
     // check if provided subscription information is valid 
@@ -60,7 +60,7 @@ router.post('/signup', async (request, result) => {
     // check for user uniqueness, return error if a user with the same email already exists
     let prevUser = await User.findOne({ email: request.body.email }).exec();
     if (prevUser){
-        result.status(400).json({ success: false, message: 'Email aready in use'});
+        result.status(400).json({ success: false, message: 'Email already in use'});
         return;
     }
     // calculate salt and hash
@@ -83,13 +83,16 @@ router.post('/signup', async (request, result) => {
         userType: 'user'
     })
     // if user was successfully registered, also logs him in and return generated token 
-    if (await user.save()){
-        console.log('user saved');
-        result.status(201).json({ success: true, message: 'Enjoy your token!',
+    user.save()
+        .then( () => {
+            console.log('user saved');
+            result.status(201).json({ success: true, message: 'Enjoy your token!',
                 token: tokenHandler.createToken(user) });
-        return;
-    }
-    result.status(400).json({ success: false, message: 'Unknown error'});
+            return;
+        })
+        .catch( (error) => {
+            result.status(400).json({ success: false, message: error.message });
+        })
 })
 
 module.exports = router;

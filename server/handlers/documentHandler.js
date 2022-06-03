@@ -292,11 +292,41 @@ router.get('/saved', async (request, result) => {
         .status(200)
         .json({
             success: true,
-            message: 'Uploaded documents found',
+            message: 'Saved documents found',
             documents: documents
         })
 })
 
+// route handler for listing most liked documents
+router.get('/mostLiked', async (request, result) => {
+    // find 10 most liked documents
+    let documents = await Document.find({ status: "public" }).sort({ like: 'desc' }).limit(10).exec();
+    // if no documents were found in the database
+    if (!documents || documents.length == 0){
+        return result
+            .status(204)
+            .send()
+    }
+    // if documents were found, extract needed information to return
+    documents = documents.map( (doc)=>{
+        return {
+            _id: doc._id,
+            title: doc.title,
+            description: doc.description,
+            approval: 100 * doc.like.length/(doc.like.length + doc.dislike.length), 
+            url: doc.url,
+            area: doc.area
+        }
+    })
+    // return needed information to show document preview
+    return result
+        .status(200)
+        .json({
+            success: true,
+            message: 'Most liked documents found',
+            documents: documents
+        })
+})
 
 // route handler for listing a document by ID
 router.get('/:id', async (request, result) => {

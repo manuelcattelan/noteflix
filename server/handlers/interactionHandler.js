@@ -112,6 +112,7 @@ router.patch('/:id/comment', async (request, result) =>{
                     message: 'Comment added successfully',
                     commentBody: comment.body,
                     commentDate: comment.date,
+                    id: document.comments[document.comments.length-1]._id
                 })
         })
         .catch( (error) => {
@@ -160,12 +161,12 @@ router.delete('/:id/comment/:commentId', async (request, result) =>{
         return;
     } 
     // only moderators and comment authors are allowed to delete documents
-    if (document.commets[commentIndex].author != request.loggedUser.id || request.loggedUser.type != 'moderator'){
+    if (!(document.comments[commentIndex].author == request.loggedUser.id || request.loggedUser.type == 'moderator')){
         result
             .status(403)
             .json({
                 success: false,
-                message: 'You do not have the permissionto delete this comment',
+                message: 'You do not have the permission to delete this comment',
             })
         return;
     }

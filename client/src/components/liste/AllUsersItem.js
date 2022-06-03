@@ -3,19 +3,19 @@ import { ListGroup, Button, Form } from 'react-bootstrap';
 import Avatar from 'react-nice-avatar';
 import swal from 'sweetalert';
 
-const MentorPendingItem = ({username, avatar, email, token, id}) => {
+const AllUsersItem = ({username, avatar, email, token, id}) => {
 
     const mailto = "mailto:" + email
+    
 
     const [decision, setDecision] = useState()
-
     const handleSubmit = (e) => {
 
         e.preventDefault();
 
         switch(decision){
-            case "downgrade":
-                fetch("../api/v2/users/"+id+"/downgrade?token="+token, {method: 'PATCH'})
+            case "elimina":
+                fetch("../api/v2/users/"+id+"?token="+token, {method: 'DELETE'})
                 .then(res => res.json())
                 .then(e.target.className="d-none")
                 .then(data => swal(data.message))
@@ -37,7 +37,7 @@ const MentorPendingItem = ({username, avatar, email, token, id}) => {
             <Form className="d-flex" onSubmit={handleSubmit}>
                 <Form.Select className='mx-3' id="macroarea" maxlength="160" onChange={(e) => setDecision(e.target.value)}>
                     <option disabled selected value="">- seleziona un'azione</option>
-                    <option value="downgrade">Downgrade a Utente</option>
+                    <option value="elimina">Elimina l'utente</option>
                 </Form.Select>
                 <Button type="submit" size="sm" variant="primary">Salva</Button>
             </Form>
@@ -46,4 +46,4 @@ const MentorPendingItem = ({username, avatar, email, token, id}) => {
     );
 };
 
-export default MentorPendingItem;
+export default AllUsersItem;

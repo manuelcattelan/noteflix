@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import Navigation from '../components/Navigation';
 import { useNavigate} from 'react-router-dom';
 import macroaree from '../data/macroaree.json'
+import Footer from '../components/Footer';
     
 const Upload = (props) => {
 
@@ -63,11 +64,22 @@ const Upload = (props) => {
             redirect: 'follow'
         };
 
-        const url='http://localhost:3001/api/v1/documents/?token='+props.token
+        const url='../api/v2/documents/?token='+props.token
         fetch(url, requestOptions)
         .then( res => console.log(res))
         .then(navigate('/'))
     };
+
+
+    useEffect(() => {
+        fetch("../api/v2/token/?token="+props.token)
+        .then(resp => resp.json())
+        .then(data => {
+            if(!data.success || data.tokenData.type != "mentor"){
+                navigate('/')
+            }
+        })
+    }, []);
     
 
 
@@ -138,7 +150,7 @@ const Upload = (props) => {
                     </div>
                 </Container>
             </Container>
-            
+            <Footer/>
         </>
     );
 };

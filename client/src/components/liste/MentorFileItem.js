@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { ListGroup, Button, ButtonGroup, ButtonToolbar, Badge, Form, ModalTitle } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { ListGroup, Button, Badge, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import swal from 'sweetalert';
 
 const MentorFileItem = ({token, id, title, status, votes, like, comments}) => {
 
@@ -12,9 +13,9 @@ const MentorFileItem = ({token, id, title, status, votes, like, comments}) => {
                 //da implementare
                 break;
             case "elimina":
-                fetch("api/v1/documents/"+id+"?token="+token, {method: 'DELETE'})
+                fetch("../api/v2/documents/"+id+"?token="+token, {method: 'DELETE'})
                 .then(res => res.json())
-                .then(data => alert(data.message))
+                .then(data => swal(data.message))
                 break;
         }
     }
@@ -41,9 +42,9 @@ const MentorFileItem = ({token, id, title, status, votes, like, comments}) => {
                 
             </div>
             <ListGroup className="me-3" horizontal>
-                <ListGroup.Item>{comments == 1 ? "1 commento" : comments + " commenti"}</ListGroup.Item>
-                <ListGroup.Item>{votes == 1 ? "1 valutazione" : votes + " valutazioni"}</ListGroup.Item>
-                <ListGroup.Item>{like == null ? "Nessun like" : "Piace al " + like + "%"}</ListGroup.Item>
+                <ListGroup.Item>{comments === 1 ? "1 commento" : comments + " commenti"}</ListGroup.Item>
+                <ListGroup.Item>{votes === 1 ? "1 valutazione" : votes + " valutazioni"}</ListGroup.Item>
+                <ListGroup.Item>{like == null ? "Nessun like" : "Piace al " + like.toFixed() + "%"}</ListGroup.Item>
             </ListGroup>
             <Link to={"/document/?id="+id}>
                 <Button variant="outline-primary">Visualizza</Button>
@@ -51,7 +52,7 @@ const MentorFileItem = ({token, id, title, status, votes, like, comments}) => {
             <Form className="d-flex" onSubmit={handleSubmit}>
                 <Form.Select className='mx-3' id="macroarea" maxlength="160" onChange={(e) => setDecision(e.target.value)}>
                     <option disabled selected value>- seleziona un'azione</option>
-                    <option value="modifica">Modifica</option>
+                    {/* <option value="modifica">Modifica</option> */}
                     <option value="elimina">Elimina</option>
                 </Form.Select>
                 <Button type="submit" size="sm" variant="primary">Salva</Button>

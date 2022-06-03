@@ -47,35 +47,35 @@ describe('GET /api/v1/documents', () => {
     });
     test('LOGIN / Should return 200', () => {
         return request(app)
-            .post('/api/v1/auth/login')
+            .post('/api/v2/auth/login')
             .set('Accept', 'application/json')
             .send({ email: 'utente@gmail.com', password: 'password' }) 
             .expect(200);
     });
     test('LOGIN / Without password return 400', () => {
         return request(app)
-            .post('/api/v1/auth/login')
+            .post('/api/v2/auth/login')
             .set('Accept', 'application/json')
             .send({ email: 'utente@gmail.com' }) 
             .expect(400);
     });
     test('LOGIN / Without username return 400', () => {
         return request(app)
-            .post('/api/v1/auth/login')
+            .post('/api/v2/auth/login')
             .set('Accept', 'application/json')
             .send({ password: 'password' }) 
             .expect(400);
     });
     test('LOGIN / with invalid email return 400', () => {
         return request(app)
-            .post('/api/v1/auth/login')
+            .post('/api/v2/auth/login')
             .set('Accept', 'application/json')
             .send({ email: 'utent7/egmail.com', password: 'password'}) 
             .expect(400);
     });
     test('LOGIN / with invalid password return 400', () => {
         return request(app)
-            .post('/api/v1/auth/login')
+            .post('/api/v2/auth/login')
             .set('Accept', 'application/json')
             .send({ email: 'utente@gmail.com', password: 'password_sbagliata'}) 
             .expect(400);

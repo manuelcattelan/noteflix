@@ -13,8 +13,9 @@ import Upload from './pages/Upload';
 import Policy from './pages/Policy';
 import Document from './pages/Document';
 import MentorWannaBe from './pages/MentorWannaBe';
-import Test from './pages/Test';
 import ModeratorConsole from './pages/ModeratorConsole';
+import NoAccess from './pages/NoAccess';
+import NotFound404 from './pages/NotFound404';
 
 
 
@@ -22,16 +23,22 @@ function App() {
 
   const [navbar, setNavbar] = useState("visitor")                                           // la navbar potrà essere visitatore, user, moderator, mentor
   const [token, setToken] =  useLocalStorage('token', "")                                   //controllo di avere un token salvato nel local storage
-  const [user, setUser] = useLocalStorage('user', "")                                       //creo uno stato per conservare l'oggetto utente
-  const [page, setPage] = useState(<Main token={token}   navbar="visitatore"/>)   //creo uno stato per la pagina principale
+  const [user, setUser] = useLocalStorage('user', "")                                       //creo uno stato per conservare l'id utente
+  const [persona, setPersona] = useLocalStorage('persona', "")                              //creo uno stato per conservare avatar e username    
+  const [page, setPage] = useState(<Main token={token}   navbar="visitatore"/>)             //creo uno stato per la pagina principale
 
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/v1/token/?token="+token)
+    fetch("../api/v2/token/?token="+token)
     .then(resp => resp.json())
     .then(data => {
       setUser(data.tokenData.id)
       if(data.success === true){
+
+        //fetch per ottenere username e avatar utente
+        fetch("../api/v2/users/"+data.tokenData.id+"?token="+token)
+        .then(resp => resp.json())
+        .then(data => setPersona(data))
 
         switch(data.tokenData.type) {
           case "mentor":
@@ -53,7 +60,7 @@ function App() {
         
       }
     })
-  }, [""]);
+  }, []);
 
   return (
     <div  className="App">
@@ -61,27 +68,26 @@ function App() {
         <Routes>
 
           
-          
           {/* carica una pagina a "/" a seconda se l'utente è loggato o meno */}
-          <Route path='/' exact element={page} />
-
-
-          <Route path='/test' exact element={<Test/>} />
-
+          <Route path='/'                  exact element={page} />
 
           {/* pagine accessibili da tutti (anche non loggati) */}
-          <Route path='/signlog'        exact element={<SignLog token={token} setToken={setToken} setPage={setPage}  setUser={setUser} /*qui il set user è necessario*/ navbar={navbar} setNavbar={setNavbar}/>} />
-          <Route path='/policy'         exact element={<Policy  navbar={navbar}/>} />
-          <Route path='/mentorwannabe'  exact element={<MentorWannaBe token={token} navbar={navbar}/>} />
+          <Route path='/signlog'           exact element={<SignLog token={token} /*da qui..*/ setToken={setToken}setPage={setPage} setUser={setUser} setPersona={setPersona} setNavbar={setNavbar} /* ..a qui necessari*/ navbar={navbar} />} />
+          <Route path='/policy'            exact element={<Policy  navbar={navbar}/>} />
           
           {/* pagine accessibili solo sotto verifica utente loggato (hanno la props user) */}
-          <Route path='/library'           exact element={<Library  token={token} navbar={navbar}/>} />
-          <Route path='/mentorconsole'     exact element={<MentorConsole    token={token} navbar={navbar}/>} />
-          <Route path='/moderatorconsole'  exact element={<ModeratorConsole   token={token} navbar={navbar}/>} />
-          <Route path='/upload'            exact element={<Upload     token={token} navbar={navbar}/>} />
-          <Route path='/document'          exact element={<Document   token={token} navbar={navbar}/>} />
+          <Route path='/library'           exact element={<Library           token={token} navbar={navbar}/>} />
+          <Route path='/mentorconsole'     exact element={<MentorConsole     token={token} navbar={navbar}/>} />
+          <Route path='/moderatorconsole'  exact element={<ModeratorConsole  token={token} navbar={navbar}/>} />
+          <Route path='/upload'            exact element={<Upload            token={token} navbar={navbar}/>} />
+          <Route path='/document'          exact element={<Document          token={token} navbar={navbar}/>} />
+          <Route path='/mentorwannabe'     exact element={<MentorWannaBe token={token} navbar={navbar} /*da qui..*/ setToken={setToken}setPage={setPage} setUser={setUser} setPersona={setPersona} setNavbar={setNavbar} /* ..a qui necessari*//>} />
+          <Route path='/noaccess'          exact element={<NoAccess navbar={navbar}/>}/>
 
-          {/* <Route render={() => <PageNotFound />}/> */}
+          {/* pagine non esistenti nel sito */}
+          <Route path='*'                  element={<NotFound404 />}/>
+
+
         </Routes>
       </Router>
     </div>
