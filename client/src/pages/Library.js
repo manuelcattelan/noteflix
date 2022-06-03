@@ -33,7 +33,7 @@ const Library = (props) => {
                 <p className='titolo text-center mt-5'>Ecco la tua <span className='text-primary'>libreria</span> personale.</p>
                 <p className='testo text-center'>Qui troverai i documenti che hai salvato dalla sezione esplora.</p>        
             </Container>
-            <Container style={{height:"50vh"}}>
+            <Container style={{minHeight:"50vh"}}>
                 <LibraryList documenti={docArray.documents}/>
             </Container>
             <Footer/>
