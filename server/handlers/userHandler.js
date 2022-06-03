@@ -185,7 +185,7 @@ router.patch('/userToMentor', async (req, res) => {
         })
         .catch( (error) => {
             return res
-                .status(400)
+                .status(500)
                 .json({ 
                     success: true,
                     message: error.message 
@@ -245,7 +245,7 @@ router.patch('/:id/upgrade', async (req, res) => {
         })
         .catch( (error) => {
             return res
-                .status(400)
+                .status(500)
                 .json({ 
                     success: true,
                     message: error.message 
@@ -305,7 +305,7 @@ router.patch('/:id/downgrade', async (req, res) => {
         })
         .catch( (error) => {
             return res
-                .status(400)
+                .status(500)
                 .json({ 
                     success: true,
                     message: error.message
@@ -405,7 +405,7 @@ router.delete('/:id', async (req, res) => {
             // document deletion failed
             console.log('-> user deletion failed')
             return res
-                .status(400)
+                .status(500)
                 .json({
                     success: false,
                     message: error.message

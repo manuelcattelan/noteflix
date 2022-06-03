@@ -58,7 +58,7 @@ router.post('/:id/save', async (request, result) =>{
         })
         .catch( (error) => {
             return result
-                .status(400)
+                .status(500)
                 .json({
                     success: false,
                     message: error.message
@@ -117,7 +117,7 @@ router.patch('/:id/comment', async (request, result) =>{
         })
         .catch( (error) => {
             return result
-                .status(400)
+                .status(500)
                 .json({
                     success: false,
                     message: error.message
@@ -183,7 +183,7 @@ router.delete('/:id/comment/:commentId', async (request, result) =>{
         })
         .catch( (error) => {
             return result
-                .status(400)
+                .status(500)
                 .json({
                     success: false,
                     message: error.message
@@ -257,7 +257,7 @@ router.patch('/:id/report', async (request, result) => {
         .catch( error => {
             // document report failed
             return result
-                .status(400)
+                .status(500)
                 .json({
                     success: false,
                     message: error.message
@@ -329,7 +329,7 @@ router.patch('/:id/:vote', async (request, result) =>{
     }).catch( error => {
         // document save failure
         return result
-            .status(400)
+            .status(500)
             .json({
                 success: false,
                 message: error.message

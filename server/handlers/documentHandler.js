@@ -106,7 +106,7 @@ router.post('', async (request, result) => {
                 // document save failed
                 console.log('-> document upload failed')
                 return result
-                    .status(400)
+                    .status(500)
                     .json({
                         success: false,
                         message: error.message
@@ -483,7 +483,7 @@ router.delete('/:id', async(request, result) => {
             // document deletion failed
             console.log('-> document deletion failed')
             return result
-                .status(400)
+                .status(500)
                 .json({
                     success: false,
                     message: error.message
@@ -565,7 +565,7 @@ router.patch('/:id/validate', async (request, result) => {
         .catch( error => {
             // document publish failed
             return result
-                .status(400)
+                .status(500)
                 .json({
                     success: false,
                     message: error.message

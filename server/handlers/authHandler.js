@@ -91,7 +91,7 @@ router.post('/signup', async (request, result) => {
             return;
         })
         .catch( (error) => {
-            result.status(400).json({ success: false, message: error.message });
+            result.status(500).json({ success: false, message: error.message });
         })
 })
 
