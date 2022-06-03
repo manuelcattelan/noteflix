@@ -70,12 +70,10 @@ function App() {
           
           {/* carica una pagina a "/" a seconda se l'utente è loggato o meno */}
           <Route path='/' exact element={page} />
-          <Route path='noaccess/' exact element={<NoAccess navbar={navbar}/>}/>
 
           {/* pagine accessibili da tutti (anche non loggati) */}
-          <Route path='/signlog'        exact element={<SignLog token={token} setToken={setToken} setPage={setPage}  setUser={setUser} setPersona={setPersona} /*qui il set user è necessario*/ navbar={navbar} setNavbar={setNavbar}/>} />
+          <Route path='/signlog'        exact element={<SignLog token={token} /*da qui..*/ setToken={setToken}setPage={setPage} setUser={setUser} setPersona={setPersona} setNavbar={setNavbar} /* ..a qui necessari*/ navbar={navbar} />} />
           <Route path='/policy'         exact element={<Policy  navbar={navbar}/>} />
-          <Route path='/mentorwannabe'  exact element={<MentorWannaBe token={token} navbar={navbar}/>} />
           
           {/* pagine accessibili solo sotto verifica utente loggato (hanno la props user) */}
           <Route path='/library'           exact element={<Library           token={token} navbar={navbar}/>} />
@@ -83,6 +81,9 @@ function App() {
           <Route path='/moderatorconsole'  exact element={<ModeratorConsole  token={token} navbar={navbar}/>} />
           <Route path='/upload'            exact element={<Upload            token={token} navbar={navbar}/>} />
           <Route path='/document'          exact element={<Document          token={token} navbar={navbar}/>} />
+          <Route path='/mentorwannabe'  exact element={<MentorWannaBe token={token} navbar={navbar} /*da qui..*/ setToken={setToken}setPage={setPage} setUser={setUser} setPersona={setPersona} setNavbar={setNavbar} /* ..a qui necessari*//>} />
+          <Route path='/noaccess' exact element={<NoAccess navbar={navbar}/>}/>
+
 
           {/* <Route render={() => <PageNotFound />}/> */}
         </Routes>
