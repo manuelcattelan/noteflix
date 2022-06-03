@@ -3,7 +3,7 @@ const app = require('../app.js');
 const jwt = require('jsonwebtoken');
 
 
-describe('', () => {
+describe('Login/signup test (authHandler)', () => {
     let userSpy;
     let userSaveSpy;
     beforeAll( async () => {
@@ -29,8 +29,6 @@ describe('', () => {
     })
     
     afterAll( async () => {
-        //mongoose.disconnect();
-        console.log("Database connection successfully closed.");
         userSpy.mockRestore();
         userSaveSpy.mockRestore();
     })
@@ -38,6 +36,7 @@ describe('', () => {
     test('app module should be defined', () => {
         expect(app).toBeDefined();
     });
+
     test('LOGIN / Should return 200', () => {
         return request(app)
             .post('/api/v2/auth/login')
@@ -64,13 +63,6 @@ describe('', () => {
             .post('/api/v2/auth/login')
             .set('Accept', 'application/json')
             .send({ email: 'utente_falso@gmail.com', password: 'password' }) 
-            .expect(400);
-    });
-    test('LOGIN / Without username return 400', () => {
-        return request(app)
-            .post('/api/v2/auth/login')
-            .set('Accept', 'application/json')
-            .send({ password: 'password' }) 
             .expect(400);
     });
     test('LOGIN / with invalid email return 400', () => {
