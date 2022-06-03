@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate} from 'react-router-dom';
 import Platform from '../pages/Platform';
 import macroaree from '../data/macroaree.json'
-    
+import swal from 'sweetalert';
 
 const Signup = ({setPage, setNavbar, setUser, setPersona, user, setToken}) => {
 
@@ -82,7 +82,7 @@ const Signup = ({setPage, setNavbar, setUser, setPersona, user, setToken}) => {
                 })
                 
             }else{
-                alert(data.message)
+                swal(data.message)
             }
         })
     }
@@ -92,7 +92,7 @@ const Signup = ({setPage, setNavbar, setUser, setPersona, user, setToken}) => {
         var password = document.getElementById("password-label").value;
         var confirmPassword = document.getElementById("confirm-password-label").value;
         if (password !== confirmPassword) {
-            alert("Passwords do not match.");
+            swal("Passwords do not match.");
             return false;
         }
         return true;

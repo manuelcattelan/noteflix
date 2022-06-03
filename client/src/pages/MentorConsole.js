@@ -5,7 +5,7 @@ import Avatar from 'react-nice-avatar'
 import { useNavigate } from 'react-router-dom';
 import MentorFileList from '../components/liste/MentorFileList';
 import Footer from '../components/Footer';
-
+import swal from 'sweetalert';
 
 
 const MentorConsole = (props) => {
@@ -30,7 +30,7 @@ const MentorConsole = (props) => {
         fetch("../api/v2/users/"+userId+"?token="+props.token)
         .then(resp => resp.json())
         .then(data => setPersona(data))
-        // .then(alert(JSON.stringify(persona)))
+        // .then(swal(JSON.stringify(persona)))
 
 
     }, []);

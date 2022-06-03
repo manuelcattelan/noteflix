@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Button, Form, Modal, NavDropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import swal from 'sweetalert';
 
 import macroaree from '../data/macroaree.json'
     
@@ -47,7 +48,7 @@ const ChangePlan = () => {
 
         })
         .then(res => res.json())
-        .then(data => alert(data.message))
+        .then(data => swal(data.message))
         .then(()=>{
             //logout
             localStorage.removeItem("token")

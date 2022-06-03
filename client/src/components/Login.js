@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import {useNavigate} from 'react-router-dom';
 import Platform from '../pages/Platform';
-
+import swal from 'sweetalert';
 
 const Login = ({setToken, token, setUser, setPersona, user, setPage, setNavbar}) => {
 
@@ -65,7 +65,7 @@ const Login = ({setToken, token, setUser, setPersona, user, setPage, setNavbar})
                 })
                 
             }else{
-                alert(data.message)
+                swal(data.message)
             }
         })
     }

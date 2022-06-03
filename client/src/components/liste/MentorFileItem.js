@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ListGroup, Button, Badge, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import swal from 'sweetalert';
 
 const MentorFileItem = ({token, id, title, status, votes, like, comments}) => {
 
@@ -14,7 +15,7 @@ const MentorFileItem = ({token, id, title, status, votes, like, comments}) => {
             case "elimina":
                 fetch("../api/v2/documents/"+id+"?token="+token, {method: 'DELETE'})
                 .then(res => res.json())
-                .then(data => alert(data.message))
+                .then(data => swal(data.message))
                 break;
         }
     }

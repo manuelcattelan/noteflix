@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { Button, Modal } from 'react-bootstrap';
+import swal from 'sweetalert';
 
 const Report = ({id, token}) => {
 
@@ -14,7 +15,7 @@ const Report = ({id, token}) => {
         fetch("../api/v2/documents/"+id+"/report?token="+token, {method: 'PATCH'})
         .then(res => res.json())
         .then(handleClose)
-        .then(data => alert(data.message))   
+        .then(data => swal(data.message))   
     }
 
     return (
