@@ -39,13 +39,13 @@ const tokenChecker = function ( req, res, next ) {
     // header or url parameters or post parameters
     var token = req.body.token || req.query.token || req.headers[ 'x-access-token'];
     if (!token) {
-        res.status(401).json({ success: false, message: 'No token provided.'});
+        res.status(401).json({ success: false, message: "Nessun token è stato fornito"});
         return
     }
     // decode token, verifies secret and checks expiration
     jwt.verify(token, process.env.TOKEN_SECRET, function ( err, decoded ) {
         if (err) 
-            res.status( 403 ).json({ success: false, message: 'Token not valid'});
+            res.status( 403 ).json({ success: false, message: "Il token fornito non è valido"});
         else {
             // if everything is good, save in req object for use in other routes
             req.loggedUser = decoded;

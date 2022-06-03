@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
             .status(403)
             .json({
                 success: false,
-                message: "Only moderators can access the users list"
+                message: "Solo i moderatori possono accedere alla lista degli utenti"
             })
     }
     // find all users in the platform, except for moderators
@@ -38,7 +38,7 @@ router.get('/', async (req, res) => {
         .status(200)
         .json({
             success: true,
-            message: 'Users found',
+            message: "Sono stati trovati utenti",
             users: users
         })
 })
@@ -51,7 +51,7 @@ router.get('/pending', async (req, res) => {
             .status(403)
             .json({
                 success: false,
-                message: "Only moderators can access the pending users list"
+                message: "Solo i moderatori possono accedere alla lista degli utenti in attesa di diventare mentor"
             })
     }
     // find all users that have asked to be upgraded to mentors
@@ -76,7 +76,7 @@ router.get('/pending', async (req, res) => {
         .status(200)
         .json({
             success: true,
-            message: 'Pending users found',
+            message: "Sono stati trovati utenti in attesa di diventare mentor",
             users: users
         })
 })
@@ -89,7 +89,7 @@ router.get('/mentors', async (req, res) => {
             .status(403)
             .json({
                 success: false,
-                message: "Only moderators can access the mentors list"
+                message: "Solo i moderatori possono accedere alla lista dei mentor"
             })
     }
     // find all mentors in the platform
@@ -114,7 +114,7 @@ router.get('/mentors', async (req, res) => {
         .status(200)
         .json({
             success: true,
-            message: 'Mentors found',
+            message: "Sono stati trovati mentor",
             users: users
         })
 })
@@ -127,7 +127,7 @@ router.get('/:id', async (req, res) => {
             .status(400)
             .json({
                 success: false,
-                message: 'Invalid ID',
+                message: "l'ID dell'utente non è valido",
             })
     }
     // check for user existence in database
@@ -137,7 +137,7 @@ router.get('/:id', async (req, res) => {
             .status(404)
             .json({
                 success: false,
-                message: 'User not found'
+                message: "L'utente non esiste nei database"
             })
     }
     // return username and avatar of user
@@ -160,7 +160,7 @@ router.patch('/userToMentor', async (req, res) => {
             .status(404)
             .json({
                 success: false,
-                message: 'User not found'
+                message: "L'utente non esiste nei database"
             })
     }
     // only let users require to become mentors
@@ -169,7 +169,7 @@ router.patch('/userToMentor', async (req, res) => {
             .status(403)
             .json({
                 success: false,
-                message: 'Only users can require to become mentors'
+                message: "Solo gli utenti possono richiedere di diventare mentor"
             })
     }
     // user is authorized to make request
@@ -180,7 +180,7 @@ router.patch('/userToMentor', async (req, res) => {
                 .status(200)
                 .json({ 
                     success: true,
-                    message: 'User request was sent successfully'
+                    message: "La richiesta di diventare mentor è stata inoltrata con successo"
                 });
         })
         .catch( (error) => {
@@ -201,7 +201,7 @@ router.patch('/:id/upgrade', async (req, res) => {
             .status(400)
             .json({
                 success: false,
-                message: 'Invalid ID',
+                message: "l'ID dell'utente non è valido",
             })
     }
     // check for user existence in database
@@ -211,7 +211,7 @@ router.patch('/:id/upgrade', async (req, res) => {
             .status(404)
             .json({
                 success: false,
-                message: 'User not found'
+                message: "L'utente non esiste nei database"
             })
     }
     // only let moderators upgrade users to mentors
@@ -220,7 +220,7 @@ router.patch('/:id/upgrade', async (req, res) => {
             .status(403)
             .json({
                 success: false,
-                message: 'Only moderators are allowed to upgrade users to mentors'
+                message: "Solo i moderatori sono autorizzati a promuovere gli utenti a mentor"
             })
     }
     // if user to upgrade is not a simple user, he/she cannot be upgraded
@@ -229,7 +229,7 @@ router.patch('/:id/upgrade', async (req, res) => {
             .status(400)
             .json({
                 success: false,
-                message: 'User cannot be upgraded'
+                message: "L'utente non può essere promosso a mentor"
             })
     };
     // change user status and save changes to database
@@ -240,7 +240,7 @@ router.patch('/:id/upgrade', async (req, res) => {
                 .status(200)
                 .json({ 
                     success: true,
-                    message: 'User was successfully upgraded to mentor'
+                    message: "L'utente è stato promosso con successo a mentor"
                 });
         })
         .catch( (error) => {
@@ -261,7 +261,7 @@ router.patch('/:id/downgrade', async (req, res) => {
             .status(400)
             .json({
                 success: false,
-                message: 'Invalid ID',
+                message: "l'ID dell'utente non è valido",
             })
     }
     // check for user existence in database
@@ -271,7 +271,7 @@ router.patch('/:id/downgrade', async (req, res) => {
             .status(404)
             .json({
                 success: false,
-                message: 'User not found'
+                message: "L'utente non esiste nei database"
             })
     }
     // only let moderators upgrade users to mentors
@@ -280,7 +280,7 @@ router.patch('/:id/downgrade', async (req, res) => {
             .status(403)
             .json({
                 success: false,
-                message: 'Only moderators are allowed to downgrade mentors to users'
+                message: "Solo i moderatori sono autorizzati a riportare i mentor allo stato di utenti"
             })
     }
     // if user is still pending, reject upgrade request
@@ -290,7 +290,7 @@ router.patch('/:id/downgrade', async (req, res) => {
             .status(400)
             .json({
                 success: false,
-                message: 'User could not be downgraded'
+                message: "Il mentor non può essere riportato a utente"
             })
     }
     user.userType = 'user'
@@ -300,7 +300,7 @@ router.patch('/:id/downgrade', async (req, res) => {
                 .status(200)
                 .json({ 
                     success: true,
-                    message: 'Downgrade ok'
+                    message: "Il downgrade è stato effettuato con successo"
                 });
         })
         .catch( (error) => {
@@ -317,7 +317,7 @@ router.patch('/:id/downgrade', async (req, res) => {
 router.patch('/changePassword', async (request, result) => {
     // check if old passwords and new passwords were provided
     if ( !(request.body.oldPassword && request.body.newPassword)){
-        result.status(400).json({ success: false, message: 'Malformed request'});
+        result.status(400).json({ success: false, message: 'La richiesta non è in un formato valido'});
         return;
     }
     // retrieve information of currently logged in user 
@@ -325,14 +325,14 @@ router.patch('/changePassword', async (request, result) => {
     // generate password digest with the old password to check validity
     let hash = crypto.createHash('sha256').update(request.body.oldPassword + usr.passwordSalt).digest('hex');
     if (hash != usr.passwordHash){
-        result.status(400).json({ success: false, message: 'Old password doesn\'t match'});
+        result.status(400).json({ success: false, message: 'La password attuale risulta scorretta'});
         return;
     }
     // if provided old password was correct, generate digest of new password and set it to the new user password
     hash = crypto.createHash('sha256').update(request.body.newPassword + usr.passwordSalt).digest('hex');
     usr.passwordHash = hash;
     await usr.save();
-    result.status(200).json({ success: true, message: 'Password successfully updated'});
+    result.status(200).json({ success: true, message: 'La tua password è stata aggiornata con successo'});
 })
 
 // change current subscription plan for logged in user
@@ -340,7 +340,7 @@ router.patch('/changeSubscription', async (req, result) => {
     // if subscription information provided isn't valid, return error
     if ( !(req.body.subscriptionType == 'studenti' || req.body.subscriptionType == 'nerd' || req.body.subscriptionType == 'matricole') ||
           (req.body.subscriptionType == "studenti" && (!req.body.subscriptionArea)) ){
-        result.status(400).json({ success: false, message: 'Malformed request'});
+        result.status(400).json({ success: false, message: 'La richiesta non è in un formato valido'});
         return;
     }
     // retrieve information of currently logged in user 
@@ -355,7 +355,7 @@ router.patch('/changeSubscription', async (req, result) => {
     // replace old subscription plan with the new one and store change in the database
     user.subscription = sub;
     await user.save();   
-    result.status(200).json({ success: true, message: 'Enjoy your token!',
+    result.status(200).json({ success: true, message: 'Ecco il tuo token!',
                 token: tokenHandler.createToken(user) });
     return;
 });
@@ -368,7 +368,7 @@ router.delete('/:id', async (req, res) => {
             .status(400)
             .json({
                 success: false,
-                message: 'Invalid ID',
+                message: "l'ID dell'utente non è valido",
             })
     }
     // check for user existence in database
@@ -378,7 +378,7 @@ router.delete('/:id', async (req, res) => {
             .status(404)
             .json({
                 success: false,
-                message: 'User not found'
+                message: "L'utente non esiste nei database"
             })
     }
     // only moderators or account owners can delete their account
@@ -387,7 +387,7 @@ router.delete('/:id', async (req, res) => {
             .status(403)
             .json({
                 success: false,
-                message: "Only moderators or account owners can delete their account"
+                message: "Solo il proprietario dell'account o un moderatore può eliminare il proprio account"
             })
     }
     // delete user from database
@@ -398,7 +398,7 @@ router.delete('/:id', async (req, res) => {
                 .status(200)
                 .json({
                     success: true,
-                    message: 'User deleted successfully'
+                    message: "L'utente è stato eliminato con successo"
                 })
         })
         .catch( (error) => {

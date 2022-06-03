@@ -13,7 +13,7 @@ router.post('/:id/save', async (request, result) =>{
         result.status(400)
             .json({
                 success: false,
-                message: 'Invalid ID',
+                message: "l'ID del documento non è valido",
             })
         return;
     }
@@ -25,7 +25,7 @@ router.post('/:id/save', async (request, result) =>{
             .status(404)
             .json({
                 success: false,
-                message: 'No document found with the given id',
+                message: "Nessun documento è stato trovato con l'ID fornito",
             })
     }
     let user = await User.findById(request.loggedUser.id);
@@ -34,7 +34,7 @@ router.post('/:id/save', async (request, result) =>{
             .status(404)
             .json({
                 success: false,
-                message: 'No user found with the id of the logged user'
+                message: "Nessun utente è stato trovato con l'ID fornito"
             })
     }
     // find index of saved reference to logged user id, if it exists
@@ -53,7 +53,7 @@ router.post('/:id/save', async (request, result) =>{
                 .json({
                     success: true,
                     saved: savedIndex == -1,
-                    message: "Document " + (savedIndex == -1 ? 'saved' : 'unsaved')+ " successfully",
+                    message: "Il documento è stato " + (savedIndex == -1 ? 'salvato' : 'rimosso dai salvati')+ " con successo",
                 })
         })
         .catch( (error) => {
@@ -73,7 +73,7 @@ router.patch('/:id/comment', async (request, result) =>{
         result.status(400)
             .json({
                 success: false,
-                message: 'Invalid ID',
+                message: "l'ID del commento non è valido",
             })
         return;
     }
@@ -82,7 +82,7 @@ router.patch('/:id/comment', async (request, result) =>{
         result.status(400)
         .json({
             success: false,
-            message: 'Missing comment body'
+            message: "Il commento è stato inviato senza un body"
         })
     }
     // find document by id parameter
@@ -93,7 +93,7 @@ router.patch('/:id/comment', async (request, result) =>{
             .status(404)
             .json({
                 success: true,
-                message: 'No document found with the given id',
+                message: "Nessun documento è stato trovato con l'ID fornito",
             })
     }
     // create comment object
@@ -109,7 +109,7 @@ router.patch('/:id/comment', async (request, result) =>{
             result.status(200)
                 .json({
                     success: true,
-                    message: 'Comment added successfully',
+                    message: "Il commento è stato aggiunto con successo",
                     commentBody: comment.body,
                     commentDate: comment.date,
                     id: document.comments[document.comments.length-1]._id
@@ -133,7 +133,7 @@ router.delete('/:id/comment/:commentId', async (request, result) =>{
         result.status(400)
             .json({
                 success: false,
-                message: 'Invalid document or comment id',
+                message: "l'ID del commento o del documento non è valido",
             })
         return;
     }
@@ -145,7 +145,7 @@ router.delete('/:id/comment/:commentId', async (request, result) =>{
             .status(404)
             .json({
                 success: false,
-                message: 'No document found with the given id',
+                message: "Nessun documento è stato trovato con l'ID fornito",
             })
     }
     // find index of comment with given id, if it exists
@@ -156,7 +156,7 @@ router.delete('/:id/comment/:commentId', async (request, result) =>{
             .status(404)
             .json({
                 success: false,
-                message: 'No comment found with the given id',
+                message: "Nessun commento è stato trovato con l'ID fornito",
             })
         return;
     } 
@@ -166,7 +166,7 @@ router.delete('/:id/comment/:commentId', async (request, result) =>{
             .status(403)
             .json({
                 success: false,
-                message: 'You do not have the permission to delete this comment',
+                message: "Non hai il permesso di eliminare questo commento, devi esserne l'autore o un moderatore",
             })
         return;
     }
@@ -178,7 +178,7 @@ router.delete('/:id/comment/:commentId', async (request, result) =>{
             result.status(200)
                 .json({
                     success: true,
-                    message: 'Comment deleted successfully'
+                    message: "Il commento è stato eliminato con successo"
                 })
         })
         .catch( (error) => {
@@ -199,7 +199,7 @@ router.patch('/:id/report', async (request, result) => {
             .status(400)
             .json({
                 success: false,
-                message: 'Invalid ID',
+                message: "l'ID del documento non è valido",
             })
     }
     // look for document with provided id
@@ -210,7 +210,7 @@ router.patch('/:id/report', async (request, result) => {
             .status(404)
             .json({
                 success: false,
-                message: 'No document found with the given id',
+                message: "Nessun documento è stato trovato con l'ID fornito",
             })
         return;
     }
@@ -219,7 +219,7 @@ router.patch('/:id/report', async (request, result) => {
             .status(400)
             .json({
                 success: false,
-                message: 'You cannot report documents that are still pending',
+                message: "Non puoi segnalare un documento che non è ancora pubblico",
             })
         return;
     }
@@ -229,7 +229,7 @@ router.patch('/:id/report', async (request, result) => {
             .status(403)
             .json({
                 success: false,
-                message: 'You cannot report your own document'
+                message: "Non puoi segnalare un documento di cui sei l'autore"
             })
     }
     // update reported attribute if it wasn't already reported by the logged user
@@ -238,7 +238,7 @@ router.patch('/:id/report', async (request, result) => {
             .status(200)
             .json({
                 success: true,
-                message: 'You have reported this document already',
+                message: "Hai già segnalato questo documento, grazie del tuo contributo",
             })
         return;
     }
@@ -251,7 +251,7 @@ router.patch('/:id/report', async (request, result) => {
                 .status(200)
                 .json({ 
                     success: true,
-                    message: 'Document reported successfully'
+                    message: "Il documento è stato segnalato con successo"
                 });
         })
         .catch( error => {
@@ -272,7 +272,7 @@ router.patch('/:id/:vote', async (request, result) =>{
         result.status(400)
             .json({
                 success: false,
-                message: 'Invalid ID',
+                message: "l'ID del documento non è valido",
             })
         return;
     }
@@ -283,7 +283,7 @@ router.patch('/:id/:vote', async (request, result) =>{
         return result.status(404)
             .json({
                 success: false,
-                message: 'No document found with the given id',
+                message: "Nessun documento è stato trovato con l'ID fornito",
             })
     }
     // check if current user has already liked/disliked
@@ -314,7 +314,7 @@ router.patch('/:id/:vote', async (request, result) =>{
             return result.status(400)
             .json({
                 success: false,
-                message: 'Invalid vote option given',
+                message: "L'opzione di voto fornita non è valida",
             })
     }
     // save changes to database 

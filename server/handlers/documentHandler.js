@@ -60,7 +60,7 @@ router.post('', async (request, result) => {
             .status(403)
             .json({
                 success: false,
-                message: 'User is not a mentor'
+                message: "Devi essere un mentor per pubblicare un documento"
             })
     }
     // upload document sent in form to s3 storage
@@ -98,7 +98,7 @@ router.post('', async (request, result) => {
                     .status(201)
                     .json({ 
                         success: true,
-                        message: 'Document created successfully', 
+                        message: "Il documento è stato caricato con successo", 
                         documentId: document._id
                     });
             })
@@ -141,7 +141,7 @@ router.get('', async (request, result) => {
         .status(200)
         .json({
             success: true,
-            message: 'Public documents found',
+            message: "Sono stati trovati dei documenti",
             documents: documents
         })
 });
@@ -154,7 +154,7 @@ router.get('/pending', async (request, result) => {
             .status(403)
             .json({
                 success: false,
-                message: 'User is not a moderator'
+                message: "Solo i moderatori possono rendere pubblici i documenti in attesa di approvazione"
             })
     }
     // find all documents that are waiting for validation
@@ -182,7 +182,7 @@ router.get('/pending', async (request, result) => {
         .status(200)
         .json({
             success: true,
-            message: 'Pending documents found',
+            message: "Sono stati trovati documenti in attesa di essere approvati",
             documents: documents
         })
 });
@@ -195,7 +195,7 @@ router.get('/reported', async (request, result) => {
             .status(403)
             .json({
                 success: false,
-                message: 'User is not a moderator'
+                message: "Solo i moderatori possono visualizzare i documenti segnalati"
             })
     }
     // find all documents that have been reported
@@ -219,7 +219,7 @@ router.get('/reported', async (request, result) => {
         .status(200)
         .json({
             success: true,
-            message: 'Reported documents found',
+            message: "Sono stati trovati documenti segnalati dagli utenti",
             documents: documents
         })
 });
@@ -232,7 +232,7 @@ router.get('/uploaded', async (request, result) => {
             .status(403)
             .json({
                 success: false,
-                message: 'User is not a mentor'
+                message: "Solo i mentor possono ottenere la lista dei file da loro pubblicati"
             })
     }
     // find all documents that have been uploaded from current mentor
@@ -259,7 +259,7 @@ router.get('/uploaded', async (request, result) => {
         .status(200)
         .json({
             success: true,
-            message: 'Uploaded documents found',
+            message: "Sono stati trovati i documenti che hai caricato",
             documents: documents
         })
 })
@@ -292,7 +292,7 @@ router.get('/saved', async (request, result) => {
         .status(200)
         .json({
             success: true,
-            message: 'Saved documents found',
+            message: 'Sono stati trovati i documenti che hai salvato',
             documents: documents
         })
 })
@@ -323,7 +323,7 @@ router.get('/mostLiked', async (request, result) => {
         .status(200)
         .json({
             success: true,
-            message: 'Most liked documents found',
+            message: "Sono stati trovati i documenti con più like",
             documents: documents
         })
 })
@@ -336,7 +336,7 @@ router.get('/:id', async (request, result) => {
             .status(400)
             .json({
                 success: false,
-                message: 'Invalid ID',
+                message: "l'ID del documento non è valido",
             })
     }
     // find document by id parameter
@@ -347,7 +347,7 @@ router.get('/:id', async (request, result) => {
             .status(404)
             .json({
                 success: false,
-                message: 'No document found with the given id',
+                message: "Nessun documento è stato trovato con l'ID fornito",
             })
     }
     // grant access to document to every moderator
@@ -365,14 +365,14 @@ router.get('/:id', async (request, result) => {
                 .status(403)
                 .json({
                     success: false,
-                    message: 'Your subscription plan does not allow you to view this document.',
+                    message: "Il tuo piano di abbonamento non ti permette di vedere questo documento",
                 })
         if (!hasValidSubscription) {
             return result
                 .status(403)
                 .json({
                     success: false,
-                    message: 'Your subscription plan does not allow you to view this document.',
+                    message: "Il tuo piano di abbonamento non ti permette di vedere questo documento",
                 })
         }
     }
@@ -429,7 +429,7 @@ router.get('/:id', async (request, result) => {
         .status(200)
         .json({
             success: true,
-            message: 'Document found',
+            message: "Documenti trovati!",
             document,
             author,
             comments,
@@ -445,7 +445,7 @@ router.delete('/:id', async(request, result) => {
             .status(400)
             .json({
                 success: false,
-                message: 'Invalid ID',
+                message: "l'ID del documento non è valido",
             })
     }
     
@@ -458,7 +458,7 @@ router.delete('/:id', async(request, result) => {
             .status(403)
             .json({
                 success: false,
-                message: 'You cannot delete resources unless you are a moderator or the document author'
+                message: "Non puoi eliminare documenti a meno che tu non sia il proprietario o un moderatore"
             })
     }
     // if no document was found in the database
@@ -467,7 +467,7 @@ router.delete('/:id', async(request, result) => {
             .status(404)
             .json({
                 success: false,
-                message: 'No document found with the given id',
+                message: "Nessun documento è stato trovato con l'ID fornito",
             })
     }
     // retrieve document name from url attribute
@@ -505,7 +505,7 @@ router.delete('/:id', async(request, result) => {
                 .status(200)
                 .send({
                     success: true,
-                    message: 'Document deleted'
+                    message: "Il documento è stato eliminato con successo"
                 })
     })
 })
@@ -519,7 +519,7 @@ router.patch('/:id/validate', async (request, result) => {
             .status(400)
             .json({
                 success: false,
-                message: 'invalid id',
+                message: "l'ID del documento non è valido",
             })
     }
     // check if current user is a moderator
@@ -528,7 +528,7 @@ router.patch('/:id/validate', async (request, result) => {
             .status(403)
             .json({
                 success: false,
-                message: 'You cannot validate resources unless you are a moderator'
+                message: "Non puoi approvare una risorsa a meno che tu non sia un moderatore"
             })
     }
     // look for document with provided id
@@ -539,7 +539,7 @@ router.patch('/:id/validate', async (request, result) => {
             .status(404)
             .json({
                 success: false,
-                message: 'No document found with the given id',
+                message: "Nessun documento è stato trovato con l'ID fornito",
             })
         return;
     }
@@ -559,7 +559,7 @@ router.patch('/:id/validate', async (request, result) => {
                 .status(200)
                 .json({ 
                     success: true,
-                    message: 'Document validated successfully'
+                    message: "Il documento è stato approvato con successo!"
                 });
         })
         .catch( error => {
