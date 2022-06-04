@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, InputGroup } from 'react-bootstrap';
 import Avatar, { genConfig, AvatarConfig } from 'react-nice-avatar'
 import { Link } from 'react-router-dom';
 import { useNavigate} from 'react-router-dom';
@@ -137,7 +137,10 @@ const Signup = ({setPage, setNavbar, setUser, setPersona, user, setToken}) => {
                 </div>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Indirizzo Email</Form.Label>
-                    <Form.Control type="email" placeholder="Inserisci la tua email" onChange={(e)=>setEmail(e.target.value)} required/>
+                    <InputGroup>
+                        <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
+                        <Form.Control type="email" placeholder="Inserisci la tua email" onChange={(e)=>setEmail(e.target.value)} required/>
+                    </InputGroup>
                     <Form.Text className="text-muted">
                         Non condivideremo la tua email con terze parti.
                     </Form.Text>
