@@ -53,7 +53,7 @@ router.post('/:id/save', async (request, result) =>{
                 .json({
                     success: true,
                     saved: savedIndex == -1,
-                    message: "Il documento è stato " + (savedIndex == -1 ? 'salvato' : 'rimosso dai salvati')+ " con successo",
+                    message: "Il documento è stato " + (savedIndex == -1 ? 'salvato' : 'rimosso dai salvati') + " con successo",
                 })
         })
         .catch( (error) => {

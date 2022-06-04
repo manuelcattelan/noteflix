@@ -290,7 +290,7 @@ router.patch('/:id/downgrade', async (req, res) => {
             .status(400)
             .json({
                 success: false,
-                message: "Il mentor non può essere riportato a utente"
+                message: "L'utente indicato non è un mentor"
             })
     }
     user.userType = 'user'
@@ -325,14 +325,14 @@ router.patch('/changePassword', async (request, result) => {
     // generate password digest with the old password to check validity
     let hash = crypto.createHash('sha256').update(request.body.oldPassword + usr.passwordSalt).digest('hex');
     if (hash != usr.passwordHash){
-        result.status(400).json({ success: false, message: 'La password attuale risulta scorretta'});
+        result.status(400).json({ success: false, message: "La password attuale risulta scorretta"});
         return;
     }
     // if provided old password was correct, generate digest of new password and set it to the new user password
     hash = crypto.createHash('sha256').update(request.body.newPassword + usr.passwordSalt).digest('hex');
     usr.passwordHash = hash;
     await usr.save();
-    result.status(200).json({ success: true, message: 'La tua password è stata aggiornata con successo'});
+    result.status(200).json({ success: true, message: "La tua password è stata aggiornata con successo"});
 })
 
 // change current subscription plan for logged in user
@@ -340,7 +340,7 @@ router.patch('/changeSubscription', async (req, result) => {
     // if subscription information provided isn't valid, return error
     if ( !(req.body.subscriptionType == 'studenti' || req.body.subscriptionType == 'nerd' || req.body.subscriptionType == 'matricole') ||
           (req.body.subscriptionType == "studenti" && (!req.body.subscriptionArea)) ){
-        result.status(400).json({ success: false, message: 'La richiesta non è in un formato valido'});
+        result.status(400).json({ success: false, message: "La richiesta non è in un formato valido"});
         return;
     }
     // retrieve information of currently logged in user 
@@ -355,7 +355,7 @@ router.patch('/changeSubscription', async (req, result) => {
     // replace old subscription plan with the new one and store change in the database
     user.subscription = sub;
     await user.save();   
-    result.status(200).json({ success: true, message: 'Ecco il tuo token!',
+    result.status(200).json({ success: true, message: "Ecco il tuo token!",
                 token: tokenHandler.createToken(user) });
     return;
 });
@@ -387,7 +387,7 @@ router.delete('/:id', async (req, res) => {
             .status(403)
             .json({
                 success: false,
-                message: "Solo il proprietario dell'account o un moderatore può eliminare il proprio account"
+                message: "Solo il proprietario dell'account o un moderatore può eliminare un account"
             })
     }
     // delete user from database

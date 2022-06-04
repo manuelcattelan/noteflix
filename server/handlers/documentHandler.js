@@ -292,7 +292,7 @@ router.get('/saved', async (request, result) => {
         .status(200)
         .json({
             success: true,
-            message: 'Sono stati trovati i documenti che hai salvato',
+            message: "Sono stati trovati i documenti che hai salvato",
             documents: documents
         })
 })
@@ -429,7 +429,7 @@ router.get('/:id', async (request, result) => {
         .status(200)
         .json({
             success: true,
-            message: "Documenti trovati!",
+            message: "Il documento è stato trovato!",
             document,
             author,
             comments,

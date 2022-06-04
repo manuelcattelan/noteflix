@@ -13,7 +13,7 @@ const User = require('./../models/userModel');
 router.post('/login', async (request, result) => {
     // check if email and passwords were provided, else return error
     if ( !(request.body.email && request.body.password)){
-        result.status(400).json({ success: false, message: 'La richiesta non è in un formato valido'});
+        result.status(400).json({ success: false, message: "La richiesta non è in un formato valido"});
         return;
     }
     // check if email matches a valid format, else return error
@@ -31,25 +31,25 @@ router.post('/login', async (request, result) => {
     let pwdHash = crypto.createHash('sha256').update(request.body.password + user.passwordSalt).digest('hex');
     if (pwdHash ===  user.passwordHash){
         // if check was successfull, authenticate user and return generated token
-        result.status(200).json({ success: true, message: 'Ecco il tuo token!',
+        result.status(200).json({ success: true, message: "Ecco il tuo token!",
         token: tokenHandler.createToken(user) });
         return;
     } 
     // if check was unsuccessfull, return error
-    result.status(400).json({ success: false, message: 'La password non è corretta'});
+    result.status(400).json({ success: false, message: "La password non è corretta"});
 });
 
 // register new user
 router.post('/signup', async (request, result) => {
     // check if email and passwords were provided, else return error
     if ( !(request.body.email && request.body.password && request.body.avatar && request.body.username && request.body.subscriptionType)){
-        result.status(400).json({ success: false, message: 'Mancano dei parametri nel body della richiesta'});
+        result.status(400).json({ success: false, message: "Mancano dei parametri nel body della richiesta"});
         return;
     }
     // check if provided subscription information is valid 
     if (!(request.body.subscriptionType == 'studenti' || request.body.subscriptionType == 'nerd' || request.body.subscriptionType == 'matricole') ||
          (request.body.subscriptionType == "studenti" && (!request.body.subscriptionArea))){
-        result.status(400).json({ success: false, message: 'Il piano di abbonamento selezionato non è valido'});
+        result.status(400).json({ success: false, message: "Il piano di abbonamento selezionato non è valido"});
         return;
     }
     // check for valid email address 
@@ -86,7 +86,7 @@ router.post('/signup', async (request, result) => {
     user.save()
         .then( () => {
             console.log('user saved');
-            result.status(201).json({ success: true, message: 'Ecco il tuo token!',
+            result.status(201).json({ success: true, message: "Ecco il tuo token!",
                 token: tokenHandler.createToken(user) });
             return;
         })
