@@ -6,8 +6,8 @@ import logolight from "../media/logolight.svg"
 
 const Footer = (props) => {
     return(
-        
-                <Row style={{minHeight:"20vh", backgroundColor:"#f4f4f4", position: "relative", bottom:"0"}} className="mt-5 text-muted">
+            <>
+                <Row style={{minHeight:"20vh", backgroundColor:"#f4f4f4", position: "relative", bottom:"0"}} className="p-0 m-0 mt-5 text-muted">
                     <Col xs="12" md="6" lg="3" className='d-flex justify-content-center'>
                         <div>
                         <img
@@ -43,7 +43,7 @@ const Footer = (props) => {
                         </small>
                     </Col>
                 </Row>
-
+            </>
     );
 };
 

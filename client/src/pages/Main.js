@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Button, Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 import Navigation from '../components/Navigation';
-import noteslight from "../media/noteslight.svg"
+import noteslight from "../media/knowledge.svg"
 import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 import mockup from '../media/mockup.svg'
@@ -13,7 +13,7 @@ const Main = (props) => {
         <>   
             <Navigation navbar={props.navbar} token={props.token}/>
             <Container>
-                <Row style={{minHeight:"95vh"}}>        
+                <Row style={{minHeight:"90vh"}}>        
                     <Col className="d-flex justify-content-center align-items-center">
                         <img
                             alt=""
@@ -29,9 +29,8 @@ const Main = (props) => {
                             <p className='testo'>Ci impegnamo per fornirti i migliori <br/>appunti universitari per qualsiasi corso <br/>e per qualsiasi facoltà.</p>
                             <div>
                                 <Link to="/signlog">
-                                    <Button size="lg" className='me-2'>Inizia ora</Button>
+                                    <Button size="lg" className='me-2'>Inizia ora <i class="bi bi-arrow-right ms-2"></i></Button>
                                 </Link>
-                                <Button size="lg" variant="outline-primary">Scopri di più</Button>
                             </div>
                             {/* <Row style={{marginTop:"85px"}}>
                                 <Col xs="6">
@@ -112,8 +111,10 @@ const Main = (props) => {
                                     <ListGroupItem className="text-secondary">Esplora e salva i file che ti servono</ListGroupItem>
                                     <ListGroupItem className="text-secondary">Questo piano non ti permette di visualizzare i documenti</ListGroupItem>
                                 </ListGroup>
-                                <Card.Body>
-                                    <Button variant="outline-dark">Accedi</Button>
+                                <Card.Body className="d-flex justify-content-center align-items-end">
+                                    <Link to="signlog" className="w-100">
+                                        <Button variant="outline-dark" className="w-100">Continua</Button>
+                                    </Link>
                                 </Card.Body>
                             </Card>
                         </Col>
@@ -130,8 +131,10 @@ const Main = (props) => {
                                     <ListGroupItem className="text-secondary">Accesso illimitato ai documenti della tua area di studio</ListGroupItem>
                                     <ListGroupItem className="text-secondary">Salva i documenti che ti interessano così da poterli leggere più tardi</ListGroupItem>
                                 </ListGroup>
-                                <Card.Body>
-                                    <Button variant="outline-dark">Accedi</Button>
+                                <Card.Body className="d-flex justify-content-center align-items-end">
+                                    <Link to="signlog" className="w-100">
+                                        <Button variant="outline-primary" className="w-100">Il preferito dai nostri utenti</Button>
+                                    </Link>
                                 </Card.Body>
                             </Card>
                         </Col>
@@ -148,8 +151,10 @@ const Main = (props) => {
                                     <ListGroupItem className="text-secondary">Tutti i vantaggi del piano “Studenti”</ListGroupItem>
                                     <ListGroupItem className="text-secondary">Accesso illimitato ai documenti di qualsiasi area di studio, qualsiasi.</ListGroupItem>
                                 </ListGroup>
-                                <Card.Body>
-                                    <Button variant="outline-dark">Accedi</Button>
+                                <Card.Body className="d-flex justify-content-center align-items-end">
+                                    <Link to="signlog" className="w-100">
+                                        <Button variant="outline-dark" className="w-100">Continua</Button>
+                                    </Link>
                                 </Card.Body>
                             </Card>
                         </Col>
@@ -174,7 +179,7 @@ const Main = (props) => {
                             <p className='testo'>Ore di lezione condensate in documenti che <br/>permettono ai nostri utenti di concentrarsi su ciò che <br/>importa davvero, studiare.</p>
                             <div>
                                 <Link to="/signlog">
-                                    <Button size="lg" className='me-2'>Inizia ora</Button>
+                                    <Button size="lg" className='me-2'>Inizia ora  <i class="bi bi-arrow-right ms-2"></i></Button>
                                 </Link>
                             </div>
                             {/* <Row style={{marginTop:"85px"}}>
