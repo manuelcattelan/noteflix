@@ -247,7 +247,7 @@ router.patch('/:id/upgrade', async (req, res) => {
             return res
                 .status(500)
                 .json({ 
-                    success: true,
+                    success: false,
                     message: error.message 
                 });
         })
@@ -307,7 +307,7 @@ router.patch('/:id/downgrade', async (req, res) => {
             return res
                 .status(500)
                 .json({ 
-                    success: true,
+                    success: false,
                     message: error.message
                 });
         })
