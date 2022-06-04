@@ -2,6 +2,8 @@ import React from 'react';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { HashLink as Link } from 'react-router-hash-link';
 import logolight from "../media/logolight.svg"
+import { NavHashLink } from 'react-router-hash-link'
+
 
 const VisitorNav = (props) => {
     return (
@@ -23,8 +25,12 @@ const VisitorNav = (props) => {
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="ms-auto">
-                            <Nav.Link href="#def" className="Navtheme">Prezzi</Nav.Link>
-                            <Nav.Link href="#def" className="Navtheme">Chi siamo</Nav.Link>
+                            <NavHashLink smooth to="/#prezzi">
+                                <Nav.Link href="#def" className="Navtheme">Prezzi</Nav.Link>
+                            </NavHashLink>
+                            <NavHashLink smooth to="/#why">
+                                <Nav.Link href="#def" className="Navtheme">Perchè Noteflix</Nav.Link>
+                            </NavHashLink>
                             <Link to="/policy">
                                 <Nav.Link href="#def" className="Navtheme">Policy</Nav.Link>
                             </Link>
