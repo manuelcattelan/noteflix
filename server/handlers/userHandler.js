@@ -322,6 +322,14 @@ router.patch('/changePassword', async (request, result) => {
     }
     // retrieve information of currently logged in user 
     let usr = await User.findById(request.loggedUser.id);
+    if (!usr){
+        return result
+            .status(404)
+            .json({
+                success: false,
+                message: "L'utente non esiste nei database"
+            })
+    }
     // generate password digest with the old password to check validity
     let hash = crypto.createHash('sha256').update(request.body.oldPassword + usr.passwordSalt).digest('hex');
     if (hash != usr.passwordHash){
