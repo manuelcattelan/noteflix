@@ -14,7 +14,7 @@ const Main = (props) => {
             <Navigation navbar={props.navbar} token={props.token}/>
             <Container>
                 <Row style={{minHeight:"90vh"}}>        
-                    <Col className="d-flex justify-content-center align-items-center">
+                    <Col xs="12" md="6" className="d-flex justify-content-center align-items-center">
                         <img
                             alt=""
                             src={noteslight}
