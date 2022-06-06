@@ -205,17 +205,5 @@ describe('Login/signup test (authHandler)', () => {
             .expect(400);
     });
 
-    test('SIGNUP / with new email should return 201', () => {
-        return request(app)
-            .post('/api/v2/auth/signup')
-            .set('Accept', 'application/json')
-            .send({ email: 'uetnte2@yahoo.com', 
-                    password: 'password',
-                    subscriptionType: "nerd",
-                    avatar: " ",
-                    username: 'Utente TEST'
-                 }) 
-            .expect(201);
-    });
 
 })  
