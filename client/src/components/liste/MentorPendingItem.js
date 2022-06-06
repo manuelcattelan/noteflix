@@ -17,7 +17,7 @@ const MentorPendingItem = ({username, avatar, email, token, id}) => {
             case "downgrade":
                 fetch("../api/v2/users/"+id+"/downgrade?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
-                .then(e.target.className="d-none")
+                .then(document.getElementById(id).className="d-none")
                 .then(data => swal(data.message))
                 break;
         }
@@ -26,6 +26,7 @@ const MentorPendingItem = ({username, avatar, email, token, id}) => {
 
     return (
         <ListGroup.Item
+            id={id}
             as="li"
             className="d-flex justify-content-between align-items-center"
         >

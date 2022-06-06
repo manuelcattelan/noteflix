@@ -4,7 +4,8 @@ import Navigation from '../components/Navigation';
 import { useNavigate} from 'react-router-dom';
 import macroaree from '../data/macroaree.json'
 import Footer from '../components/Footer';
-    
+import swal from 'sweetalert';
+
 const Upload = (props) => {
 
     /*
@@ -66,7 +67,8 @@ const Upload = (props) => {
 
         const url='../api/v2/documents/?token='+props.token
         fetch(url, requestOptions)
-        .then( res => console.log(res))
+        .then( res => res.json())
+        .then( data => swal(data.message))
         .then(navigate('/'))
     };
 

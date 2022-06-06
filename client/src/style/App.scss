@@ -83,7 +83,8 @@ hr{
 
 
 #console-panes{
-    height: "90vh" !important;
+    min-height: "90vh" !important;
+    margin-bottom: 100px;
     background-color: #f6f6f6;
     overflow-y: scroll;
     border-radius: 10px;
