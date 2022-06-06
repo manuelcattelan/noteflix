@@ -411,10 +411,30 @@ router.get('/:id', async (request, result) => {
             body: comment.body
         }
     }));
+    document = {
+            _id: document._id,
+            title: document.title,
+            author: document.author,
+            description: document.description,
+            area: document.area,
+            tag: document.tag,
+            creationDate: document.creationDate,
+            url: document.url,
+            like:   document.like.length,
+            dislike: document.dislike.length,
+            approval: 100 * document.like.length/(document.like.length + document.dislike.length)
+        }
     // if document was found return document
     return result
         .status(200)
-        .json(document)
+        .json({
+            success: true,
+            message: "Il documento è stato trovato!",
+            document,
+            author,
+            comments,
+            interactions
+        })
 })
 
 // route handler for deleting a document by ID
