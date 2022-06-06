@@ -1,13 +1,14 @@
-const request = require('supertest');
-const app = require('../app.js');
-const jwt = require('jsonwebtoken');
+const request  = require('supertest');
+const app      = require('../app');
+const jwt      = require('jsonwebtoken'); // used to create, sign, and verify tokens
+const mongoose = require('mongoose');
 
 describe('Change password test', () => {
     let token
     let invToken
+    let id = "629212873e064e49f55addc4"
     beforeAll( async () => {
         jest.setTimeout(100000);
-        
 
         invToken= jwt.sign({
             id: '629212873e064e49f55addc3',
@@ -19,7 +20,7 @@ describe('Change password test', () => {
         },process.env.TOKEN_SECRET, { expiresIn: 86400 });
 
         token = jwt.sign({
-            id: '629212873e064e49f55addc3',
+            id: id,
             type: 'user',
             subscription: {
                 type: 'nerd',
@@ -27,25 +28,33 @@ describe('Change password test', () => {
             }
         },process.env.TOKEN_SECRET, { expiresIn: 86400 });
 
-        const Document = require('../models/documentModel');
+        connection = await  mongoose.connect(process.env.TEST_DATABASE_URL, {useNewUrlParser: true, useUnifiedTopology: true});
 
-        //mock find user function to return a mock user
-        documentSpy = jest.spyOn(Document, 'findById').mockImplementation((criterias) => {
-            let ret
-            if (criterias=='6298a480ae458ccc9943fb26')
-                ret = mockDocument
-            return {exec: ()=> { return ret; }};
-        });
+        const User = require('../models/userModel.js');
 
-        //prevent saving to actual database
-        mockSaveDocument = jest.spyOn(Document.prototype, 'save').mockImplementation(async (criterias) => {
-            return true;
-        });
+        await User.deleteMany({}).exec();
+        await User.insertMany([
+            {
+                "subscription": {
+                    "subType": "nerd",
+                    "area": "",
+                    "creationDate": "2022-05-28T12:18:29.731Z",
+                    "lastPayment": "2022-05-28T12:18:29.731Z"
+                },
+                "avatar": {},
+                "_id": id,
+                "email": "user@gmail.com",
+                "passwordHash": "de960487b954feff764fab74a2b022a406585e287e64ea1cbda0ae3809c69962",
+                "passwordSalt": "7BaZDC9tAD+MCktX9yXFhw==",
+                "joinDate": "2022-05-28T12:18:29.731Z",
+                "userType": "user",
+                "username": "User",
+                "__v": 75
+            }])
     })
 
     afterAll( async () => {
-        documentSpy.mockRestore();
-        mockSaveDocument.mockRestore();
+        mongoose.disconnect();
     })
 
     test('app module should be defined', () => {
@@ -54,11 +63,10 @@ describe('Change password test', () => {
     
     test('CHANGE PASSWORD with invalid user', () => {
         return request(app)
-            .patch('/api/v2/users/changePassword?token='+token)
+            .patch('/api/v2/users/changePassword?token='+invToken)
             .set('Accept', 'application/json')
             .send({ oldPassword: 'password',
                     newPassword: 'password1' }) 
-            .send() 
             .expect(404);
     });
     
@@ -68,7 +76,6 @@ describe('Change password test', () => {
             .set('Accept', 'application/json')
             .send({ oldPassword: 'password_sbagliata',
                     newPassword: 'password1' }) 
-            .send() 
             .expect(400);
     });
 
@@ -77,7 +84,14 @@ describe('Change password test', () => {
             .patch('/api/v2/users/changePassword?token='+token)
             .set('Accept', 'application/json')
             .send({ newPassword: 'password1' }) 
-            .send() 
+            .expect(400);
+    });
+
+    test('CHANGE PASSWORD without new password', () => {
+        return request(app)
+            .patch('/api/v2/users/changePassword?token='+token)
+            .set('Accept', 'application/json')
+            .send({ oldPassword: 'password' }) 
             .expect(400);
     });
 
@@ -87,7 +101,6 @@ describe('Change password test', () => {
             .set('Accept', 'application/json')
             .send({ oldPassword: 'password',
                     newPassword: 'password' }) 
-            .send() 
             .expect(200);
     });
 
@@ -97,7 +110,6 @@ describe('Change password test', () => {
             .set('Accept', 'application/json')
             .send({ oldPassword: 'password',
                     newPassword: 'password1' }) 
-            .send() 
             .expect(200);
     });
 

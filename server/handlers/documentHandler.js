@@ -411,30 +411,10 @@ router.get('/:id', async (request, result) => {
             body: comment.body
         }
     }));
-    document = {
-            _id: document._id,
-            title: document.title,
-            author: document.author,
-            description: document.description,
-            area: document.area,
-            tag: document.tag,
-            creationDate: document.creationDate,
-            url: document.url,
-            like:   document.like.length,
-            dislike: document.dislike.length,
-            approval: 100 * document.like.length/(document.like.length + document.dislike.length)
-        }
     // if document was found return document
     return result
         .status(200)
-        .json({
-            success: true,
-            message: "Il documento è stato trovato!",
-            document,
-            author,
-            comments,
-            interactions
-        })
+        .json(document)
 })
 
 // route handler for deleting a document by ID
@@ -550,6 +530,13 @@ router.patch('/:id/validate', async (request, result) => {
     // if document was public and got reported, validate it
     else if (document.status == "public" && document.reported.length > 0) { 
         document.reported = [];
+    } else {
+        return result
+            .status(400)
+            .json({ 
+                success: false,
+                message: "Il documento è già pubblico e senza segnalazioni!"
+            });
     }
     // push changes to database
     document.save()

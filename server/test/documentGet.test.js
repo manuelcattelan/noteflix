@@ -3,19 +3,16 @@ const app      = require('../app');
 const jwt      = require('jsonwebtoken'); // used to create, sign, and verify tokens
 const mongoose = require('mongoose');
 
-describe('Approve document test', () => {
-    let documentSpy
+describe('Get document test', () => {
     let token
-    
-    let reportedDocID = "6298b4da9498d878f934874b"
-    let pendingDocID = "6298b4da9498d878f934874c"
+    let docID = "6298b4da9498d878f934874c"
     
     beforeAll( async () => {
         jest.setTimeout(100000);
 
         token = jwt.sign({
             id: '629212873e064e49f55addc3',
-            type: 'moderator',
+            type: 'user',
             subscription: {
                 type: 'nerd',
                 area: ''
@@ -28,26 +25,17 @@ describe('Approve document test', () => {
 
         await Document.deleteMany({}).exec();
         await Document.insertMany([{
-                "_id": reportedDocID,
+                "_id": docID,
                 "title": "TESTDOC ",
-                "author": '629212873e064e49fa5addca',
+                "author": '629212873e064e49fa5addcb',
                 "description": "TESTDOC",
                 "area": "Fisica",
                 "creationDate": "2022-06-02T13:02:18.217Z",
                 "status": "public",
                 "reported": ['629212873e064e49fa5addc3'],
                 "url": "https://noteflix.s3.eu-central-1.amazonaws.com/1654174935691.pdf",
-                "__v": 5
-            },{
-                "_id": pendingDocID,
-                "title": "TESTDOC ",
-                "author": '629212873e064e49fa5addca',
-                "description": "TESTDOC",
-                "area": "Fisica",
-                "creationDate": "2022-06-02T13:02:18.217Z",
-                "status": "pending",
-                "reported": [],
-                "url": "https://noteflix.s3.eu-central-1.amazonaws.com/1654174935691.pdf",
+                "like": [],
+                "dislike": [],
                 "__v": 5
             }
        ])
@@ -55,32 +43,34 @@ describe('Approve document test', () => {
     })
 
     afterAll( async () => {
-        
+        mongoose.disconnect();
     })
 
     test('app module should be defined', () => {
         expect(app).toBeDefined();
     });
     
-    test('APPROVE document with invalid ID', () => {
+    test('GET document with invalid ID', () => {
         return request(app)
-            .patch('/api/v2/documents/hhhhhhhhhhhhhhh/validate?token='+token)
+            .get('/api/v2/documents/hhhhhhhhhhhhhhh?token='+token)
             .send() 
             .expect(400);
     });
-    test('APPROVE document with valid, but non existant ID', () => {
+
+    test('GET document with valid but non existant ID', () => {
         return request(app)
-            .patch('/api/v2/documents/6298a480ae458ccc9943fb2f/validate?token='+token)
+            .get('/api/v2/documents/629212873e064e49fa5addca?token='+token)
             .send() 
             .expect(404);
     });
-    test('APPROVE document without a moderator account', () => {
+
+    test('GET document with without valid subscription', () => {
         return request(app)
-            .patch('/api/v2/documents/'+pendingDocID+'/validate?token='+jwt.sign({
+            .get('/api/v2/documents/'+docID+'?token='+jwt.sign({
                 id: '629212873e064e49f55addc3',
                 type: 'user',
                 subscription: {
-                    type: 'nerd',
+                    type: 'matricole',
                     area: ''
                 }
             },process.env.TOKEN_SECRET, { expiresIn: 86400 }))
@@ -88,32 +78,31 @@ describe('Approve document test', () => {
             .expect(403);
     });
 
-    test('APPROVE document successfully', () => {
+    test('GET document with invalid subscription, but with author account', () => {
         return request(app)
-            .patch('/api/v2/documents/'+pendingDocID+'/validate?token='+token)
+            .get('/api/v2/documents/'+docID+'?token='+jwt.sign({
+                id: '629212873e064e49fa5addcb',
+                type: 'mentor',
+                subscription: {
+                    type: 'studenti',
+                    area: 'Lettere'
+                }
+            },process.env.TOKEN_SECRET, { expiresIn: 86400 }))
             .send() 
             .expect(200);
     });
 
-    test('APPROVE document that is already public', () => {
+    test('GET document with invalid subscription, but with moderator account', () => {
         return request(app)
-            .patch('/api/v2/documents/'+pendingDocID+'/validate?token='+token)
-            .send() 
-            .expect(400);
-    });
-
-    test('APPROVE document that has been reported', () => {
-        return request(app)
-            .patch('/api/v2/documents/'+reportedDocID+'/validate?token='+token)
+            .get('/api/v2/documents/'+docID+'?token='+jwt.sign({
+                id: '629212873e064e49fa5addc4',
+                type: 'moderator',
+                subscription: {
+                    type: 'matricole',
+                    area: ''
+                }
+            },process.env.TOKEN_SECRET, { expiresIn: 86400 }))
             .send() 
             .expect(200);
     });
-
-    test('APPROVE second document that has been reported', () => {
-        return request(app)
-            .patch('/api/v2/documents/'+reportedDocID+'/validate?token='+token)
-            .send() 
-            .expect(400);
-    });
-
 })

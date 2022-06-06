@@ -85,7 +85,6 @@ router.post('/signup', async (request, result) => {
     // if user was successfully registered, also logs him in and return generated token 
     user.save()
         .then( () => {
-            console.log('user saved');
             result.status(201).json({ success: true, message: "Ecco il tuo token!",
                 token: tokenHandler.createToken(user) });
             return;

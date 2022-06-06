@@ -1,77 +1,93 @@
-const request = require('supertest');
-const app = require('../app.js');
-const jwt = require('jsonwebtoken');
-
+const request  = require('supertest');
+const app      = require('../app');
+const jwt      = require('jsonwebtoken'); // used to create, sign, and verify tokens
+const mongoose = require('mongoose');
 
 
 describe('Downgrade user test', () => {
     let token
-    let userID = '629212873e064e49f55addc3'
-    let moderatorID = '629212873e064e49f55addc4'
-    let pendingID = '629212873e064e49f55addc5'
+    let connection
+    let userID = '629213153660aff1889873e8'
+    let moderatorID = '629213153660aff1889873e7'
+    let mentorID = '629213153660aff188987319'
+    let pendingID = '629213153660aff1889873e9'
+    
+    
     beforeAll( async () => {
-        jest.setTimeout(100000);
-        db_connection = await mongoose.connect(process.env.TEST_DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true });
-        const User = require('../models/userModel');
-        await User.deleteMany({}).exec();
+        jest.setTimeout(80000);
+        jest.unmock('mongoose');
+        connection = await  mongoose.connect(process.env.TEST_DATABASE_URL, {useNewUrlParser: true, useUnifiedTopology: true});
 
+        const User = require('../models/userModel.js');
+
+        await User.deleteMany({}).exec();
         await User.insertMany([
             {
-                "_id": {"$oid": "629212873e064e49f55addc3"},
-                "email": "utente@gmail.com",
-                "passwordHash": "9c142d288c143c208a43afd5aa48a4d64f4f3da1c73770f8f30cdefdedf631af",
-                "passwordSalt": "kxKto29XMW9KUvyoCxA1mA==",
-                "joinDate": {"$date": {"$numberLong": "1653740167601"}},
-                "userType": "user",
-                "username": "utentenerd",
                 "subscription": {
                     "subType": "nerd",
                     "area": "",
-                    "creationDate": {"$date": {"$numberLong": "1653740167601"}},
-                    "lastPayment": {"$date": {"$numberLong": "1653740167601"}}
+                    "creationDate": "2022-05-28T12:18:29.731Z",
+                    "lastPayment": "2022-05-28T12:18:29.731Z"
                 },
-                "savedDocuments": [],
                 "avatar": {},
-                "__v": {"$numberInt": "8"}
-            },
-            {
-                "_id": {"$oid": "629212873e064e49f55addc4"},
-                "email": "moderator@gmail.com",
-                "passwordHash": "9c142d288c143c208a43afd5aa48a4d64f4f3da1c73770f8f30cdefdedf631af",
-                "passwordSalt": "kxKto29XMW9KUvyoCxA1mA==",
-                "joinDate": {"$date": {"$numberLong": "1653740167601"}},
+                "_id": "629213153660aff1889873e7",
+                "email": "moderatore@gmail.com",
+                "passwordHash": "cca581732cf13327e5f96143b3f9e273ed6f5f3053f355bf750f433ab7f419a5",
+                "passwordSalt": "0xCjdsPwxwk9JEGfwivBBw==",
+                "joinDate": "2022-05-28T12:18:29.731Z",
                 "userType": "moderator",
-                "username": "moderator",
+                "username": "Giulia",
+                "__v": 75
+            },{
                 "subscription": {
                     "subType": "nerd",
                     "area": "",
-                    "creationDate": {"$date": {"$numberLong": "1653740167601"}},
-                    "lastPayment": {"$date": {"$numberLong": "1653740167601"}}
+                    "creationDate": "2022-05-28T12:18:29.731Z",
+                    "lastPayment": "2022-05-28T12:18:29.731Z"
                 },
-                "savedDocuments": [],
                 "avatar": {},
-                "__v": {"$numberInt": "8"}
-            },
-            {
-                "_id": {"$oid": "629212873e064e49f55addc5"},
+                "_id": "629213153660aff1889873e8",
+                "email": "utente@gmail.com",
+                "passwordHash": "cca581732cf13327e5f96143b3f9e273ed6f5f3053f355bf750f433ab7f419a5",
+                "passwordSalt": "0xCjdsPwxwk9JEGfwivBBw==",
+                "joinDate": "2022-05-28T12:18:29.731Z",
+                "userType": "user",
+                "username": "Utente",
+                "__v": 75
+            },{
+                "subscription": {
+                    "subType": "nerd",
+                    "area": "",
+                    "creationDate": "2022-05-28T12:18:29.731Z",
+                    "lastPayment": "2022-05-28T12:18:29.731Z"
+                },
+                "avatar": {},
+                "_id": "629213153660aff1889873e9",
                 "email": "pending@gmail.com",
-                "passwordHash": "9c142d288c143c208a43afd5aa48a4d64f4f3da1c73770f8f30cdefdedf631af",
-                "passwordSalt": "kxKto29XMW9KUvyoCxA1mA==",
-                "joinDate": {"$date": {"$numberLong": "1653740167601"}},
+                "passwordHash": "cca581732cf13327e5f96143b3f9e273ed6f5f3053f355bf750f433ab7f419a5",
+                "passwordSalt": "0xCjdsPwxwk9JEGfwivBBw==",
+                "joinDate": "2022-05-28T12:18:29.731Z",
                 "userType": "pending",
-                "username": "pending",
+                "username": "pendning",
+                "__v": 75
+            },{
                 "subscription": {
                     "subType": "nerd",
                     "area": "",
-                    "creationDate": {"$date": {"$numberLong": "1653740167601"}},
-                    "lastPayment": {"$date": {"$numberLong": "1653740167601"}}
+                    "creationDate": "2022-05-28T12:18:29.731Z",
+                    "lastPayment": "2022-05-28T12:18:29.731Z"
                 },
-                "savedDocuments": [],
                 "avatar": {},
-                "__v": {"$numberInt": "8"}
-            },
-
-        ]).exec()
+                "_id": "629213153660aff188987319",
+                "email": "mentor@gmail.com",
+                "passwordHash": "cca581732cf13327e5f96143b3f9e273ed6f5f3053f355bf750f433ab7f419a5",
+                "passwordSalt": "0xCjdsPwxwk9JEGfwivBBw==",
+                "joinDate": "2022-05-28T12:18:29.731Z",
+                "userType": "mentor",
+                "username": "mentor",
+                "__v": 75
+            }
+        ])
 
 
         token = jwt.sign({
@@ -86,7 +102,7 @@ describe('Downgrade user test', () => {
     })
 
     afterAll( async () => {
-        mongoose.disconnect();
+        mongoose.connection.close(true);
     })
 
     test('app module should be defined', () => {
@@ -95,7 +111,7 @@ describe('Downgrade user test', () => {
     
     test('DOWNGRADE with non-moderator account', () => {
         return request(app)
-            .patch('/api/v2/users/'+id+'/downgrade?token='+jwt.sign({
+            .patch('/api/v2/users/'+pendingID+'/downgrade?token='+jwt.sign({
                 id: '629212873e064e49f55addc3',
                 type: 'user',
                 subscription: {
