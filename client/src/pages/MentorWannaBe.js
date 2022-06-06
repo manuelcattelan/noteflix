@@ -3,7 +3,7 @@ import { Alert, Button, Col, Container, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Navigation from '../components/Navigation';
-
+import swal from 'sweetalert';
 import img from '../media/mentorwannabe.svg'
 
 
@@ -31,6 +31,7 @@ const MentorWannaBe = (props) => {
     const handleRequest = () => {
         fetch("../api/v2/users/userToMentor?token="+token, { method: 'PATCH'} )
         .then(res => res.json())
+        .then( data => swal(data.message))
         .then(() => {
             localStorage.removeItem("token")
             localStorage.removeItem("user")

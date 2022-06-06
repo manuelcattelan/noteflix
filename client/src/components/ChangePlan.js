@@ -48,7 +48,7 @@ const ChangePlan = () => {
 
         })
         .then(res => res.json())
-        .then(data => swal(data.message))
+        .then(data => {if(data.success) swal("Piano cambiato con successo!")})
         .then(()=>{
             //logout
             localStorage.removeItem("token")

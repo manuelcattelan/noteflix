@@ -14,8 +14,8 @@ const Report = ({id, token}) => {
 
         fetch("../api/v2/documents/"+id+"/report?token="+token, {method: 'PATCH'})
         .then(res => res.json())
+        .then(data => swal(data.message))
         .then(handleClose)
-        .then(data => swal(data.message))   
     }
 
     return (
@@ -32,7 +32,7 @@ const Report = ({id, token}) => {
                     La tua segnalazione sarà inviata ai moderatori del sito.
                 </Modal.Body>
                 <Modal.Footer>
-                <Button variant="primary" onClick={handleReport}>
+                <Button variant="outline-danger" onClick={handleReport}>
                     Sono sicuro di voler segnalare, procedi
                 </Button>
                 </Modal.Footer>

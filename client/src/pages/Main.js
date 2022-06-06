@@ -1,10 +1,10 @@
 import React from 'react';
 import { Container, Row, Col, Button, Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 import Navigation from '../components/Navigation';
-import noteslight from "../media/knowledge.svg"
 import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 import mockup from '../media/mockup.svg'
+import noteslight from "../media/knowledge.svg"
 import studyboy from '../media/studyboy.svg'
 
 const Main = (props) => {
@@ -32,16 +32,6 @@ const Main = (props) => {
                                     <Button size="lg" className='me-2'>Inizia ora <i class="bi bi-arrow-right ms-2"></i></Button>
                                 </Link>
                             </div>
-                            {/* <Row style={{marginTop:"85px"}}>
-                                <Col xs="6">
-                                    <p style={{fontWeight: "600", fontSize: "56px", lineheight: "60px", letterSpacing: "-1.8px"}}>98%</p>
-                                    <p style={{fontWeight: "500", fontSize: "18px", lineheight: "28px", letterSpacing: "-0.4px"}}>la percentuale di <br/>studenti che supera <br/>esami con successo <br/>utilizzando noteflix.</p>
-                                </Col>
-                                <Col>
-                                    <p style={{fontWeight: "600", fontSize: "56px", lineheight: "60px", letterSpacing: "-1.8px"}}>27.5</p>
-                                    <p style={{fontWeight: "500", fontSize: "18px", lineheight: "28px", letterSpacing: "-0.4px"}}>la valutazione <br/>media che i nostri <br/>utenti ottengono <br/>utilizzando noteflix.</p>
-                                </Col>
-                            </Row> */}
                         </div>
                         
                     </Col>

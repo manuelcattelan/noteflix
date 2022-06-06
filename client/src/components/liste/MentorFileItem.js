@@ -8,6 +8,8 @@ const MentorFileItem = ({token, id, title, status, votes, like, comments}) => {
     const[decision, setDecision] = useState()
 
     const handleSubmit = (e) => {
+        e.preventDefault()
+
         switch(decision){
             case "modifica":
                 //da implementare
@@ -15,6 +17,7 @@ const MentorFileItem = ({token, id, title, status, votes, like, comments}) => {
             case "elimina":
                 fetch("../api/v2/documents/"+id+"?token="+token, {method: 'DELETE'})
                 .then(res => res.json())
+                .then(document.getElementById(id).className="d-none")
                 .then(data => swal(data.message))
                 break;
         }
@@ -23,8 +26,9 @@ const MentorFileItem = ({token, id, title, status, votes, like, comments}) => {
 
     return (
             <ListGroup.Item
-                    as="li"
-                    className="d-flex justify-content-between align-items-center"
+                id={id}
+                as="li"
+                className="d-flex justify-content-between align-items-center"
             >
             <div className="fw-bold ms-2 me-auto">
                 {title}

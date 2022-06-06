@@ -53,7 +53,7 @@ const ModeratorConsole = (props) => {
                       </Nav>
                     </Col>
                     <Col id="console-panes" sm={9}>
-                        <Tab.Content className='mt-3'>
+                        <Tab.Content className='my-3'>
                             <Tab.Pane eventKey="pending">
                                 <ModeratorPendingList token={props.token}/>
                             </Tab.Pane>
@@ -73,7 +73,6 @@ const ModeratorConsole = (props) => {
                     </Col>
                 </Row>
             </Tab.Container>
-            <Footer/>
         </>
     );
 };

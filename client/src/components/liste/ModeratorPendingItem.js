@@ -18,13 +18,13 @@ const ModeratorPendingItem = ({title, id, email, token}) => {
             case "approva":
                 fetch("../api/v2/documents/"+id+"/validate?token="+token, {method: 'PATCH'})
                 .then(res => res.json())
-                .then(e.target.className="d-none")
+                .then(document.getElementById(id).className="d-none")
                 .then(data => swal(data.message))
                 break;
             case "elimina":
                 fetch("../api/v2/documents/"+id+"?token="+token, {method: 'DELETE'})
                 .then(res => res.json())
-                .then(e.target.className="d-none")
+                .then(document.getElementById(id).className="d-none")
                 .then(data => swal(data.message))
                 break;
         }
@@ -33,6 +33,7 @@ const ModeratorPendingItem = ({title, id, email, token}) => {
 
     return (
         <ListGroup.Item
+            id={id}
             as="li"
             className="d-flex justify-content-between align-items-center"
         >
