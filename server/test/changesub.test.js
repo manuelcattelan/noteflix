@@ -77,15 +77,6 @@ describe('Change subscrition test', () => {
                     subscriptionArea: 'Ingegneria Informatica, Informatica' }) 
             .expect(400);
     });
-    
-    test('CHANGE SUBSCIPTION with invalid plan', () => {
-        return request(app)
-            .patch('/api/v2/users/changeSubscription?token='+token)
-            .set('Accept', 'application/json')
-            .send({ subscriptionType: 'aaaaaaaaaaa',
-                    subscriptionArea: 'Ingegneria Informatica, Informatica' }) 
-            .expect(400);
-    });
 
     test('CHANGE SUBSCIPTION to student plan wih no area', () => {
         return request(app)

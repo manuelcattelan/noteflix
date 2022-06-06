@@ -78,6 +78,48 @@ describe('Get document test', () => {
             .expect(403);
     });
 
+    test('GET document with with valid subscription for wrong area', () => {
+        return request(app)
+            .get('/api/v2/documents/'+docID+'?token='+jwt.sign({
+                id: '629212873e064e49f55addc3',
+                type: 'user',
+                subscription: {
+                    type: 'studenti',
+                    area: 'Lettere'
+                }
+            },process.env.TOKEN_SECRET, { expiresIn: 86400 }))
+            .send() 
+            .expect(403);
+    });
+
+    test('GET document with with valid subscription for correct area', () => {
+        return request(app)
+            .get('/api/v2/documents/'+docID+'?token='+jwt.sign({
+                id: '629212873e064e49f55addc3',
+                type: 'user',
+                subscription: {
+                    type: 'studenti',
+                    area: 'Fisica'
+                }
+            },process.env.TOKEN_SECRET, { expiresIn: 86400 }))
+            .send() 
+            .expect(200);
+    });
+
+    test('GET document with with valid nerd subscription', () => {
+        return request(app)
+            .get('/api/v2/documents/'+docID+'?token='+jwt.sign({
+                id: '629212873e064e49f55addc3',
+                type: 'user',
+                subscription: {
+                    type: 'nerd',
+                    area: ''
+                }
+            },process.env.TOKEN_SECRET, { expiresIn: 86400 }))
+            .send() 
+            .expect(200);
+    });
+
     test('GET document with invalid subscription, but with author account', () => {
         return request(app)
             .get('/api/v2/documents/'+docID+'?token='+jwt.sign({

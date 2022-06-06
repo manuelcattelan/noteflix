@@ -90,7 +90,7 @@ describe('Request upgrade to mentor test', () => {
         return request(app)
             .patch('/api/v2/users/userToMentor?token='+jwt.sign({
                 id: mentorid,
-                type: 'user',
+                type: 'user', //only ID matters this is left to basic user to test it isn't used
                 subscription: {
                     type: 'nerd',
                     area: ''
