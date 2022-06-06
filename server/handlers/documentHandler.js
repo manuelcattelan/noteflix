@@ -154,7 +154,7 @@ router.get('/pending', async (request, result) => {
             .status(403)
             .json({
                 success: false,
-                message: "Solo i moderatori possono rendere pubblici i documenti in attesa di approvazione"
+                message: "Solo i moderatori accedere ai documenti in attesa di approvazione"
             })
     }
     // find all documents that are waiting for validation
@@ -494,7 +494,7 @@ router.delete('/:id', async(request, result) => {
         // document deletion from cloud failed
         if (error){
             return result
-                    .status(400)
+                    .status(500)
                     .send({ 
                         success: false, 
                         message: error.message
