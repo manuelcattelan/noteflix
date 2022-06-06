@@ -42,7 +42,7 @@ const MentorConsole = (props) => {
         <>
             <Navigation navbar={props.navbar} token={props.token}/>
             {
-                docArray && persona
+                persona
                 ?
                 <div  style={{minHeight:"65vh"}}>
                     <Container className='my-5'>

@@ -22,7 +22,7 @@ const ChangePassword = () => {
         var newPwdConfirm = document.getElementById("new-password-confirm").value
 
         if (newPwd !== newPwdConfirm) {
-            swal("Passwords do not match.");
+            swal("La conferma password non corrisponde.");
             return false;
         }
 
@@ -34,6 +34,7 @@ const ChangePassword = () => {
         })
         .then(res => res.json())
         .then(data => swal(data.message))
+        .then(handleClose)
     }        
 
     

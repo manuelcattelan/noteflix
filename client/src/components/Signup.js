@@ -92,7 +92,7 @@ const Signup = ({setPage, setNavbar, setUser, setPersona, user, setToken}) => {
         var password = document.getElementById("password-label").value;
         var confirmPassword = document.getElementById("confirm-password-label").value;
         if (password !== confirmPassword) {
-            swal("Passwords do not match.");
+            swal("Le password non corrispondono");
             return false;
         }
         return true;

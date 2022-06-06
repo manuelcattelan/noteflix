@@ -119,7 +119,7 @@ const ChangePlan = () => {
 
                 </Modal.Body>
                 <Modal.Footer className="d-flex">
-                    <span className="small me-auto">Dovrai effettuare nuovamente il login</span>
+                    <span className="small me-auto text-danger">Dovrai effettuare nuovamente il login</span>
                     <Button variant="primary" onClick={handlePlanChange}>
                         Aggiorna il mio piano
                     </Button>

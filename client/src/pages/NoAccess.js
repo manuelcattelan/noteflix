@@ -52,7 +52,7 @@ const NoAccess = (props) => {
                             ?
                             <p className=''>
                                 Il piano <span className='fw-bold'>matricole</span> ti permette di esplorare il nostro sito, tuttavia non ti fornisce l'accesso ai file che desideri. <br/>
-                                Cambia il tuo piano d'abbonamento e accedi a quello che ti vuoi. I tuoi documenti preferiti ti aspettano.<br/>
+                                Cambia il tuo piano d'abbonamento e accedi a quello che vuoi. I tuoi documenti preferiti ti aspettano.<br/>
                                 
                             </p>
                             :
@@ -73,7 +73,7 @@ const NoAccess = (props) => {
                     </div>
                     <div className='d-flex justify-content-center'>
                         <Link className='mt-2 fw-bold text-decoration-underline' to="/">
-                            Oppure torna alla Piattaforma
+                            Torna alla Piattaforma
                         </Link>
                     </div>
                     
