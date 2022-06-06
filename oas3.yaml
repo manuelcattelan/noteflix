@@ -1,18 +1,16 @@
-openapi: 3.0.0
+openapi: '3.0.0'
 info:
-  version: '1.0'
+  version: '2.0'
   title: "Noteflix OpenAPI 3.0"
   description: API for managing Noteflix project.
   license:
     name: MIT
-servers:
-  - url: http://localhost:3001/api/v1
-    description: Localhost
+
 paths:
   /login:
     post:
-      description: 'By providing the email and password in the login form, the request is sent to authenticate the user and, if it succeeds, a JWT is returned.'
-      summary: 'Logs in a registered user.'
+      description: 'Log in as a user by providing your user credentials.'
+      summary: 'Log in as a registered user.'
       requestBody:
         content:
           application/json:
@@ -24,13 +22,15 @@ paths:
               properties:
                 email:
                   type: string
-                  description: 'Email address of the user used at signup'
+                  description: 'Email address of the user chosen at signup'
+                  default: 'utente@gmail.com'
                 password:
                   type: string
                   description: 'User password chosen at signup'
+                  default: 'password'
       responses:
         '200':
-          description: 'The login process succeeded and the user token is sent in the "token" field.'
+          description: 'The login process succeeded and the user token is sent in the "token" field of the response.'
           content:
             application/json:
               schema:
@@ -38,12 +38,15 @@ paths:
                 properties:
                   success:
                     type: boolean
+                    default: true
                   token: 
                     type: string
+                    default: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOTIxMzE1MzY2MGFmZjE4ODk4NzNlNyIsInR5cGUiOiJtb2RlcmF0b3IiLCJzdWJzY3JpcHRpb24iOnsidHlwZSI6Im5lcmQiLCJhcmVhIjoiIn0sImlhdCI6MTY1NDA2OTY0MiwiZXhwIjoxNjU0MTU2MDQyfQ.VudylKx0a1sd5P1MkBbeim5BzBP4upTfafEo0VYZJNU"
                   message:
                     type: string
+                    default: "Ecco il tuo token!"
         '400':
-          description: 'The login process failed and the reason is stated in the "message" field.'
+          description: 'The user did not provide both an email and a password.'
           content:
             application/json:
               schema:
@@ -53,12 +56,48 @@ paths:
                     type: boolean
                   message:
                     type: string
-                  
+                    default: "La richiesta non è in un formato valido"
+        '400':
+          description: 'The user provided an invalid email address.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "L'email è stata fornita in un formato invalido"
+        '400':
+          description: 'The user provided the email address of a non existing user.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "L'email fornita non risulta nei nostri database"
+        '400':
+          description: 'The user provided a wrong password which does not correspond to the email'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "La password non è corretta"
 
   /signup:
     post:
-      description: 'By providing a non-registered email and a password, the request is sent together with the data regarding the avatar selected and, if it succeeds, a JWT is returned.'
-      summary: 'Registers a new user.'
+      description: 'Register as a new user to the platform by providing a non-registered email and a password.'
+      summary: 'Register as a new user.'
       requestBody:
         content:
           application/json:
@@ -67,20 +106,29 @@ paths:
               required:
                 - email
                 - password
+                - subscriptionType
                 - avatar
               properties:
                 email:
                   type: string
-                  description: 'Email address of the user used for signup'
+                  description: 'Email address of the user chosen to sign up'
+                  default: 'utente@gmail.com'
                 password:
                   type: string
-                  description: 'User password chosen at signup'
+                  description: 'Password of the user chosen to sign up'
+                  default: 'password'
+                subscriptionType:
+                  type: string
+                  description: 'Subscription plan chosen'
+                  default: 'matricole'
+                subscriptionArea:
+                  type: string
+                  description: 'Subscription area chosen'
                 avatar:
-                  type: object
-                  description: 'Avatar configuration'
+                  $ref: '#/components/schemas/Avatar'
       responses:
         '201':
-          description: 'The registration process succeeded, the user credentials are stored in the database and the user token is sent in the "token" field.'
+          description: 'The registration process succeeded: the user credentials are stored in the database and the user token is sent in the "token" field of the response'
           content:
             application/json:
               schema:
@@ -88,12 +136,15 @@ paths:
                 properties:
                   success:
                     type: boolean
+                    default: true
                   token: 
                     type: string
+                    default: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOTIxMzE1MzY2MGFmZjE4ODk4NzNlNyIsInR5cGUiOiJtb2RlcmF0b3IiLCJzdWJzY3JpcHRpb24iOnsidHlwZSI6Im5lcmQiLCJhcmVhIjoiIn0sImlhdCI6MTY1NDA2OTY0MiwiZXhwIjoxNjU0MTU2MDQyfQ.VudylKx0a1sd5P1MkBbeim5BzBP4upTfafEo0VYZJNU"
                   message:
                     type: string
+                    default: "Ecco il tuo token!"                
         '400':
-          description: 'The registration process failed and the reason is stated in the "message" field.'
+          description: 'The user did not provide all required parameters.'
           content:
             application/json:
               schema:
@@ -103,11 +154,60 @@ paths:
                     type: boolean
                   message:
                     type: string
+                    default: "Mancano dei parametri nel body della richiesta"
+        '400':
+          description: 'The user did not provide valid subscription information.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Il piano di abbonamento selezionato non è valido"
+        '400':
+          description: 'The user provided an invalid email address.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "L'email è stata fornita in un formato invalido"
+        '400':
+          description: 'The user provided an already existing email address.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "L'email fornita risulta già in uso"
+        '500':
+          description: 'User credentials were not saved in the database due to an error specified in the response.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: 'Error message returned from saving user credentials'
                   
   /documents:
     get:
-      description: 'By providing a valid token as a request parameter, the request returns a JSON containing all documents in the database and the corresponding informations.'
-      summary: 'Lists all documents in the database.'
+      description: 'Get all currently public (approved by moderators) documents in the platform.'
+      summary: 'List all documents in the database.'
       parameters: 
         - in: query
           name: token
@@ -117,7 +217,7 @@ paths:
           description: 'Access token to verify user permissions'
       responses:
         '200':
-          description: 'There were documents found in the database and their information is returned in the "documents" field.'
+          description: 'Public documents were found and their information is returned in the "documents" field.'
           content:
             application/json:
               schema:
@@ -125,14 +225,93 @@ paths:
                 properties:
                   success:
                     type: boolean
+                    default: true
                   message:
                     type: string
+                    default: "Sono stati trovati dei documenti"
                   documents:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Document'
-        '404':
-          description: 'No documents were found in the database and the message is displayed in the "message" field.'
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          default: '62921e59c24c13d0137fbe74'
+                        title:
+                          type: string
+                          default: 'Document title'
+                        description:
+                          type: string
+                          default: 'Document description'
+                        area:
+                          type: string
+                          default: 'Document area'
+                        approval:
+                          type: string
+                          default: '100'
+                        url:
+                          type: string
+                          default: 'Url to resource in the cloud'
+                        
+        '204':
+          description: 'No public documents were found.'
+          
+    post:
+      description: 'Upload a new document from the file-system by providing information such as title and description.'
+      summary: 'Upload a new document in the database.'
+      parameters: 
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - title
+                - description
+                - area
+                - tag
+                - file
+              properties:
+                title:
+                  type: string
+                  description: 'Title of the document'
+                description:
+                  type: string
+                  description: 'Description of the document'
+                area:
+                  type: string
+                  description: 'Area of the document'
+                tag:
+                  type: string
+                  description: 'Document tag(s) separated with spaces'
+                file:
+                  type: object
+                  description: 'File to uplaod from filesystem'
+      responses:
+        '201':
+          description: 'The document was successfully uploaded to the database and its id is returned in the "documentId" field.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: "Il documento è stato caricato con successo"
+                  documentId:
+                    type: string
+                    default: '62921e59c24c13d0137fbe74'
+        '400':
+          description: 'The user did not provide all required parameters.'
           content:
             application/json:
               schema:
@@ -142,10 +321,48 @@ paths:
                     type: boolean
                   message:
                     type: string
+                    default: 'Missing parameters in request form.'
+        '400':
+          description: 'The extension of the document does not match with .pdf'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: 'Only .pdf files are supported!'
+        '500':
+          description: 'The document information were not saved in the database due to an error specified in the response.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: 'Error message returned from saving document information'
+        '403':
+          description: 'The document upload failed because the currently logged in user is not a mentor.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Devi essere un mentor per pubblicare un documento"
                     
-    post:
-      description: 'By providing a valid token and the required information in "form-data" format, a new document is created with the given parameters, uploaded to cloud storage and its informations are stored in the database'
-      summary: 'Uploads a new document in the database.'
+  /documents/mostLiked:
+    get:
+      description: 'Get the currently most liked documents in the platform (meaning those who have more likes).'
+      summary: 'List most liked documents in the database.'
       parameters: 
         - in: query
           name: token
@@ -154,8 +371,8 @@ paths:
           required: true
           description: 'Access token to verify user permissions'
       responses:
-        '201':
-          description: 'The document was successfully uploaded to the database and its informations are returned in the "document" field.'
+        '200':
+          description: 'Most liked documents were found and their information is returned in the "documents" field.'
           content:
             application/json:
               schema:
@@ -163,14 +380,79 @@ paths:
                 properties:
                   success:
                     type: boolean
+                    default: true
                   message:
                     type: string
+                    default: "Sono stati trovati i documenti con più like"
                   documents:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Document'
-        '400':
-          description: 'The document upload failed and the reason is stated in the "message" field.'
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          default: '62921e59c24c13d0137fbe74'
+                        title:
+                          type: string
+                          default: 'Document title'
+                        description:
+                          type: string
+                          default: 'Document description'
+                        area:
+                          type: string
+                          default: 'Document area'
+                        approval:
+                          type: string
+                          default: '100'
+                        url:
+                          type: string
+                          description: 'Url to resource in the cloud'
+        '204':
+          description: 'No most liked documents were found.'
+    
+  /documents/pending:
+    get:
+      description: 'Get the currently pending documents in the platform (meaning those who are being evaluated by moderators).'
+      summary: 'List all pending documents in the database.'
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'Pending documents were found and their information is returned in the "documents" field.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: "Sono stati trovati documenti in attesa di essere approvati"
+                  documents:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          default: '62921e59c24c13d0137fbe74'
+                        title:
+                          type: string
+                          default: 'Document title'
+                        authorEmail:
+                          type: string
+                          default: 'mentore@gmail.com'
+        '204':
+          description: 'No pending documents were found.'
+        '403':
+          description: 'User different than moderator tries to access pending documents.'
           content:
             application/json:
               schema:
@@ -180,12 +462,184 @@ paths:
                     type: boolean
                   message:
                     type: string
-      
+                    default: "Solo i moderatori possono accedere ai documenti in attesa di approvazione"
+    
+  /documents/reported:
+    get:
+      description: 'Get the currently reported documents in the platform (meaning those who got reported by users).'
+      summary: 'List all reported documents in the database.'
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'Reported documents were found and their information is returned in the "documents" field.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: "Sono stati trovati documenti segnalati dagli utenti"
+                  documents:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          default: '62921e59c24c13d0137fbe74'
+                        title:
+                          type: string
+                          default: 'Document title'
+                        reportedTimes:
+                          type: integer
+                          default: 1
+                        
+        '204':
+          description: 'No reported documents were found'
+        '403':
+          description: 'User different than moderator tries to access reported documents.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Solo i moderatori possono visualizzare i documenti segnalati"
   
+  /documents/uploaded:
+    get:
+      description: 'Get the documents you uploaded as a mentor in the platform.'
+      summary: 'List all owned documents in the database.'
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'Uploaded documents were found their information is returned in the "documents" field.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: "Sono stati trovati i documenti che hai caricato"
+                  documents:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          default: '62921e59c24c13d0137fbe74'
+                        title:
+                          type: string
+                          default: 'Document title'
+                        status: {
+                          type: string,
+                          "enum": ["pending", "public"],
+                          default: 'pending'
+                        }
+                        totalVotes:
+                          type: integer
+                          default: 1
+                        totalComments:
+                          type: integer
+                        approval:
+                          type: string
+                          default: '100'
+                        
+        '204':
+          description: 'No uploaded documents from the currently logged in user were found.'
+        
+        '403':
+          description: 'User different than mentor tries to access own uploaded documents.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Solo i mentor possono ottenere la lista dei file da loro pubblicati"
+                      
+  /documents/saved:
+    get:
+      description: 'Get all the documents that you saved in your personal library as a user.'
+      summary: 'List all user saved documents in the database.'
+      parameters: 
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'Saved documents were found and their information is returned in the "documents" field.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: "Sono stati trovati i documenti che hai salvato"
+                  documents:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          default: '62921e59c24c13d0137fbe74'
+                        title:
+                          type: string
+                          default: 'Document title'
+                        description:
+                          type: string
+                          default: 'Document description'
+                        area:
+                          type: string
+                          default: 'Document area'
+                        approval:
+                          type: string
+                          default: '100'
+                        url:
+                          type: string
+                          description: 'Url to resource in the cloud'
+        '204':
+          description: 'No saved documents were found.'
+
   /documents/{id}:
     get:
-      description: 'By providing the document ID and a valid token as a request parameter, the request returns a JSON containing the information regarding the document, if it was found.'
-      summary: 'Finds and returns a document with the given id.'
+      description: 'Get information such as title and description about a specific document by providing its id.'
+      summary: 'Find and return a document with a given id.'
       parameters:
         - in: path
           name: id
@@ -201,7 +655,7 @@ paths:
           description: 'Access token to verify user permissions'
       responses:
         '200':
-          description: 'The document was found and its information is returned in the field "document".'
+          description: 'The document with the given id was found and its information are returned in the response.'
           content:
             application/json:
               schema:
@@ -209,8 +663,10 @@ paths:
                 properties:
                   success:
                     type: boolean
+                    default: true
                   message:
                     type: string
+                    default: "Il documento è stato trovato!"
                   document:
                     $ref: '#/components/schemas/Document'
                   author:
@@ -220,9 +676,37 @@ paths:
                         type: string
                       avatar:
                         $ref: '#/components/schemas/Avatar'
-                    
+                  interactions:
+                    type: object
+                    properties:
+                      rating:
+                        type: string
+                        default: 'none'
+                      saved:
+                        type: boolean
+                  comments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                        id:
+                          type: string
+                        author:
+                          type: object
+                          properties:
+                            username:
+                              type: string
+                              default: 'username'
+                            avatar:
+                              $ref: '#/components/schemas/Avatar'
+                        body:
+                          type: string
+                          default: 'Comment body'
+                          
         '400':
-          description: 'No documents with the given ID were found and the message is returned in the "message" field.'
+          description: 'The ID parameter was given with a wrong format.'
           content:
             application/json:
               schema:
@@ -231,10 +715,325 @@ paths:
                   success:
                     type: boolean
                   message:
+                    type: string
+                    default: "l'ID del documento non è valido"
+
+        '403':
+          description: 'Document has been found but the user is not allowed to view it'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Il tuo piano di abbonamento non ti permette di vedere questo documento"
+                    
+        '404':
+          description: 'No document with the given ID were found.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Nessun documento è stato trovato con l'ID fornito"
+    delete:
+      description: 'Completely remove a document and all of its information by providing its id.'
+      summary: 'Delete a document with a given id.'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: 'Document ID'
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'Document wad deleted successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: "Il documento è stato eliminato con successo"
+                    
+        '404':
+          description: 'No document found with the given ID.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Nessun documento è stato trovato con l'ID fornito"
+        '400':
+          description: 'The format of the provided id is invalid'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "l'ID del documento non è valido"
+        '400':
+          description: 'Document deletion from database failed and the reason is stated in the "message" field of the response.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '403':
+          description: 'The user does not have sufficient permissions to delete the document.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Non puoi eliminare documenti a meno che tu non sia il proprietario o un moderatore"
+        '500':
+          description: 'Document deletion from cloud failed and the reason is stated in the "message" field of the response.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /documents/{id}/validate:
+    patch:
+      description: 'Validate a document with a given id by removing all reports and making it visible (public) in the platform.'
+      summary: 'Approve a document with a given id.'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: 'Document ID'
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'Document was validated successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: "Il documento è stato approvato con successo!"
+        '400':
+          description: 'The format of the ID provided is invalid'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "l'ID del documento non è valido"            
+        '404':
+          description: 'No document found with the given ID.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Nessun documento è stato trovato con l'ID fornito"
+        '500':
+          description: 'Error while saving document changes to the database'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '403':
+          description: 'The user does not have sufficient permissions to validate the document.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Non puoi approvare una risorsa a meno che tu non sia un moderatore"
+                    
+  /documents/{id}/save:
+    post:
+      description: 'Allows users to add/remove documents to their personal library.'
+      summary: 'Save/unsave document to library.'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: 'Document ID'
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'Document saved/unsaved successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  saved:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: "Il documento è stato salvato/rimosso dai salvati con successo"
+                    
+        '404':
+          description: 'No document has been found with the provided ID.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Nessun documento è stato trovato con l'ID fornito"
+        '400':
+          description: 'The format of the provided id is invalid'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "l'ID del documento non è valido"
+        '500':
+          description: 'The operation failed and the error is shown in the "message" field of the response.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+
+  /documents/{id}/comment:
+    patch:
+      description: 'Allows users to post comments in the comment section of a document.'
+      summary: 'Post comment to document.'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: 'Document ID'
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - commentText
+              properties:
+                commentText:
+                  type: string
+                  default: 'Comment body'
+      responses:
+        '200':
+          description: 'Comment was posted successfully to the document.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: 'Comment added successfully'
+                  commentId:
+                    type: string
+                    default: ''
+                  commentBody:
+                    type: string
+                  commentDate:
                     type: string
                     
         '404':
-          description: 'The ID parameter was given with a wrong format and the message is returned in the "message" field.'
+          description: 'No document has been found with the provided ID.'
           content:
             application/json:
               schema:
@@ -244,11 +1043,939 @@ paths:
                     type: boolean
                   message:
                     type: string
-  
-  /subscription:
-    post:
-      description: 'By providing a valid token and a subscription plan and area (if needed) in the request body, a new subscription is created and stored in the database.'
-      summary: 'Creates a new user subscription.'
+                    default: "Nessun documento è stato trovato con l'ID fornito"
+        '400':
+          description: 'The format of the provided id is invalid'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default:  "l'ID del commento non è valido"
+        '400':
+          description: 'The user did not provide a body for the comment'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Il commento è stato inviato senza un body"
+        '500':
+          description: 'The operation failed and the reason is shown in the "message" field of the response.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    
+  /documents/{id}/comment/{comment_id}:
+    delete:
+      description: 'Allows users to delete their comments in the comment section of a document.'
+      summary: 'Delete a comment from a document.'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: 'Document ID'
+        - in: path
+          name: comment_id
+          schema:
+            type: string
+          required: true
+          description: 'Comment ID'
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'Comment was removed successfully from the document.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: 'Comment deleted successfully'
+        '404':
+          description: 'No document has been found with the provided ID.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Nessun documento è stato trovato con l'ID fornito"
+        '400':
+          description: 'The format of the provided id (comment or document) is invalid'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "l'ID del commento o del documento non è valido"
+        '500':
+          description: 'The operation failed and the reason is shown in the "message" field of the response.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '403':
+          description: 'The user does not have sufficient permission to delete the comment'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Non hai il permesso di eliminare questo commento, devi esserne l'autore o un moderatore"
+  /documents/{id}/report:
+    patch:
+      description: 'Allows users to report public documents in the platform.'
+      summary: 'Report a document.'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: 'Document ID'
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'Document was reported successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: "Il documento è stato segnalato con successo"
+        '200':
+          description: 'Document was already reported by current user.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: "Hai già segnalato questo documento, grazie del tuo contributo"
+        '400':
+          description: 'The format of the provided id is invalid'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "l'ID del documento non è valido"
+        '400':
+          description: 'The user tried to report a document that is still pending for validation'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Non puoi segnalare un documento che non è ancora pubblico"
+        '500':
+          description: 'The operation failed and the reason is shown in the "message" field of the response.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '404':
+          description: 'No document has been found with the provided ID.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Nessun documento è stato trovato con l'ID fornito"
+        '403':
+          description: 'A mentor tried to report their own document'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Non puoi segnalare un documento di cui sei l'autore"
+  /documents/{id}/{vote}:
+    patch:
+      description: 'Allows users to like or dislike documents in the platform.'
+      summary: 'Add a like or dislike to a document.'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: 'Document ID'
+        - in: path
+          name: vote
+          schema:
+            type: string
+          required: true
+          description: 'Vote'
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'Document has been liked/disliked successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  rating: 
+                    type: string
+                    default: 'liked'
+                  like: 
+                    type: integer
+                  dislike: 
+                    type: integer
+        '400':
+          description: 'The format of the provided id is invalid'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "l'ID del documento non è valido"
+        '400':
+          description: 'The user provided an invalid vote parameter'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "L'opzione di voto fornita non è valida"
+        '500':
+          description: 'The operation failed and the reason is shown in the "message" field of the response.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '404':
+          description: 'No document has been found with the provided ID.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Nessun documento è stato trovato con l'ID fornito"
+                    
+  /users:
+    get:
+      description: 'Used by moderators to get a list of all non-moderator users, meaning users with all kinds of subscriptions and mentors'
+      summary: 'List all non-moderator users.'
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'Users have been found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: "Sono stati trovati utenti"
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: 
+                          type: string
+                          default: ''
+                        username:
+                          type: string
+                          default: 'username'
+                        email:
+                          type: string
+                          default: 'user@gmail.com'
+                        avatar:
+                         $ref: '#/components/schemas/Avatar'
+                        
+        '204':
+          description: 'No non-moderator users have been found.'
+        '403':
+          description: 'The current user cannot access the list of users in the platform.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Solo i moderatori possono accedere alla lista degli utenti"
+          
+  /users/pending:
+    get:
+      description: 'Used by moderators to get a list of all users that have requested to become mentors.'
+      summary: 'List all pending users.'
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'Users have been found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: "Sono stati trovati utenti in attesa di diventare mentor"
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: 
+                          type: string
+                          default: ''
+                        username:
+                          type: string
+                          default: 'username'
+                        email:
+                          type: string
+                          default: 'user@gmail.com'
+                        avatar:
+                         $ref: '#/components/schemas/Avatar'
+                        
+        '204':
+          description: 'No pending users have been found.'
+        '403':
+          description: 'The current user cannot access the list of pending users in the platform.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Solo i moderatori possono accedere alla lista degli utenti in attesa di diventare mentor"
+
+  /users/mentors:
+    get:
+      description: 'Used by moderators to get a list of all mentors in the platform.'
+      summary: 'List all mentors.'
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'Mentors have been found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: "Sono stati trovati mentor"
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: 
+                          type: string
+                          default: ''
+                        username:
+                          type: string
+                          default: 'username'
+                        email:
+                          type: string
+                          default: 'user@gmail.com'
+                        avatar:
+                         $ref: '#/components/schemas/Avatar'
+                        
+        '204':
+          description: 'No mentors have been found'
+        '403':
+          description: 'The current user cannot access the list of mentors in the platform.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Solo i moderatori possono accedere alla lista dei mentor"
+
+  /users/{id}:
+    get:
+      description: 'Find and retrieve user information such as the username for the user with a given id.'
+      summary: 'Find and return a user with a given id.'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: 'User ID'
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'User found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  username:
+                    type: string
+                    default: 'username'
+                  email:
+                    type: string
+                    default: 'email@gmail.com'
+                  avatar:
+                    $ref: '#/components/schemas/Avatar'
+        '400':
+          description: 'The format of the id provided is not valid'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "l'ID dell'utente non è valido"
+                    
+        '404':
+          description: 'No user has been found with the given ID.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "L'utente non esiste nei database"
+    delete:
+      description: 'Delete a user account if you are the account owner or a moderator.'
+      summary: 'Delete a user account.'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: 'User ID'
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'User deleted successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: "L'utente è stato eliminato con successo"
+                    
+        '404':
+          description: 'No user has been found with the provided ID.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "L'utente non esiste nei database"
+        '400':
+          description: 'The format of the id provided is invalid.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "l'ID dell'utente non è valido"
+        '500':
+          description: 'Account deletion failed and the error is stated in the "message" field of the response.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: 'Error message for failure of account deletion.'
+        '403':
+          description: 'The current user cannot delete the indicated account.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Solo il proprietario dell'account o un moderatore può eliminare un account"
+  /users/userToMentor:
+    patch:
+      description: 'User request to be upgraded by moderators as mentor in order to upload documents.'
+      summary: 'Require to become mentor.'
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'Request to become mentor was sent successfully'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: "La richiesta di diventare mentor è stata inoltrata con successo"
+                    
+        '404':
+          description: 'No user has been found with the provided ID.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "L'utente non esiste nei database"
+        '500':
+          description: 'Failure to send request and the error is stated in the "message" field of the response.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '403':
+          description: 'The current user cannot require to become a mentor.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Solo gli utenti possono richiedere di diventare mentor"
+  /users/{id}/upgrade:
+    patch:
+      description: 'Used by moderators to upgrade a user to a mentor'
+      summary: 'Upgrade user to mentor.'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: 'User ID'
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'The user was upgraded successfully and changes are saved in the database.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: "L'utente è stato promosso con successo a mentor"
+        '400':
+          description: 'The format of the provided id is invalid.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "l'ID dell'utente non è valido"
+        '400':
+          description: 'The user cannot be upgraded because he/she has not required to become a mentor'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "L'utente non può essere promosso a mentor"
+        '403':
+          description: 'The current user does not have sufficient permissions to upgrade users.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Solo i moderatori sono autorizzati a promuovere gli utenti a mentor"
+        '404':
+          description: 'No user has been found with the provided ID.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "L'utente non esiste nei database"
+        '500':
+          description: 'Request failed and the error is stated in the "message" field of the response.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+
+  /users/{id}/downgrade:
+    patch:
+      description: 'Used by moderators to downgrade mentors or pending users to users.'
+      summary: 'Downgrade mentor/pending user to user.'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: 'User ID'
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'User found.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: "Il downgrade è stato effettuato con successo"
+        '400':
+          description: 'The format of the provided id is invalid.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "l'ID dell'utente non è valido"
+        '400':
+          description: 'The user cannot be downgraded because he/she is not a mentor'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "L'utente indicato non è un mentor"
+        '403':
+          description: 'The current user does not have sufficient permission to downgrade mentors to users.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "Solo i moderatori sono autorizzati a riportare i mentor allo stato di utenti"
+        '404':
+          description: 'No user has been found with the provided ID.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "L'utente non esiste nei database"
+        '500':
+          description: 'Request failed and the error is stated in the "message" field of the response.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+
+  /users/changePassword:
+    patch:
+      description: 'By providing a new password as well as the old one, you can change your password.'
+      summary: 'Change user password.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                oldPassword:
+                  type: string
+                  default: 'password'
+                newPassword:
+                  type: string
+                  default: 'newpassword'
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: 'Access token to verify user permissions'
+      responses:
+        '200':
+          description: 'Password has been changed successfully.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: "La tua password è stata aggiornata con successo"
+        '400':
+          description: 'The user did not provide both an old password and a new password in the request body'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "La richiesta non è in un formato valido"
+        '400':
+          description: 'The old password does not match with the current password.'
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                    default: "La password attuale risulta scorretta"
+
+  /users/changeSubscription:
+    patch:
+      description: 'By providing a valid token and a subscription plan and area (if needed) in the request body, the users subscription is updated.'
+      summary: 'Change user subscription.'
       requestBody:
         content:
           application/json:
@@ -259,6 +1986,7 @@ paths:
               properties:
                 subscriptionType:
                   type: string
+                  default: 'matricole'
                   description: 'Type of subscription chosen by the user'
                 subscriptionArea:
                   type: string
@@ -271,8 +1999,8 @@ paths:
           required: true
           description: 'Access token to verify user permissions'
       responses:
-        '201':
-          description: 'The subscription is created and the token containing the information regarding the new subscription.'
+        '200':
+          description: 'The user subscription is updated and the token containing the information regarding the new subscription is returned.'
           content:
             application/json:
               schema:
@@ -280,13 +2008,15 @@ paths:
                 properties:
                   success:
                     type: boolean
+                    default: true
                   message:
                     type: string
+                    default: "Ecco il tuo token!"
                   token:
                     type: string
-
+                    default: ''
         '400':
-          description: 'The subscription creation failed and the reason is stated in the "message" field.'
+          description: 'The user did not provide all needed information to change subscription'
           content:
             application/json:
               schema:
@@ -296,6 +2026,7 @@ paths:
                     type: boolean
                   message:
                     type: string
+                    default: "La richiesta non è in un formato valido"
   
   /token:
     post:
@@ -318,9 +2049,23 @@ paths:
                 properties:
                   success:
                     type: boolean
+                    default: true
                   tokenData:
                     type: object
-
+                    properties:
+                      id:
+                        type: string
+                      type:
+                        type: string
+                        default: 'user'
+                      subscription:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                            default: 'matricole'
+                          area:
+                            type: string
         '401':
           description: 'The token verification failed because no token was given.'
           content:
@@ -331,7 +2076,8 @@ paths:
                   success:
                     type: boolean
                   message:
-                    type: object
+                    type: string
+                    default: "Nessun token è stato fornito"
         
         '403':
           description: 'The token verification failed because the token was invalid.'
@@ -344,6 +2090,7 @@ paths:
                     type: boolean
                   message:
                     type: string
+                    default: "Il token fornito non è valido"
 
           
 components:
@@ -372,18 +2119,35 @@ components:
         joinDate:
           type: string
           description: 'Date the user joined'
-        userType:
-          type: string
-          description: 'Type of user'
+        userType: {
+          type: string,
+          "enum": ["user", "pending", "mentor", "moderator"],
+          description: "User type"
+        }
         subscription:
-          $ref: '#/components/schemas/Subscription'
+          type: object
+          properties:
+            subType: {
+              type: string,
+              "enum": ["matricole", "studenti", "nerd"],
+              description: "Subscription plan chosen at registration"
+            }
+            area:
+              type: string
+              description: Subscription area to access that area's documents
+            creationDate:
+              type: string
+              description: Subscription creation date
+            lastPayment:
+              type: string
+              description: Subscription last payment date
         savedDocuments:
           type: array
           items:
             $ref: '#/components/schemas/Document'
         avatar:
-          type: object
-          description: 'Avatar configuration in JSON format'
+            $ref: '#/components/schemas/Avatar'
+          
     Document:
       type: object
       required:
@@ -395,6 +2159,8 @@ components:
         - creationDate
         - url
       properties:
+        _id:
+          type: string
         title:
           type: string
           description: 'Title of the document'
@@ -418,24 +2184,13 @@ components:
         url:
           type: string
           description: 'Link to resource on s3 cloud'
-    Subscription:
-      type: object
-      required:
-        - type
-        - creationDate
-      properties:
-        type:
+        like:
+          type: integer
+        dislike:
+          type: integer
+        approval:
           type: string
-          description: 'Type of subscription'
-        area:
-          type: string
-          description: 'The user can only access documents within this area'
-        creationDate:
-          type: string
-          description: 'Date of creation of the subscription'
-        lastPayment:
-          type: string
-          description: 'Date of last payment'
+
     Avatar:
       type: object
       properties:
@@ -469,3 +2224,5 @@ components:
           type: string
         bgColor:
           type: string
+      description: 'Avatar configuration in JSON format'
+    
