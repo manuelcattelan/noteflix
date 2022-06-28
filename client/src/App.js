@@ -18,7 +18,6 @@ import NoAccess from './pages/NoAccess';
 import NotFound404 from './pages/NotFound404';
 
 
-
 function App() {
 
   const [navbar, setNavbar] = useState("visitor")                                           // la navbar potrà essere visitatore, user, moderator, mentor
