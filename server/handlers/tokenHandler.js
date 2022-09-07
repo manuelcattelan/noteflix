@@ -22,7 +22,7 @@ function createToken(user){
                     type: user.userType};
     // if the user has a subscription (user or mentor), add this information to token
     if (user.subscription){
-        if (new Date() - user.subscription.lastPayment < 30 * (1000*3600*24) )  //must have payed within 30 days
+        //if (new Date() - user.subscription.lastPayment < 30 * (1000*3600*24) )  //must have payed within 30 days
             payload.subscription = {
                 type: user.subscription.subType,
                 area: user.subscription.area,
